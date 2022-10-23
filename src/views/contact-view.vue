@@ -1,10 +1,12 @@
 <script setup>
-import {RouterView} from "vue-router"
 </script>
 
 <template>
-  <router-view />
+  <div className="contact">
+    CONTACT
+  </div>
 </template>
 
 <style scoped>
+
 </style>

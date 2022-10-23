@@ -1,10 +1,12 @@
 <script setup>
-import {RouterView} from "vue-router"
 </script>
 
 <template>
-  <router-view />
+  <div class="error">
+    ERROR
+  </div>
 </template>
 
 <style scoped>
+
 </style>
