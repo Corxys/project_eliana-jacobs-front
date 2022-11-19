@@ -18,7 +18,7 @@ const router = createRouter({
       component: () => import("../views/about-view.vue"),
     },
     {
-      path: "/article",
+      path: "/article/:slug",
       name: "article",
       component: () => import("../views/article-view.vue"),
     },
@@ -38,12 +38,12 @@ const router = createRouter({
       component: () => import("../views/news-view.vue"),
     },
     {
-      path: "/project",
+      path: "/project/:slug",
       name: "project",
       component: () => import("../views/project-view.vue"),
     },
     {
-      path: "/projects",
+      path: "/projects/:slug",
       name: "projects",
       component: () => import("../views/projects-view.vue"),
     },

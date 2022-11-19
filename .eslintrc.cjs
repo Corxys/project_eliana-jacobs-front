@@ -1,21 +1,34 @@
 /* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution')
+require("@rushstack/eslint-patch/modern-module-resolution");
 
 module.exports = {
   root: true,
-  'extends': [
-    'plugin:vue/vue3-essential',
-    'plugin:vue/vue3-strongly-recommended',
-    'plugin:vue/vue3-recommended',
-    'eslint:recommended',
-    '@vue/eslint-config-prettier'
+  extends: [
+    "plugin:vue/vue3-recommended",
+    "plugin:vue/vue3-essential",
+    "plugin:vue/vue3-strongly-recommended",
+    "eslint:recommended"
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: "latest"
   },
   rules: {
-    "quotes": [2, "double", {"avoidEscape": true}],
-    "object-curly-spacing": ["error", "never"],
-    "vue/multi-world-component-names": ["error"],
-  },
-}
+    /* ESLint core rules */
+    "quotes": [2, "double", {avoidEscape: true}],
+    "semi": ["error", "always"],
+    "max-len": ["error", {"code": 180, "tabWidth": 2}],
+    
+    /* Vue 3 rules */
+    "vue/template-curly-spacing": ["error", "never"],
+    "vue/mustache-interpolation-spacing": ["error", "never"],
+    "vue/attributes-order": ["error"],
+    "vue/max-attributes-per-line": ["error", {
+      "singleline": {
+        "max": 4,
+      },
+      "multiline": {
+        "max": 1,
+      }
+    }],
+  }
+};

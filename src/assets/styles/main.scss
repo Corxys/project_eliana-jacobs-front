@@ -1,0 +1,72 @@
+@import "../../../node_modules/destyle.css/destyle.min.css";
+@import "./_vars.scss";
+
+// General
+body {
+  overflow-x: hidden;
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  background-color: var(--color-background-dark);
+  color: var(--color-text-dark);
+}
+
+* {
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar {
+    width: 7px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--epj-c-main);
+  }
+}
+
+// Titles
+h1, h2, h3, h4 {
+  font-family: var(--font-primary);
+}
+h1 {
+  font-size: 45px;
+  margin-bottom: var(--spacing-between-vertical-elements);
+}
+h2 {
+  font-size: 25px;
+}
+h3 {
+  font-size: 22px;
+  margin-bottom: var(--spacing-h3);
+}
+h4 {
+  font-size: 18px;
+  margin-bottom: var(--spacing-h4)
+}
+
+// Semantic
+p {
+  line-height: 1.2rem;
+}
+
+.about, .news, .contact, .projects, .project {
+  min-height: 100vh;
+  padding:
+    var(--spacing-section-padding-top)
+    var(--spacing-section-padding-x)
+    var(--spacing-section-padding-bottom)
+    var(--spacing-section-padding-x);
+}
+
+//.about, .news, .article, .contact, .project, .projects {
+//  //min-height: var(--min-height-component);
+
+//}
+//
+//.home, .about, .news, .article, .contact, .projects, .transition {
+
+//}
+//.projects--light, .project {
+//  background-color: var(--color-background-light);
+//  color: var(--color-text-light);
+//}
+

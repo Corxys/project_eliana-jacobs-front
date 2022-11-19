@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@font-face {
+  font-family: 'MrDarcy';
+  src: url(../fonts/mr-darcy-bold.ttf) format("truetype");
+}
+
+/* Color palette */
+:root {
+  --epj-c-black: #110F10;
+  --epj-c-white: #F9FDFD;
+  --epj-c-main: #58003C;
+}
+
+/* Fonts variables */
+:root {
+  --font-primary: "MrDarcy", serif;
+  --font-secondary: "Roboto", sans-serif;
+}
+
+/* Semantic color variables */
+:root {
+  /* Default (dark) */
+  --dark-filter-default-background-color: var(--epj-c-black);
+  --dark-filter-default-border-color: var(--epj-c-white);
+  --dark-filter-default-text-color: var(--epj-c-white);
+  /* Hover (dark) */
+  --dark-filter-hover-background-color: red;
+  --dark-filter-hover-border-color: red;
+  --dark-filter-hover-text-color: blue;
+  /* Default (light) */
+  --light-filter-default-background-color: var(--epj-c-white);
+  --light-filter-default-border-color: var(--epj-c-main);
+  --light-filter-default-text-color: var(--epj-c-main);
+  /* Active */
+  --both-filter-active-background-color: var(--epj-c-main);
+  --both-filter-active-border-color: var(--epj-c-main);
+  --both-filter-active-text-color: var(--epj-c-white);
+}
+
+
+
+
+
+
+
+
+
+/* Semantic color variables */
+:root {
+  --color-background-dark: var(--epj-c-black);
+  --color-text-dark: var(--epj-c-white);
+  --color-background-light: var(--epj-c-light);
+  --color-text-light: var(--epj-c-black);
+
+  --color-button-background-default: var(--epj-c-main);
+  --color-button-background-hover: var(--epj-c-black);
+  --color-button-border-hover: var(--epj-c-white);
+
+  --color-section-background: rgba(113, 206, 212, 0.1);
+  --color-overlay-background: rgba(17, 15, 16, 0.95);
+
+  --color-input-background: rgba(249, 253, 253, 0.2);
+}
+
+/* Semantic text variables */
+:root {
+
+
+  --spacing-subtitle-small: 30px;
+  --spacing-subtitle-medium: 60px;
+  --spacing-h3: 5px;
+  --spacing-h4: 5px;
+}
+
+/* Semantic dimension variables */
+:root {
+  --min-height-component: 100vh;
+}
+
+/* Semantic spacing variables */
+:root {
+  --spacing-section-padding-top: 105px;
+  --spacing-section-padding-bottom: 105px;
+  --spacing-section-padding-x: 20%;
+
+  --spacing-between-buttons: 10px;
+
+  --spacing-between-vertical-elements: 50px;
+  --spacing-between-horizontal-elements: 30px;
+  --spacing-box-section: 60px;
+}
+
+
