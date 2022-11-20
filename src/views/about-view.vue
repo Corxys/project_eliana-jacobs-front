@@ -55,7 +55,7 @@ import {practices} from "../assets/data/practices";
     :deep(.icon-social) {
       margin-right: var(--spacing-between-buttons);
     }
-    :deep(.custom-button) {
+    :deep(.button) {
       margin-right: 10px;
       &:last-child {
         margin-right: 0;
