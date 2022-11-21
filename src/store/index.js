@@ -6,11 +6,11 @@ import gql from "graphql-tag";
 import graphqlClient from "../utils/graphql";
 
 // eslint-disable-next-line max-len
-const NEWS_QUERY = gql`query News{news{data{id attributes{address{name street cp city}date{date start end}email image{data{attributes{url}}}publishedAt register{src}text title website}}}}`;
+const NEWS_QUERY = gql`query News{news (pagination: {limit:100}){data{id attributes{address{name street cp city}date{date start end}email image{data{attributes{url}}}publishedAt register{src}text title website}}}}`;
 const CATEGORIES_QUERY = gql`query Categories{categories{data{attributes{name}id}}}`;
 const TYPES_QUERY = gql`query Types{types{data{id attributes{name image{data{attributes{url alternativeText}}}category{data{id attributes{name}}}}}}}`;
 // eslint-disable-next-line max-len
-const PROJECTS_QUERY = gql`query Projects{projects{data{id attributes{category{data{attributes{name}id}}date link{src}medias{copyright src{data{attributes{alternativeText mime url}}}id}name text type{data{id attributes{name}}}}}}}`;
+const PROJECTS_QUERY = gql`query Projects{projects (pagination: {limit:100}){data{id attributes{category{data{attributes{name}id}}date link{src}medias{copyright src{data{attributes{alternativeText mime url}}}id}name text type{data{id attributes{name}}}}}}}`;
 
 export default createStore({
   state() {
