@@ -20,7 +20,11 @@ const emit = defineEmits(["selectFilter"]);
     <div class="transition__filters">
       <div v-for="type of types" :key="type.id" class="transition__filter">
         <div class="transition__filter-image" @click="emit('selectFilter', {'name': type.attributes.name})">
-          <img class="transition__filter-src" :src="`http://localhost:1337${type.attributes.image.data.attributes.url}`">
+          <img
+            class="transition__filter-src"
+            :src="type.attributes.image.data.attributes.url ? type.attributes.image.data.attributes.url : ''"
+            :alt="type.attributes.image.data.attributes.alternativeText ? type.attributes.image.data.attributes.alternativeText : ''"
+          >
         </div>
         <h2 class="transition__filter-name" @click="emit('selectFilter', {'name': type.attributes.name})">
           {{type.attributes.name}}

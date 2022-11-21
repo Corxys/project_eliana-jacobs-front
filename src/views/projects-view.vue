@@ -1,7 +1,7 @@
 <script setup>
 // Import
 import {useStore} from "vuex";
-import {useRouter, useRoute} from "vue-router";
+import {useRoute} from "vue-router";
 import {computed, watch} from "vue";
 
 // Utils
@@ -12,7 +12,6 @@ import TransitionComponent from "../components/transition-component.vue";
 
 // Hook call
 const store = useStore();
-const router = useRouter();
 const route = useRoute();
 
 // Store
@@ -24,9 +23,6 @@ const filters = computed(() => store.state.filters.selected);
 const projects = computed(() => store.state.projects.selected);
 const medias = computed(() => store.state.projects.data["circus"].medias);
 const selectedMedia = computed(() => store.state.projects.data["circus"].selectedMedia);
-
-// Environment variables
-const API_URL = import.meta.env.VITE_API_URL;
 
 // Regex
 const mimesTypesImage = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
@@ -50,7 +46,6 @@ watch(() => route, (param) => {
       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
       break;
     case "music":
-      // TODO: return to a special route, with a waiting screen for the music projects
       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
       break;
     case "digital media":
@@ -91,44 +86,45 @@ watch(() => route, (param) => {
             <img
               v-if="mimesTypesImage.test(media.src.data.attributes.mime)"
               class="projects__gallery-src"
-              :src="media.src ? API_URL + media.src.data.attributes.url : ''"
-              :alt="media.alt ? media.alt : ''"
+              :src="media.src ? media.src.data.attributes.url : ''"
+              :alt="media.src.data.attributes.alternativeText ? media.src.data.attributes.alternativeText : ''"
             >
             <video
               v-else
               class="projects__item-src"
-              :src="media.src ? API_URL + media.src.data.attributes.url : ''"
+              :src="media.src ? media.src.data.attributes.url : ''"
             />
           </div>
         </div>
         <div class="projects__gallery-highlight">
+          <!-- TODO: on click of the image, open preview -->
           <img
             v-if="mimesTypesImage.test(selectedMedia.src.data.attributes.mime)"
             class="projects__gallery-src projects__gallery-src--highlight"
-            :src="selectedMedia.src ? API_URL + selectedMedia.src.data.attributes.url : ''"
+            :src="selectedMedia.src ? selectedMedia.src.data.attributes.url : ''"
             :alt="selectedMedia.alt ? selectedMedia.alt : ''"
           >
           <video
             v-else
             class="projects__item-src"
-            :src="selectedMedia.src ? API_URL + selectedMedia.src.data.attributes.url : ''"
+            :src="selectedMedia.src ? selectedMedia.src.data.attributes.url : ''"
           />
         </div>
       </div>
       <div v-else class="projects__list">
         <div v-for="project of projects" :key="project.id" class="projects__item">
           <div class="projects__item-image projects__item-image--link" @click="store.commit('setProject', {'id': project.id})">
-            <router-link :to="`/project/${slugifyTitle(project.attributes.title)}`">
+            <router-link :to="`/project/${slugifyTitle(project.attributes.name)}`">
               <img
                 class="projects__item-src"
-                :src="project.attributes.medias.length ? API_URL + project.attributes.medias[0].src.data.attributes.url : ''"
+                :src="project.attributes.medias.length ? project.attributes.medias[0].src.data.attributes.url : ''"
                 :alt="project.attributes.medias.length ? project.attributes.medias[0].alt : ''"
               >
             </router-link>
           </div>
           <h2 class="projects__item-title projects__item-title--link" @click="store.commit('setProject', {'id': project.id})">
-            <router-link :to="`/project/${slugifyTitle(project.attributes.title)}`">
-              {{project.attributes.title}}
+            <router-link :to="`/project/${slugifyTitle(project.attributes.name)}`">
+              {{project.attributes.name}}
             </router-link>
           </h2>
         </div>
@@ -193,6 +189,9 @@ watch(() => route, (param) => {
       object-fit: cover;
       object-position: center;
       &--highlight {
+        height: auto;
+        position: sticky;
+        top: 0;
         object-fit: contain;
         object-position: top;
       }

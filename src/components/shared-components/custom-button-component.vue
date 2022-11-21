@@ -31,16 +31,13 @@ defineProps({
       </div>
     </button>
   </a>
-  <!-- TODO: create custom button for submit event -->
-  <div v-if="!link" class="button button--submit">
+  <button v-if="!link" class="button button--submit" type="submit">
     <div class="button__content">
-      <div class="button__text">
+      <span class="button__text">
         {{text}}
-      </div>
+      </span>
     </div>
-  </div>
-
-  <!-- <input v-if="!link" class="button__content button__content--submit" type="submit" :value="text"> -->
+  </button>
 </template>
 
 <style scoped lang="scss">
@@ -49,7 +46,7 @@ defineProps({
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 32px;
     font-family: var(--font-primary);
     text-transform: uppercase;
     padding-left: 12px;
@@ -63,8 +60,8 @@ defineProps({
     }
   }
   &__text {
-    margin-top: 4px;
-
+    white-space: nowrap;
+    margin-bottom: -0.1em;
   }
   &--submit {
     height: 100%;

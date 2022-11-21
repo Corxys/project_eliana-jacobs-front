@@ -1,10 +1,15 @@
 <script setup>
-// Imports
+// General
 import {ref, provide} from "vue";
 import {RouterView} from "vue-router";
+import {DefaultApolloClient} from "@vue/apollo-composable";
+import {ApolloClient, InMemoryCache} from "@apollo/client/core";
 
-// Hook call
-// const route = useRoute();
+const cache = new InMemoryCache();
+const apolloClient = new ApolloClient({
+  "uri": "https://eliana-jacobs-back.herokuapp.com/graphql",
+  cache
+});
 
 // Components
 import NavbarComponent from "./components/navbar-component.vue";
@@ -13,34 +18,11 @@ import FooterComponent from "./components/footer-component.vue";
 // Ref
 const isMenuOpen = ref(false);
 const isTransitionScreenOpen = ref(false);
-// const theme = ref("");
 
 // Provider
 provide("isMenuOpen", isMenuOpen);
 provide("isTransitionScreenOpen", isTransitionScreenOpen);
-// provide("theme", theme);
-
-// Data
-const routes = ["/projects/visual-art", "/projects/digital-media", "/projects/performance-art", "/project/visual-art", "/project/digital-media", "/project/performance-art"];
-
-// Route watch
-// watch(() => route.fullPath, () => {
-//   console.debug("Watch 'route.fullPath' changed to:", route.fullPath);
-//   routes.forEach((testedRoute, index) => {
-//     console.debug("Route checked:", testedRoute, "to the index:", index);
-//     console.debug("Yes or no?", routes.indexOf(route.fullPath));
-//     routes.indexOf(route.fullPath) ? theme.value = "light" : theme.value = "dark";
-//     // if (testedRoute.match(route.fullPath)) {
-//     //   theme.value = "dark";
-//     //   console.debug("Theme dark:", theme.value);
-//     // } else {
-//     //   theme.value = "light";
-//     //   console.debug("Theme light:", theme.value);
-//     //
-//     // }
-//   }, {immediate: true});
-//   // console.debug("Theme used for this page:", theme.value);
-// });
+provide(DefaultApolloClient, apolloClient);
 </script>
 
 <template>

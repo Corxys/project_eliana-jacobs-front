@@ -38,6 +38,8 @@ defineProps({
 
 // State
 const categories = computed(() => store.state.categories);
+const projects = computed(() => store.state.projects.selected);
+const medias = computed(() => store.state.projects.data["circus"].medias);
 
 // Methods
 function getProjectsByCategory(name) {
@@ -49,7 +51,6 @@ function getProjectsByCategory(name) {
       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
     case "Music":
-      // TODO: return to a special route, with a waiting screen for the music projects
       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
     case "Digital media":
@@ -61,7 +62,11 @@ function getProjectsByCategory(name) {
     default:
   }
 
-  router.push(`/projects/${slugifyTitle(name)}`);
+  if (projects.value.length || medias.value.length ) {
+    router.push(`/projects/${slugifyTitle(name)}`);
+  } else {
+    router.push("/projects/waiting");
+  }
   isMenuOpen.value = false;
 }
 </script>
@@ -84,13 +89,23 @@ function getProjectsByCategory(name) {
       </div>
     </div>
     <div v-if="isMenuOpen" class="navbar__menu">
-      <div v-for="link of links" :key="link.id" class="navbar__link">
-        <router-link :to="link.src" @click="isMenuOpen = false">
+      <div
+        v-for="link of links"
+        :key="link.id"
+        class="navbar__link"
+        @click="router.push(link.src); isMenuOpen = false"
+      >
+        <span class="navbar__link-text">
           {{link.name}}
-        </router-link>
+        </span>
       </div>
-      <div v-for="category of categories" :key="category.id" class="navbar__link">
-        <span @click="getProjectsByCategory(category.attributes.name)">
+      <div
+        v-for="category of categories"
+        :key="category.id"
+        class="navbar__link"
+        @click="getProjectsByCategory(category.attributes.name)"
+      >
+        <span class="navbar__link-text">
           {{category.attributes.name}}
         </span>
       </div>
@@ -204,20 +219,20 @@ function getProjectsByCategory(name) {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;
+    align-items: center;
   }
   &__link {
-    margin: 8px 0;
-    padding: 8px 25px 10px 25px;
-    a, span {
-      cursor: pointer;
-      padding: 3px 30px 5px 30px;
-      font-size: 35px;
-      font-family: var(--font-primary);
-      transition: background-color 0.2s ease;
-      &:hover {
-        background-color: var(--epj-c-main);
-      }
+    cursor: pointer;
+    font-size: 35px;
+    font-family: var(--font-primary);
+    margin: 5px 0;
+    padding: 10px 30px 7px 30px;
+    transition: background-color 0.2s ease;
+    &:hover {
+      background-color: var(--epj-c-main);
+    }
+    &-text {
+      display: inline;
     }
     &:nth-child(3) {
       margin-bottom: 60px;

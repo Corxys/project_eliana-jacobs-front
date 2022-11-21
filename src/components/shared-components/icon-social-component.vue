@@ -28,8 +28,8 @@ defineProps({
   background-color: var(--color-button-background-default);
   border: 1px solid var(--color-button-background-default);
   border-radius: 50%;
-  width: 31.59px;
-  height: 31.59px;
+  width: 32px;
+  height: 32px;
   transition: 0.2s ease-in all;
   &:hover {
     background-color: var(--color-button-background-hover);

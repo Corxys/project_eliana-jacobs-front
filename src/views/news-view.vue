@@ -15,37 +15,43 @@ const news = computed(() => store.state.news);
 
 <template>
   <section class="news">
-    <header class="news__header">
-      <h1 class="news__title">
-        News
-      </h1>
-      <article class="news__highlight">
-        <div class="news__main">
-          <article-news
-            v-for="article of news.slice(0, 1)"
-            :key="article.id"
-            :article="article"
-            type="large"
-          />
+    <h1 class="news__title">
+      News
+    </h1>
+    <div v-if="news.length" class="news__content">
+      <header class="news__header">
+        <article class="news__highlight">
+          <div class="news__main">
+            <article-news
+              v-for="article of news.slice(0, 1)"
+              :key="article.id"
+              :article="article"
+              type="large"
+            />
+          </div>
+          <div class="news__column">
+            <article-news v-for="article of news.slice(1, 4)" :key="article.id" :article="article" type="small" />
+          </div>
+        </article>
+      </header>
+      <div class="news__all">
+        <h2 class="news__subtitle">
+          All news
+        </h2>
+        <div class="news__articles">
+          <article-news v-for="article of news" :key="article.id" :article="article" type="medium" />
         </div>
-        <div class="news__column">
-          <article-news v-for="article of news.slice(1, 4)" :key="article.id" :article="article" type="small" />
-        </div>
-      </article>
-    </header>
-    <div class="news__all">
-      <h2 class="news__subtitle">
-        All news
-      </h2>
-      <div class="news__articles">
-        <article-news v-for="article of news" :key="article.id" :article="article" type="medium" />
       </div>
+    </div>
+    <div v-else>
+      Oops, an error occurred while fetching data. Try again later, and don't hesitate to contact me if the problem persists!
     </div>
   </section>
 </template>
 
 <style scoped lang="scss">
 .news {
+  padding-bottom: 0;
   &__header {
     padding-bottom: var(--spacing-box-section);
     border-bottom: 1px solid var(--epj-c-white);
@@ -55,22 +61,28 @@ const news = computed(() => store.state.news);
   &__highlight {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template: "sidebar mainA" "sidebar mainB";
+    grid-template-rows: 1fr;
+    gap: 0 30px;
     height: 450px;
     > :nth-child(1) {
-      grid-area: sidebar;
+      grid-area: 1 / 1 / 2 / 2;
     }
   }
-  &__main {
-    margin-right: 15px;
-  }
   &__column {
-    display: flex;
-    flex-direction: column;
-    margin-left: 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 30px 0;
+    grid-area: 1 / 2 / 2 / 3;
     height: 450px;
-    :deep(.news-article--small:nth-child(3)) {
-      margin-bottom: 0;
+    > :nth-child(1) {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+    > :nth-child(2) {
+      grid-area: 2 / 1 / 3 / 2;
+    }
+    > :nth-child(3) {
+      grid-area: 3 / 1 / 4 / 2;
     }
   }
   &__all {

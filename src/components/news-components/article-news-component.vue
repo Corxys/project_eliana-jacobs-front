@@ -1,4 +1,10 @@
 <script setup>
+/*
+* TODO:
+*  - animation on image hovered (scale)
+*  - fix height of the three elements in the column
+*/
+
 // General
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
@@ -32,67 +38,67 @@ const getArticle = (article) => {
 
 <template>
   <div v-if="type === 'small'" class="news-article--small">
-    <div class="link--image" @click="getArticle(article)" />
-    <!--    <router-link class="link&#45;&#45;image" :to="`/article/${slugifyTitle(article.attributes.title)}`">-->
-    <!--      &lt;!&ndash;      <img class="image" :src="`http://localhost:1337${article.attributes.image.data.attributes.url}`" alt="/">&ndash;&gt;-->
-    <!--    </router-link>-->
+    <div class="image" @click="getArticle(article)" />
     <div class="content">
       <h4 class="title" @click="getArticle(article)">
-        {{article.attributes.title}}
+        <span>
+          {{article.attributes.title}}
+        </span>
       </h4>
       <div class="date">
-        {{formatDate(article.attributes.posted)}}
+        {{formatDate(article.attributes.publishedAt)}}
       </div>
     </div>
   </div>
   <div v-if="type === 'medium'" class="news-article--medium">
     <div class="link--image" @click="getArticle(article)">
-      <img class="image" :src="`http://localhost:1337${article.attributes.image.data.attributes.url}`" alt="">
+      <img class="image" :src="article.attributes.image.data.attributes.url" alt="">
     </div>
     <div class="content">
       <h4 class="title" @click="getArticle(article)">
-        {{article.attributes.title}}
+        <span>
+          {{article.attributes.title}}
+        </span>
       </h4>
       <div class="date">
-        {{formatDate(article.attributes.posted)}}
+        {{formatDate(article.attributes.publishedAt)}}
       </div>
     </div>
   </div>
   <div v-if="type === 'large'" class="news-article--large">
-    <div class="link--image" @click="getArticle(article)" />
-    <!--    <router-link class="link&#45;&#45;image" :to="`/article/${slugifyTitle(article.attributes.title)}`">-->
-    <!--      <img class="image" :src="`http://localhost:1337${article.attributes.image.data.attributes.url}`" alt="/">-->
-    <!--    </router-link>-->
+    <div class="link--image" @click="getArticle(article)">
+      <img class="image" :src="article.attributes.image.data.attributes.url" alt="/">
+    </div>
     <div class="content">
-      <h3 class="title" @click="getArticle(article)">
-        {{article.attributes.title}}
+      <h3 class="title">
+        <span @click="getArticle(article)">
+          {{article.attributes.title}}
+        </span>
       </h3>
       <div class="date">
-        {{formatDate(article.attributes.posted)}}
+        {{formatDate(article.attributes.publishedAt)}}
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.link--image, .title {
+.image, .link--image, .title > span {
   cursor: pointer;
 }
 // News article (small)
 .news-article--small {
-  display: flex;
-  margin-bottom: 30px;
-  height: calc(100% / 3);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
   .link--image {
-    min-width: 50%;
-    width: 50%;
-    height: 100%;
-    background-color: white;
+    grid-area: 1 / 1 / 2 / 2;
   }
   .image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background-color: white;
   }
   .content {
     margin-left: 10px;
@@ -115,23 +121,29 @@ const getArticle = (article) => {
 
 // News article (large)
 .news-article--large {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--epj-c-white);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr max-content;
+  grid-area: 1 / 1 / 4 / 2;
+  height: 450px;
   padding: 5px;
-  height: 100%;
+  border: 1px solid var(--epj-c-white);
   .link--image {
-    height: 100%;
-    background-color: white;
+    grid-area: 1 / 1 / 3 / 2;
+    overflow: hidden;
   }
   .image {
     height: 100%;
     width: 100%;
     object-fit: cover;
-
+    transform: scale(1);
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      transform: scale(1.05);
+    }
   }
   .content {
-    margin-top: 10px;
+    margin-top: 5px;
   }
 }
 </style>
