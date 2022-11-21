@@ -32,18 +32,6 @@ const project = computed(() => store.state.project);
           {{project.attributes.date.slice(0, 4)}}
         </div>
         <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-        <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-
-        <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-
-        <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-
-        <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-        <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-        <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-        <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-        <p class="project__text" v-html="marked.parse(project.attributes.text)" />
-
         <div v-if="project.attributes.medias.length > 1" class="project__images">
           <div v-for="media of project.attributes.medias" :key="media.id" class="project__image">
             <img
