@@ -17,7 +17,7 @@ import {practices} from "../assets/data/practices";
   <section class="about">
     <header class="about__header">
       <h1 class="about__title">
-        Eliana is a performance artist, circus artist, visual and conceptual artist, and singer.
+        Eliana is a performance, circus, visual and conceptual artist and singer.
       </h1>
       <div class="about__buttons">
         <icon-social :icon="['fab', 'instagram']" link="https://www.instagram.com/__e_l_i_a_n_a__/" />

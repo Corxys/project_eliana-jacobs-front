@@ -129,7 +129,7 @@ const sendEmail = () => {
   &__content {
     flex-grow: 1;
     display: flex;
-    width: 50%;
+    width: 60%;
   }
   &__form {
     display: flex;

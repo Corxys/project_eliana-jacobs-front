@@ -22,7 +22,7 @@ const practices = [
     img: imageMusic,
     title: "Music",
     // eslint-disable-next-line max-len
-    text: "Eliana is a classically-trained mezzo-soprano with a background in both Baroque and Yiddish vocal music. She has performed as a soloist and with various ensembles at recitals, circus productions, artistic performances, exhibitions, private events, and concerts in the United States, Canada, France, Finland, and Germany." + "\n" + "\n" + "As an emerging Yiddish singer, Eliana is taught by some of the leading figures in the Yiddish and Klezmer music world. She is currently developing various music collaborations that fuse new compositions and recontextualizations of existent repertoire within conceptual frameworks." + "\n" + "\n" + "Check back soon for upcoming performances!"
+    text: "Eliana is a classically-trained mezzo-soprano with a background in both Baroque and Yiddish vocal music. She has performed as a soloist and with various ensembles at recitals, circus productions, artistic performances, exhibitions, private events, and concerts in the United States, Canada, France, Finland, and Germany." + "\n" + "\n" + "As an emerging Yiddish singer, Eliana is taught by some of the leading figures in the Yiddish and Klezmer music world. She is currently developing various music collaborations that fuse new compositions and recontextualizations of existent repertoire within conceptual frameworks."
   }
 ];
 

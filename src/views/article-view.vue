@@ -76,7 +76,7 @@ const article = computed(() => store.state.article);
           </div>
         </div>
         <!-- TODO: check if external URL as email or link and adjust the href used -->
-        <button-custom v-if="article.attributes.register" text="Register by mail" :link="article.attributes.register.email" :external="true" />
+        <button-custom v-if="article.attributes.register" text="Register by email" :link="'mailto:' + article.attributes.register.email" :external="true" />
         <div v-if="article.attributes.website" class="article__sidebar-link">
           <img class="article__sidebar-icon" :src="linkIcon">
           <a class="article__sidebar-info" href="/">

@@ -119,13 +119,16 @@ function getProjectsByCategory(name) {
   &__logo, &__container {
     z-index: 50;
     position: fixed;
-    height: 90px;
+    height: 105px;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   &__logo {
     left: 30px;
+    &-src {
+      width: 108px;
+    }
   }
   &__container {
     color: var(--color-text-dark);

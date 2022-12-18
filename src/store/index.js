@@ -49,10 +49,12 @@ export default createStore({
   mutations: {
     /* General */
     setProjects(state, {projects}) {
+      const circusMedias = [];
       state.projects.data["circus"].data = projects.data.filter((project) => project.attributes.category.data.attributes.name === "Circus");
       state.projects.data["circus"].data.forEach((project) => {
-        project.attributes.medias.forEach((media) => state.projects.data["circus"].medias.push(media));
+        project.attributes.medias.forEach((media) => circusMedias.push(media));
       });
+      state.projects.data["circus"].medias = circusMedias;
       state.projects.data["circus"].selectedMedia = state.projects.data["circus"].medias[0];
       
       state.projects.data["visual art"] = projects.data.filter((project) => project.attributes.category.data.attributes.name === "Visual art");
@@ -94,16 +96,35 @@ export default createStore({
     
     /* Filters */
     setSelectedFilter(state, {name}) {
+      state.app.selectedFilter = name;
+      
       if (state.app.selectedCategory === "Circus") {
+        const circusMedias = [];
+        
+        if (name === "All") {
+          state.projects.data["circus"].data.forEach((project) => {
+            project.attributes.medias.forEach((media) => circusMedias.push(media));
+          });
+          state.projects.data["circus"].medias = circusMedias;
+          state.projects.data["circus"].selectedMedia = state.projects.data["circus"].medias[0];
+          return;
+        }
+        
+        state.projects.data["circus"].data.filter((project) => {
+          if (project.attributes.type.data.attributes.name.toLowerCase() === name.toLowerCase()) {
+            project.attributes.medias.forEach((media) => circusMedias.push(media));
+          }
+        });
+        state.projects.data["circus"].medias = circusMedias;
+        state.projects.data["circus"].selectedMedia = state.projects.data["circus"].medias[0];
         return;
       }
       
-      state.app.selectedFilter = name;
       if (name === "All") {
         state.projects.selected = state.projects.data[state.app.selectedCategory.toLowerCase()];
         return;
       }
-      state.projects.selected = state.projects.data[state.app.selectedCategory.toLowerCase()].filter((project) => project.attributes.type.data.attributes.name === name);
+      state.projects.selected = state.projects.data[state.app.selectedCategory.toLowerCase()].filter((project) => project.attributes.type.data.attributes.name.toLowerCase() === name.toLowerCase());
     },
     
     /* News */
