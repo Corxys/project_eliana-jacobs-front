@@ -52,7 +52,7 @@ const getArticle = (article) => {
   </div>
   <div v-if="type === 'medium'" class="news-article--medium">
     <div class="link--image" @click="getArticle(article)">
-      <img class="image" :src="article.attributes.image.data.attributes.url" alt="">
+      <img class="image" :src="article.attributes.image.src.data.attributes.url" alt="">
     </div>
     <div class="content">
       <h4 class="title" @click="getArticle(article)">
@@ -67,7 +67,7 @@ const getArticle = (article) => {
   </div>
   <div v-if="type === 'large'" class="news-article--large">
     <div class="link--image" @click="getArticle(article)">
-      <img class="image" :src="article.attributes.image.data.attributes.url" alt="/">
+      <img class="image" :src="article.attributes.image.src.data.attributes.url" alt="/">
     </div>
     <div class="content">
       <h3 class="title">

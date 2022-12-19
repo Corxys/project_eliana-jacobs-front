@@ -17,6 +17,7 @@ import {formatHour} from "../utils/formatHour.js";
 
 // Components
 import ButtonCustom from "../components/shared-components/custom-button-component.vue";
+import ImageCustom from "../components/image-custom-component.vue";
 
 // Hook call
 const store = useStore();
@@ -85,7 +86,11 @@ const article = computed(() => store.state.article);
         </div>
       </div>
       <div class="article__image">
-        <img class="article__image-src" alt="" :src="article.attributes.image.data.attributes.url">
+        <image-custom
+          :src="article.attributes.image.src.data.attributes.url"
+          :alt="article.attributes.image.src.data.attributes.alternativeText"
+          :copyright="article.attributes.image.copyright"
+        />
       </div>
     </div>
   </div>

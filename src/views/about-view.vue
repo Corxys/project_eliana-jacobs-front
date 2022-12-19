@@ -1,16 +1,18 @@
 <script setup>
-/* TODO:
-* - add background shapes and gradients
-* - create table practices in Strapi database
-*/
+// General
+import {useStore} from "vuex";
+import {computed} from "vue";
 
 // Components
 import IconSocial from "../components/shared-components/icon-social-component.vue";
 import ButtonCustom from "../components/shared-components/custom-button-component.vue";
 import Practice from "../components/about-components/practice-component.vue";
 
-// Data
-import {practices} from "../assets/data/practices";
+// Hook call
+const store = useStore();
+
+// State
+const practices = computed(() => store.state.practices);
 </script>
 
 <template>

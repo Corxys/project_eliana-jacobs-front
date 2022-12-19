@@ -43,25 +43,27 @@ const medias = computed(() => store.state.projects.data["circus"].medias);
 
 // Methods
 function getProjectsByCategory(name) {
+  console.log(name);
   switch(name) {
     case "Circus":
       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": false, "category": name, "layout": "gallery"});
       break;
-    case "Performance art":
+    case "Performance Art":
       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
     case "Music":
       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
-    case "Digital media":
+    case "Digital Media":
       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
       break;
-    case "Visual art":
+    case "Visual Art":
       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
       break;
     default:
   }
 
+  console.log(projects.value, medias.value);
   if (projects.value.length || medias.value.length ) {
     router.push(`/projects/${slugifyTitle(name)}`);
   } else {

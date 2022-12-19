@@ -1,4 +1,8 @@
 <script setup>
+// Components
+import ImageCustom from "../image-custom-component.vue";
+
+// Props
 defineProps({
   practice: {
     type: Object,
@@ -10,19 +14,18 @@ defineProps({
 <template>
   <div class="practice">
     <div class="practice__container">
-      <div class="practice__image">
-        <img class="practice__image-src" :src="practice.img" alt="alt">
-        <span class="practice__image-credits credits">
-          Copyright
-        </span>
-      </div>
+      <image-custom
+        :src="practice.attributes.image.src.data.attributes.url"
+        :alt="practice.attributes.image.src.data.attributes.alternativeText"
+        :copyright="practice.attributes.image.copyright"
+      />
     </div>
     <div class="practice__content">
       <h3 class="practice__title">
-        {{practice.title}}
+        {{practice.attributes.title}}
       </h3>
       <p class="practice__text">
-        {{practice.text}}
+        {{practice.attributes.text}}
       </p>
     </div>
   </div>
@@ -41,30 +44,11 @@ defineProps({
     margin-right: var(--spacing-between-horizontal-elements);
     width: 100%;
   }
-  &__image {
-    position: relative;
-    &:hover {
-      .credits {
-        display: block;
-      }
-    }
-    &-src {
-      width: 100%;
-    }
-    &-credits {
-      display: none;
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      background-color: var(--epj-c-main);
-      padding: 7px 10px 5px 10px;
-    }
-  }
   &__content {
     grid-column: 4 / -1;
   }
   &__text {
-    white-space: break-spaces;
+    white-space: pre-line;
   }
 }
 </style>
