@@ -27,11 +27,11 @@ const medias = computed(() => store.state.projects.data["circus"].medias);
 const selectedMedia = computed(() => store.state.projects.data["circus"].selectedMedia);
 
 // Methods
-function selectFilter({name}) {
+async function selectFilter({name}) {
   if (hasTransitionScreen.value) {
-    store.commit("setTransitionScreen", {"isTransitioned": false});
+    await store.commit("setTransitionScreen", {"isTransitioned": false});
   }
-  store.commit("setSelectedFilter", {name});
+  await store.commit("setSelectedFilter", {name});
 }
 
 // Ref
