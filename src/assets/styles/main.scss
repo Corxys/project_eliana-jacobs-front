@@ -50,14 +50,15 @@ p {
   line-height: 1.3rem;
   hyphens: auto;
   text-align: justify;
+  white-space: pre-line;
 }
 
 .about, .news, .article, .contact, .projects, .project, .waiting {
   min-height: 100vh;
   padding:
-    var(--spacing-section-padding-top)
+    0
     var(--spacing-section-padding-x)
-    var(--spacing-section-padding-bottom)
+    0
     var(--spacing-section-padding-x);
 }
 

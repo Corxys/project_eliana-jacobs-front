@@ -41,6 +41,8 @@ const practices = computed(() => store.state.practices);
 
 <style scoped lang="scss">
 .about {
+  padding-top: 130px;
+  padding-bottom: 130px;
   &__header {
     position: relative;
     z-index: 10;

@@ -3,16 +3,17 @@ defineProps({
   src: {
     type: String,
     required: true,
+    default: "",
   },
-  // eslint-disable-next-line vue/require-default-prop
   alt: {
     type: String,
     required: false,
+    default: "",
   },
-  // eslint-disable-next-line vue/require-default-prop
   copyright: {
     type: String,
     required: false,
+    default: ""
   }
 });
 </script>

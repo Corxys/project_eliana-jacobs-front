@@ -66,7 +66,7 @@ const emit = defineEmits(["selectFilter"]);
       cursor: pointer;
       margin-top: 15px;
       text-align: center;
-      font-size: 38px;
+      font-size: 30px;
     }
   }
 }

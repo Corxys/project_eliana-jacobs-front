@@ -1,8 +1,8 @@
 <script setup>
 // Import
+import {ref, computed, watch} from "vue";
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
-import {computed, watch} from "vue";
 
 // Utils
 import {slugifyTitle} from "../utils/slugifyTitle";
@@ -36,43 +36,54 @@ function selectFilter({name}) {
 }
 
 // Watch
-watch(() => route, (param) => {
-  const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
-  switch(categoryName) {
-    case "circus":
-      store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": false, "category": categoryName, "layout": "gallery"});
-      break;
-    case "performance art":
-      store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
-      break;
-    case "music":
-      store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
-      break;
-    case "digital media":
-      store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
-      break;
-    case "visual art":
-      store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
-      break;
-    default:
-  }
-}, {"deep": true, "immediate": true});
+// watch(() => route, (param) => {
+//   const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
+//   switch(categoryName) {
+//     case "circus":
+//       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": false, "category": categoryName, "layout": "gallery"});
+//       break;
+//     case "performance art":
+//       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
+//       break;
+//     case "music":
+//       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
+//       break;
+//     case "digital media":
+//       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
+//       break;
+//     case "visual art":
+//       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
+//       break;
+//     default:
+//   }
+// }, {"deep": true, "immediate": true});
 </script>
 
 <template>
   <section class="projects">
     <transition-component v-if="hasFilter && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
-    <div v-if="hasFilter" class="projects__filters">
+    <div class="projects__filters">
       <div
-        v-for="filter of [{id: 0, attributes: {name: 'All'}}, ...filters]"
+        v-for="filter of filters"
         :key="filter.id"
         class="projects__filter"
-        :class="{'projects__filter--active': filter.attributes.name === selectedFilter}"
+        :class="{'projects__filter active': filter.attributes.name === selectedFilter}"
         @click="selectFilter({'name': filter.attributes.name})"
       >
         {{filter.attributes.name}}
       </div>
     </div>
+    <!--    <div v-if="hasFilter" class="projects__filters">-->
+    <!--      <div-->
+    <!--        v-for="filter of (route.fullPath !== '/projects/visual-art' ? filters.map((filter) => filter).unshift({id: 0, attributes: {name: 'All'}}) : filters)"-->
+    <!--        :key="filter.id"-->
+    <!--        class="projects__filter"-->
+    <!--        :class="{'projects__filter&#45;&#45;active': filter.attributes.name === selectedFilter}"-->
+    <!--        @click="selectFilter({'name': filter.attributes.name})"-->
+    <!--      >-->
+    <!--        {{filter.attributes.name}}-->
+    <!--      </div>-->
+    <!--    </div>-->
     <div v-if="projects.length || medias.length" class="projects__content">
       <div v-if="layoutProjects === 'gallery'" class="projects__gallery">
         <div v-if="medias.length" class="projects__gallery-images">
@@ -137,6 +148,8 @@ watch(() => route, (param) => {
 .projects {
   display: flex;
   flex-direction: column;
+  padding-top: 130px;
+  padding-bottom: 130px;
   &__filters {
     display: flex;
     margin-bottom: 30px;

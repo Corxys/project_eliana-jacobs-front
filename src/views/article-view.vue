@@ -12,8 +12,8 @@ import emailIcon from "../assets/icons/email.svg";
 import linkIcon from "../assets/icons/link.svg";
 
 // Utils
-import {formatDate} from "../utils/formatDate.js";
-import {formatHour} from "../utils/formatHour.js";
+import {formatDate} from "@/utils/formatDate";
+import {formatHour} from "@/utils/formatHour";
 
 // Components
 import ButtonCustom from "../components/shared-components/custom-button-component.vue";
@@ -29,12 +29,6 @@ const article = computed(() => store.state.article);
 
 <template>
   <div class="article">
-    <div class="article__back" @click="router.back()">
-      <div class="article__back-arrow" />
-      <div class="article__back-text">
-        Back
-      </div>
-    </div>
     <div class="article__header">
       <h1 class="article__header-title">
         {{article.attributes.title}}
@@ -99,32 +93,6 @@ const article = computed(() => store.state.article);
 <style scoped lang="scss">
 .article {
   padding-bottom: 0;
-  &__back {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-bottom: 30px;
-    &:hover {
-      .article__back-arrow {
-        left: -5px;
-      }
-    }
-    &-text {
-      padding-left: 17px;
-    }
-    &-arrow {
-      position: absolute;
-      left: 0;
-      bottom: 5px;
-      height: 8px;
-      width: 8px;
-      border-top: 2px solid var(--epj-c-white);
-      border-right: 2px solid var(--epj-c-white);
-      transform: rotate(-135deg);
-      transition: left .2s ease-in-out;
-    }
-  }
   &__header {
     display: flex;
     justify-content: space-between;

@@ -87,7 +87,7 @@ const news = computed(() => store.state.news);
   }
   &__all {
     background-color: var(--color-section-background);
-    padding: 30px 30px var(--spacing-section-padding-bottom) 30px;
+    padding: 30px 30px 100px 30px;
   }
     &__articles {
       display: grid;

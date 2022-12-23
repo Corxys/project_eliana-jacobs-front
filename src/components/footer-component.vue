@@ -1,13 +1,10 @@
-<script>
-export default {
-  name: "FooterComponent"
-};
+<script setup>
 </script>
 
 <template>
   <footer class="footer">
     <div class="footer__credits">
-      <router-link to="/">
+      <router-link to="/about">
         EPJ
       </router-link>
       &
@@ -26,18 +23,18 @@ export default {
 
 <style scoped lang="scss">
 .footer {
-  z-index: 5;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 85px;
-  padding: 0 30px;
   color: white;
   font-family: var(--font-primary);
   font-size: 12px;
+  &__credits, &__notices {
+    position: fixed;
+    bottom: 30px;
+  }
+  &__credits {
+    left: 30px;
+  }
+  &__notices {
+    right: 30px;
+  }
 }
 </style>
