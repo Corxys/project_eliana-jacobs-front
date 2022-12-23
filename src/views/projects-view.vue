@@ -5,10 +5,11 @@ import {useStore} from "vuex";
 import {useRoute} from "vue-router";
 
 // Utils
-import {slugifyTitle} from "../utils/slugifyTitle";
+import {slugifyTitle} from "@/utils/slugifyTitle";
 
 // Components
-import TransitionComponent from "../components/transition-component.vue";
+import TransitionComponent from "@/components/transition-component.vue";
+import GalleryComponent from "@/components/gallery-component.vue";
 
 // Hook call
 const store = useStore();
@@ -22,10 +23,8 @@ const selectedFilter = computed(() => store.state.app.selectedFilter);
 const filters = computed(() => store.state.filters.selected);
 const projects = computed(() => store.state.projects.selected);
 const medias = computed(() => store.state.projects.data["circus"].medias);
+// TODO: remove the selectedMedia key on the state
 const selectedMedia = computed(() => store.state.projects.data["circus"].selectedMedia);
-
-// Regex
-const mimesTypesImage = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
 
 // Methods
 function selectFilter({name}) {
@@ -34,6 +33,26 @@ function selectFilter({name}) {
   }
   store.commit("setSelectedFilter", {name});
 }
+
+// Ref
+let indexOfFocusedImage = ref(0);
+
+// Methods
+const changeImageFocused = ({index}) => {
+	indexOfFocusedImage.value = index;
+};
+
+// Regex
+const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
+
+const displayedFilters = computed(() => {
+	if (route.fullPath !== "/projects/visual-art") {
+		const filtersMap = filters.value.map((filterMap) => filterMap);
+		filtersMap.unshift({"id": 0, "attributes": {"name": "All"}});
+		return filtersMap;
+	}
+	return filters.value;
+});
 
 // Watch
 // watch(() => route, (param) => {
@@ -61,67 +80,46 @@ function selectFilter({name}) {
 
 <template>
   <section class="projects">
+    <!-- Transition screen -->
     <transition-component v-if="hasFilter && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
-    <div class="projects__filters">
+
+    <!-- Filters -->
+    <div v-if="hasFilter" class="projects__filters">
       <div
-        v-for="filter of filters"
+        v-for="filter of displayedFilters"
         :key="filter.id"
         class="projects__filter"
-        :class="{'projects__filter active': filter.attributes.name === selectedFilter}"
+        :class="{'projects__filter--active': filter.attributes.name === selectedFilter}"
         @click="selectFilter({'name': filter.attributes.name})"
       >
         {{filter.attributes.name}}
       </div>
     </div>
-    <!--    <div v-if="hasFilter" class="projects__filters">-->
-    <!--      <div-->
-    <!--        v-for="filter of (route.fullPath !== '/projects/visual-art' ? filters.map((filter) => filter).unshift({id: 0, attributes: {name: 'All'}}) : filters)"-->
-    <!--        :key="filter.id"-->
-    <!--        class="projects__filter"-->
-    <!--        :class="{'projects__filter&#45;&#45;active': filter.attributes.name === selectedFilter}"-->
-    <!--        @click="selectFilter({'name': filter.attributes.name})"-->
-    <!--      >-->
-    <!--        {{filter.attributes.name}}-->
-    <!--      </div>-->
-    <!--    </div>-->
+
+    <!-- Projects -->
     <div v-if="projects.length || medias.length" class="projects__content">
+      <!-- Gallery layout	-->
       <div v-if="layoutProjects === 'gallery'" class="projects__gallery">
         <div v-if="medias.length" class="projects__gallery-images">
-          <div
-            v-for="media of medias"
-            :key="media.id"
-            class="projects__gallery-image"
-            @click="store.commit('setSelectedMedia', {media})"
-          >
-            <!-- TODO: try to get the thumbnail instead the src -->
-            <img
-              v-if="mimesTypesImage.test(media.src.data.attributes.mime)"
-              class="projects__gallery-src"
-              :src="media.src ? media.src.data.attributes.url : ''"
-              :alt="media.src.data.attributes.alternativeText ? media.src.data.attributes.alternativeText : ''"
-            >
-            <video
-              v-else
-              class="projects__item-src"
-              :src="media.src ? media.src.data.attributes.url : ''"
-            />
-          </div>
+          <gallery-component :on-click="changeImageFocused" :images="medias" />
         </div>
         <div class="projects__gallery-highlight">
           <!-- TODO: on click of the image, open preview -->
           <img
-            v-if="mimesTypesImage.test(selectedMedia.src.data.attributes.mime)"
+            v-if="mimesTypesCheck.test(medias[indexOfFocusedImage].src.data.attributes.mime)"
             class="projects__gallery-src projects__gallery-src--highlight"
-            :src="selectedMedia.src ? selectedMedia.src.data.attributes.url : ''"
-            :alt="selectedMedia.alt ? selectedMedia.alt : ''"
+            :src="medias[indexOfFocusedImage].src.data.attributes.url ? medias[indexOfFocusedImage].src.data.attributes.url : ''"
+            :alt="medias[indexOfFocusedImage].src.data.attributes.alternativeText ? medias[indexOfFocusedImage].src.data.attributes.alternativeText : ''"
           >
           <video
             v-else
             class="projects__item-src"
-            :src="selectedMedia.src ? selectedMedia.src.data.attributes.url : ''"
+            :src="medias[indexOfFocusedImage].src.data.attributes.url ? medias[indexOfFocusedImage].src.data.attributes.url : ''"
           />
         </div>
       </div>
+
+      <!-- List layout -->
       <div v-else class="projects__list">
         <div v-for="project of projects" :key="project.id" class="projects__item">
           <div class="projects__item-image projects__item-image--link" @click="store.commit('setProject', {'id': project.id})">

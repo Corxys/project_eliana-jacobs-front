@@ -1,4 +1,5 @@
 <script setup>
+// Props
 defineProps({
   images: {
     type: Array,
@@ -9,16 +10,25 @@ defineProps({
     required: true,
   },
 });
+
+// Regex
+const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
 </script>
 
 <template>
   <div class="gallery">
     <div v-for="(image, index) of images" :key="image.id" class="gallery__image">
       <img
+        v-if="mimesTypesCheck.test(image.src.data.attributes.mime)"
         :src="image.src.data.attributes.url ? image.src.data.attributes.url : ''"
         :alt="image.src.data.attributes.alt ? image.src.data.attributes.alt : ''"
         @click.stop="() => onClick({index})"
       >
+      <video
+        v-else
+        class="gallery__video"
+        :src="image.src.data.attributes.url ? media.src.data.attributes.url : ''"
+      />
     </div>
   </div>
 </template>
