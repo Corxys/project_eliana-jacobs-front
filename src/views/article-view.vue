@@ -92,7 +92,8 @@ const article = computed(() => store.state.article);
 
 <style scoped lang="scss">
 .article {
-  padding-bottom: 0;
+	padding-top: 130px;
+  padding-bottom: 130px;
   &__header {
     display: flex;
     justify-content: space-between;

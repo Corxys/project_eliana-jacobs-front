@@ -23,15 +23,13 @@ const selectedFilter = computed(() => store.state.app.selectedFilter);
 const filters = computed(() => store.state.filters.selected);
 const projects = computed(() => store.state.projects.selected);
 const medias = computed(() => store.state.projects.data["circus"].medias);
-// TODO: remove the selectedMedia key on the state
-const selectedMedia = computed(() => store.state.projects.data["circus"].selectedMedia);
 
 // Methods
 async function selectFilter({name}) {
   if (hasTransitionScreen.value) {
-    await store.commit("setTransitionScreen", {"isTransitioned": false});
+    await store.dispatch("setTransitionScreen", {"isTransitioned": false});
   }
-  await store.commit("setSelectedFilter", {name});
+  await store.dispatch("setSelectedFilter", {name});
 }
 
 // Ref
@@ -79,7 +77,14 @@ const displayedFilters = computed(() => {
 </script>
 
 <template>
-  <section class="projects">
+  <section
+    class="projects"
+    :style="[
+      hasTransitionScreen ?
+        {'position': 'fixed', 'overflow': 'hidden'} :
+        {'position': 'static', 'overflow': 'auto'}
+    ]"
+  >
     <!-- Transition screen -->
     <transition-component v-if="hasFilter && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
 
@@ -122,7 +127,7 @@ const displayedFilters = computed(() => {
       <!-- List layout -->
       <div v-else class="projects__list">
         <div v-for="project of projects" :key="project.id" class="projects__item">
-          <div class="projects__item-image projects__item-image--link" @click="store.commit('setProject', {'id': project.id})">
+          <div class="projects__item-image projects__item-image--link" @click="store.dispatch('setProject', {'id': project.id})">
             <router-link :to="`/project/${slugifyTitle(project.attributes.name)}`">
               <img
                 class="projects__item-src"
@@ -131,7 +136,7 @@ const displayedFilters = computed(() => {
               >
             </router-link>
           </div>
-          <h2 class="projects__item-title projects__item-title--link" @click="store.commit('setProject', {'id': project.id})">
+          <h2 class="projects__item-title projects__item-title--link" @click="store.dispatch('setProject', {'id': project.id})">
             <router-link :to="`/project/${slugifyTitle(project.attributes.name)}`">
               {{project.attributes.name}}
             </router-link>

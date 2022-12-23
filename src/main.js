@@ -17,7 +17,15 @@ dom.watch();
 // Styles
 import "./assets/styles/main.scss";
 
-store.dispatch("getData");
+store.dispatch("getData")
+	.then(() => {
+		// TODO: use this scope to handle the loading screen
+		console.debug("[app] data initialized.");
+	})
+	.catch((error) => {
+		console.error("An error occurred while retrieving the data.");
+		console.error(error);
+	});
 
 // App init
 const app = createApp(main);

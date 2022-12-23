@@ -51,7 +51,7 @@ const news = computed(() => store.state.news);
 
 <style scoped lang="scss">
 .news {
-  padding-bottom: 0;
+  padding-top: 130px;
   &__header {
     padding-bottom: var(--spacing-box-section);
     border-bottom: 1px solid var(--epj-c-white);

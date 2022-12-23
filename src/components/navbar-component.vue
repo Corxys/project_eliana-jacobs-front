@@ -20,10 +20,10 @@ import logotypeWhite from "../assets/images/logo-w.png";
 import logotypeBlack from "../assets/images/logo-b.png";
 
 // Data
-import {links} from "../assets/data/links.js";
+import {links} from "@/assets/data/links";
 
 // Utils
-import {slugifyTitle} from "../utils/slugifyTitle";
+import {slugifyTitle} from "@/utils/slugifyTitle";
 
 // Inject
 let isMenuOpen = inject("isMenuOpen");
@@ -42,35 +42,33 @@ const projects = computed(() => store.state.projects.selected);
 const medias = computed(() => store.state.projects.data["circus"].medias);
 
 // Methods
-function getProjectsByCategory(name) {
-  console.log(name);
+const getProjectsByCategory = async (name) => {
   switch(name) {
     case "Circus":
-      store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": false, "category": name, "layout": "gallery"});
+      await store.dispatch("setCategoryForProjects", {"isFiltered": true, "isTransitioned": false, "category": name, "layout": "gallery"});
       break;
     case "Performance Art":
-      store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
+      await store.dispatch("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
     case "Music":
-      store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
+      await store.dispatch("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
     case "Digital Media":
-      store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
+      await store.dispatch("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
       break;
     case "Visual Art":
-      store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
+      await store.dispatch("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
       break;
     default:
   }
 
-  console.log(projects.value, medias.value);
   if (projects.value.length || medias.value.length ) {
-    router.push(`/projects/${slugifyTitle(name)}`);
+    await router.push(`/projects/${slugifyTitle(name)}`);
   } else {
-    router.push("/projects/waiting");
+    await router.push("/projects/waiting");
   }
   isMenuOpen.value = false;
-}
+};
 </script>
 
 <template>

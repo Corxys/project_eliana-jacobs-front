@@ -126,6 +126,8 @@ const sendEmail = () => {
 .contact {
   display: flex;
   flex-direction: column;
+	padding-top: 130px;
+	padding-bottom: 130px;
   &__content {
     flex-grow: 1;
     display: flex;

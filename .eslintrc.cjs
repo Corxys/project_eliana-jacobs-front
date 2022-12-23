@@ -16,7 +16,7 @@ module.exports = {
     /* ESLint core rules */
     "quotes": [2, "double", {avoidEscape: true}],
     "semi": ["error", "always"],
-    "max-len": ["error", {"code": 180, "tabWidth": 2}],
+    "max-len": ["error", {"code": 180, "tabWidth": 1}],
     
     /* Vue 3 rules */
     "vue/template-curly-spacing": ["error", "never"],

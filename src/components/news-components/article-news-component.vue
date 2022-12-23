@@ -31,7 +31,7 @@ defineProps({
 
 // Actions
 const getArticle = (article) => {
-  store.commit("setArticle", {id: article.id});
+  store.dispatch("setArticle", {id: article.id});
   router.push(`/article/${slugifyTitle(article.attributes.title)}`);
 };
 </script>
