@@ -1,10 +1,12 @@
 /* eslint-disable max-len */
 
 // General
+import router from "../router";
 import gql from "graphql-tag";
 
 // Utils
 import graphqlClient from "../utils/graphql";
+import {slugifyTitle} from "../utils/slugifyTitle";
 
 // Queries
 const PRACTICES_QUERY = gql`query Practices {practices {data {id attributes {title text image {src {data {attributes {url}}}copyright}}}}}`;
@@ -15,7 +17,7 @@ const PROJECTS_QUERY = gql`query Projects{projects (pagination: {limit:100}){dat
 
 export default function createActions() {
   return {
-    // General
+    /* GENERAL */
     async getData({commit}) {
       console.debug("[app] data initialization...");
 
@@ -56,6 +58,10 @@ export default function createActions() {
       const circusMedias = [];
       const circusProjects = responseProjects.data.projects.data.filter((project) => project.attributes.category.data.attributes.name === "Circus");
       circusProjects.forEach((project) => project.attributes.medias.forEach((media) => circusMedias.push(media)));
+  
+      circusMedias.sort(() => {
+        return Math.random() - 0.5;
+      });
       
       commit("setProjects", {
         circusProjects,
@@ -67,42 +73,57 @@ export default function createActions() {
       });
     },
     
-    // Projects
+    /* PROJECTS */
+    // Clicking on a link in the navigation bar.
     setCategoryForProjects({state, commit}, {isFiltered, isTransitioned, category, layout}) {
-      let selectedProjects, selectedFilters;
+      let selectedProjects, selectedFilters = [];
       
+      // Get projects for the categories (circus, music, performance art, digital media, visual art).
       const projects = state.projects.data[category.toLowerCase()];
+  
+      // For the circus projects, the key is "projects.data", otherwise is "projects".
+      selectedProjects = projects.data ? projects.data : projects;
       
-      if (projects.length || projects.data.length) {
-        selectedProjects = projects.length ? projects : projects.data;
+      // If there is projects in the selected category, select associated filters and push to the route.
+      if (selectedProjects.length) {
         selectedFilters = state.filters.data.filter((filter) => {
           return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
         });
+        router.push(`/projects/${slugifyTitle(category)}`);
+  
+        commit("setCategoryForProjects", {
+          isFiltered,
+          isTransitioned,
+          category,
+          layout,
+          selectedProjects,
+          selectedFilters,
+        });
       }
-      
-      commit("setCategoryForProjects", {
-        isFiltered,
-        isTransitioned,
-        category,
-        layout,
-        selectedProjects,
-        selectedFilters,
-      });
+      // If not, push to the waiting route.
+      else {
+        router.push("/projects/waiting");
+      }
     },
     
-    // Project
+    /* PREVIEW */
+    setImageOnPreview({commit}, {isImageOnPreview}) {
+      commit("setImageOnPreview", {isImageOnPreview});
+    },
+  
+    /* PROJECT */
     setProject({state, commit}, {id}) {
       const project = state.projects.selected.find((project) => project.id === id);
       commit("setProject", {project});
     },
-    
-    // Article
+  
+    /* ARTICLE */
     setArticle({state, commit}, {id}) {
       const article = state.news.find((article) => article.id == id);
       commit("setArticle", {article});
     },
-    
-    // Filters
+  
+    /* FILTERS */
     setTransitionScreen({commit}, {isTransitioned}) {
       commit("setTransitionScreen", {isTransitioned});
     },
@@ -118,7 +139,6 @@ export default function createActions() {
           state.projects.data["circus"].data.forEach((project) => {
             project.attributes.medias.forEach((media) => circusMedias.push(media));
           });
-          return;
         }
         
         // If the selected filter isn't "All".
@@ -135,7 +155,6 @@ export default function createActions() {
       // When the selected category isn't "Circus", displays all projects.
       if (name === "All") {
         selectedProjects = state.projects.data[state.app.selectedCategory.toLowerCase()];
-        return;
       }
       
       // If the selected filter isn't "All", select the projects corresponding to the selected filter.

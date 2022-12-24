@@ -10,6 +10,7 @@ import {slugifyTitle} from "@/utils/slugifyTitle";
 // Components
 import TransitionComponent from "@/components/transition-component.vue";
 import GalleryComponent from "@/components/gallery-component.vue";
+import ImageCustomComponent from "@/components/image-custom-component.vue";
 
 // Hook call
 const store = useStore();
@@ -40,9 +41,7 @@ const changeImageFocused = ({index}) => {
 	indexOfFocusedImage.value = index;
 };
 
-// Regex
-const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
-
+// Computed
 const displayedFilters = computed(() => {
 	if (route.fullPath !== "/projects/visual-art") {
 		const filtersMap = filters.value.map((filterMap) => filterMap);
@@ -51,6 +50,10 @@ const displayedFilters = computed(() => {
 	}
 	return filters.value;
 });
+
+watch(() => route, () => {
+	store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
+}, {"deep": true, "immediate": true});
 
 // Watch
 // watch(() => route, (param) => {
@@ -82,7 +85,7 @@ const displayedFilters = computed(() => {
     :style="[
       hasTransitionScreen ?
         {'position': 'fixed', 'overflow': 'hidden'} :
-        {'position': 'static', 'overflow': 'auto'}
+        {'position': 'static', 'overflow': 'inherit'}
     ]"
   >
     <!-- Transition screen -->
@@ -109,17 +112,10 @@ const displayedFilters = computed(() => {
           <gallery-component :on-click="changeImageFocused" :images="medias" />
         </div>
         <div class="projects__gallery-highlight">
-          <!-- TODO: on click of the image, open preview -->
-          <img
-            v-if="mimesTypesCheck.test(medias[indexOfFocusedImage].src.data.attributes.mime)"
-            class="projects__gallery-src projects__gallery-src--highlight"
-            :src="medias[indexOfFocusedImage].src.data.attributes.url ? medias[indexOfFocusedImage].src.data.attributes.url : ''"
-            :alt="medias[indexOfFocusedImage].src.data.attributes.alternativeText ? medias[indexOfFocusedImage].src.data.attributes.alternativeText : ''"
-          >
-          <video
-            v-else
-            class="projects__item-src"
-            :src="medias[indexOfFocusedImage].src.data.attributes.url ? medias[indexOfFocusedImage].src.data.attributes.url : ''"
+          <image-custom-component
+            :image="medias[indexOfFocusedImage].src.data.attributes"
+            :copyright="medias[indexOfFocusedImage].copyright"
+            :has-preview="true"
           />
         </div>
       </div>
@@ -129,11 +125,9 @@ const displayedFilters = computed(() => {
         <div v-for="project of projects" :key="project.id" class="projects__item">
           <div class="projects__item-image projects__item-image--link" @click="store.dispatch('setProject', {'id': project.id})">
             <router-link :to="`/project/${slugifyTitle(project.attributes.name)}`">
-              <img
-                class="projects__item-src"
-                :src="project.attributes.medias.length ? project.attributes.medias[0].src.data.attributes.url : ''"
-                :alt="project.attributes.medias.length ? project.attributes.medias[0].alt : ''"
-              >
+              <image-custom-component
+                :image="project.attributes.medias[0].src.data.attributes"
+              />
             </router-link>
           </div>
           <h2 class="projects__item-title projects__item-title--link" @click="store.dispatch('setProject', {'id': project.id})">
@@ -186,33 +180,37 @@ const displayedFilters = computed(() => {
     display: flex;
     &-images, &-highlight {
       width: 50%;
+			:deep(.image__src) {
+				cursor: pointer;
+			}
     }
     &-images {
       display: flex;
       flex-flow: row wrap;
-      height: 100%;
-      overflow-y: visible;
     }
-    &-image {
-      flex: auto;
-      height: 100px;
-      min-width: 50px;
-      margin: 0 8px 8px 0;
-    }
-    &-src {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      &--highlight {
-        height: auto;
-        position: sticky;
-        top: 0;
-        object-fit: contain;
-        object-position: top;
-      }
-    }
+    //&-image {
+    //  flex: auto;
+    //  height: 100px;
+    //  min-width: 50px;
+    //  margin: 0 8px 8px 0;
+    //}
+    //&-src {
+    //  width: 100%;
+    //  height: 100%;
+    //  object-fit: cover;
+    //  object-position: center;
+    //  &--highlight {
+    //    height: auto;
+    //    position: sticky;
+    //    top: 0;
+    //    object-fit: contain;
+    //    object-position: top;
+    //  }
+    //}
     &-highlight {
+			position: sticky;
+			top: 30px;
+			height: 100%;
       margin-left: 30px;
     }
   }
@@ -229,6 +227,15 @@ const displayedFilters = computed(() => {
     &-image {
       width: 100%;
       height: 350px;
+			:deep(.image) {
+				height: 100%;
+				img {
+					cursor: pointer;
+					object-fit: cover;
+					height: 100%;
+					width: 100%;
+				}
+			}
       &--link {}
     }
     &-src {

@@ -1,14 +1,13 @@
 <script setup>
-defineProps({
-  onClick: {
-    type: Function,
-    required: true,
-  },
-});
+// General
+import {useRouter} from "vue-router";
+
+// Hook call
+const router = useRouter();
 </script>
 
 <template>
-  <div class="arrow-back" @click="onClick">
+  <div class="arrow-back" @click="router.back">
     <div class="arrow-back__body" />
     <div class="arrow-back__text">
       Back

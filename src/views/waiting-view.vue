@@ -8,5 +8,8 @@
 </template>
 
 <style scoped>
-
+.waiting {
+	padding-top: 130px;
+	padding-bottom: 130px;
+}
 </style>

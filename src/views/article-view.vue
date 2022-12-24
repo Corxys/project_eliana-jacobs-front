@@ -2,7 +2,6 @@
 // General
 import {computed} from "vue";
 import {useStore} from "vuex";
-import {useRouter} from "vue-router";
 import {marked} from "marked";
 
 // Icons
@@ -18,10 +17,10 @@ import {formatHour} from "@/utils/formatHour";
 // Components
 import ButtonCustom from "../components/shared-components/custom-button-component.vue";
 import ImageCustom from "../components/image-custom-component.vue";
+import ArrowBackComponent from "@/components/arrow-back-component.vue";
 
 // Hook call
 const store = useStore();
-const router = useRouter();
 
 // State
 const article = computed(() => store.state.article);
@@ -29,6 +28,7 @@ const article = computed(() => store.state.article);
 
 <template>
   <div class="article">
+    <arrow-back-component />
     <div class="article__header">
       <h1 class="article__header-title">
         {{article.attributes.title}}
@@ -70,7 +70,6 @@ const article = computed(() => store.state.article);
             </a>
           </div>
         </div>
-        <!-- TODO: check if external URL as email or link and adjust the href used -->
         <button-custom v-if="article.attributes.register" text="Register by email" :link="'mailto:' + article.attributes.register.email" :external="true" />
         <div v-if="article.attributes.website" class="article__sidebar-link">
           <img class="article__sidebar-icon" :src="linkIcon">
@@ -81,8 +80,7 @@ const article = computed(() => store.state.article);
       </div>
       <div class="article__image">
         <image-custom
-          :src="article.attributes.image.src.data.attributes.url"
-          :alt="article.attributes.image.src.data.attributes.alternativeText"
+          :image="article.attributes.image.src.data.attributes"
           :copyright="article.attributes.image.copyright"
         />
       </div>
@@ -133,16 +131,12 @@ const article = computed(() => store.state.article);
     }
   }
   &__image {
-    flex-grow: 1;
-    width: 50%;
-    margin-left: 15px;
-    &-src {
-      position: sticky;
-      top: 0;
-      width: 100%;
-      object-fit: contain;
-      object-position: top;
-    }
+		flex-grow: 1;
+		position: sticky;
+		top: 30px;
+		width: 50%;
+		height: 100%;
+		margin-left: 15px;
   }
 }
 </style>

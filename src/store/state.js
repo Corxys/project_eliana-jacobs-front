@@ -6,6 +6,7 @@ export default function createState() {
 			selectedFilter: "All",
 			selectedCategory: "",
 			layoutProjects: "",
+			hasImageOnPreview: false,
 		},
 		filters: {
 			data: {},

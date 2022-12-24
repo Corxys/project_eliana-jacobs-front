@@ -15,8 +15,7 @@ defineProps({
   <div class="practice">
     <div class="practice__container">
       <image-custom
-        :src="practice.attributes.image.src.data.attributes.url"
-        :alt="practice.attributes.image.src.data.attributes.alternativeText"
+        :image="practice.attributes.image.src.data.attributes"
         :copyright="practice.attributes.image.copyright"
       />
     </div>

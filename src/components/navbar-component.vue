@@ -62,11 +62,13 @@ const getProjectsByCategory = async (name) => {
     default:
   }
 
-  if (projects.value.length || medias.value.length ) {
-    await router.push(`/projects/${slugifyTitle(name)}`);
-  } else {
-    await router.push("/projects/waiting");
-  }
+	// console.log(projects.value.length, medias.value.length);
+	//
+	// if (projects.value.length || medias.value.length ) {
+	// 	await router.push(`/projects/${slugifyTitle(name)}`);
+	// } else {
+	// 	await router.push("/projects/waiting");
+	// }
   isMenuOpen.value = false;
 };
 </script>

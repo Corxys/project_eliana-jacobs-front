@@ -32,6 +32,11 @@ export default function createMutations() {
 			state.filters.selected = selectedFilters;
 		},
 		
+		// Preview
+		setImageOnPreview(state, {isImageOnPreview}) {
+			state.app.hasImageOnPreview = isImageOnPreview;
+		},
+		
 		// Project
 		setProject(state, {project}) {
       state.project = project;

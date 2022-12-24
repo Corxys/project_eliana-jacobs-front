@@ -1,36 +1,60 @@
 <script setup>
+// General
+import {computed} from "vue";
+import {useStore} from "vuex";
+
+// Components
+import PreviewComponent from "@/components/preview-component.vue";
+
+// Props
 defineProps({
-  src: {
-    type: String,
-    required: true,
-    default: "",
+  "image": {
+    "type": Object,
+    "required": true,
   },
-  alt: {
-    type: String,
-    required: false,
-    default: "",
+  "copyright": {
+    "type": String,
+    "required": false,
+    "default": ""
   },
-  copyright: {
-    type: String,
-    required: false,
-    default: ""
-  }
+	"hasPreview": {
+		"type": Boolean,
+		"required": false,
+		"default": false,
+	}
 });
+
+// Hook call
+const store = useStore();
+
+// State
+const hasImageOnPreview = computed(() => store.state.app.hasImageOnPreview);
+
+// Methods
+const displayImageOnPreview = () => {
+	store.dispatch("setImageOnPreview", {"isImageOnPreview": true});
+};
 </script>
 
 <template>
   <div class="image">
-    <img class="image__src" :src="src" :alt="alt">
+    <!-- TODO: handle video media -->
+    <img
+      class="image__src"
+      :src="image.url"
+      :alt="image.alternativeText"
+      @click="displayImageOnPreview"
+    >
     <span v-if="copyright" class="image__credits credits">
       {{copyright}}
     </span>
+    <preview-component v-if="hasPreview && hasImageOnPreview" :image="image.url" :copyright="copyright" />
   </div>
 </template>
 
 <style scoped lang="scss">
 .image {
   width: 100%;
-  height: 100%;
   position: relative;
   &:hover {
     .credits {

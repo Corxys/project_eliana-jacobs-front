@@ -1,8 +1,8 @@
 <script setup>
 // General
-import {ref, computed} from "vue";
+import {ref, computed, watch} from "vue";
 import {useStore} from "vuex";
-import {useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 import {marked} from "marked";
 
 // Components
@@ -12,7 +12,7 @@ import Gallery from "@/components/gallery-component.vue";
 
 // Hook call
 const store = useStore();
-const router = useRouter();
+const route = useRoute();
 
 // Store
 const project = computed(() => store.state.project);
@@ -25,11 +25,15 @@ let indexOfFocusedImage = ref(0);
 const changeImageFocused = ({index}) => {
   indexOfFocusedImage.value = index;
 };
+
+watch(() => route, () => {
+	store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
+}, {"deep": true, "immediate": true});
 </script>
 
 <template>
   <section class="project">
-    <arrow-back :on-click="router.back" />
+    <arrow-back />
     <div class="project__container">
       <div class="project__content">
         <h1 class="project__title">
@@ -45,9 +49,9 @@ const changeImageFocused = ({index}) => {
       </div>
       <div class="project__highlight">
         <image-custom
-          class="project__highlight-image"
-          :src="project.attributes.medias[indexOfFocusedImage].src.data.attributes.url"
-          :alt="project.attributes.medias[indexOfFocusedImage].src.data.attributes.alternativeText"
+          :image="project.attributes.medias[indexOfFocusedImage].src.data.attributes"
+          :copyright="project.attributes.medias[indexOfFocusedImage].copyright"
+          :has-preview="true"
         />
       </div>
     </div>
@@ -74,12 +78,9 @@ const changeImageFocused = ({index}) => {
     position: sticky;
     top: 30px;
     height: 100%;
-    padding-left: 30px;
-    margin-top: 12px;
-    &-image {
-      cursor: pointer;
-    }
+    margin-left: 30px;
     :deep(.image__src) {
+			cursor: pointer;
       width: 100%;
       object-fit: cover;
       object-position: top center;
