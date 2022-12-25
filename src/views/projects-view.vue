@@ -25,16 +25,18 @@ const filters = computed(() => store.state.filters.selected);
 const projects = computed(() => store.state.projects.selected);
 const medias = computed(() => store.state.projects.medias);
 
+// Ref
+let indexOfFocusedImage = ref(0);
+
 // Methods
 async function selectFilter({name}) {
+	indexOfFocusedImage.value = 0;
   if (hasTransitionScreen.value) {
     await store.dispatch("setTransitionScreen", {"isTransitioned": false});
   }
   await store.dispatch("setSelectedFilter", {name});
 }
 
-// Ref
-let indexOfFocusedImage = ref(0);
 
 // Methods
 const changeImageFocused = ({index}) => {
