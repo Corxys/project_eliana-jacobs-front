@@ -13,17 +13,12 @@ export default function createMutations() {
 		setFilters(state, {filters}) {
 			state.filters.data = filters.data;
 		},
-		setProjects(state, {circusProjects, circusMedias, visualArtProjects, performanceArtProjects, musicProjects, digitalMediaProjects}) {
-      state.projects.data["circus"].data = circusProjects;
-      state.projects.data["circus"].medias = circusMedias;
-      state.projects.data["visual art"] = visualArtProjects;
-      state.projects.data["performance art"] = performanceArtProjects;
-      state.projects.data["music"] = musicProjects;
-      state.projects.data["digital media"] = digitalMediaProjects;
+		setProjects(state, {projects}) {
+			state.projects = {...state.projects, ...projects};
     },
 		
 		// Projects
-		setCategoryForProjects(state, {isFiltered, isTransitioned, category, layout, selectedProjects, selectedFilters}) {
+		setProjectsByCategory(state, {isFiltered, isTransitioned, category, layout, selectedProjects, selectedFilters}) {
 			state.app.hasFilter = isFiltered;
 			state.app.hasTransitionScreen = isTransitioned;
 			state.app.layoutProjects = layout;
@@ -53,7 +48,7 @@ export default function createMutations() {
 		},
     setSelectedFilter(state, {selectedFilterName, circusMedias = [], selectedProjects = []}) {
       state.app.selectedFilter = selectedFilterName;
-			state.projects.data["circus"].medias = circusMedias;
+			state.projects.medias = circusMedias;
 			state.projects.selected = selectedProjects;
     },
 	};

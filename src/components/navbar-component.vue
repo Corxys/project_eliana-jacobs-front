@@ -22,9 +22,6 @@ import logotypeBlack from "../assets/images/logo-b.png";
 // Data
 import {links} from "@/assets/data/links";
 
-// Utils
-import {slugifyTitle} from "@/utils/slugifyTitle";
-
 // Inject
 let isMenuOpen = inject("isMenuOpen");
 
@@ -45,30 +42,23 @@ const medias = computed(() => store.state.projects.data["circus"].medias);
 const getProjectsByCategory = async (name) => {
   switch(name) {
     case "Circus":
-      await store.dispatch("setCategoryForProjects", {"isFiltered": true, "isTransitioned": false, "category": name, "layout": "gallery"});
+      await store.dispatch("setProjectsByCategory", {"isFiltered": true, "isTransitioned": false, "category": name, "layout": "gallery"});
       break;
     case "Performance Art":
-      await store.dispatch("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
+      await store.dispatch("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
     case "Music":
-      await store.dispatch("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
+      await store.dispatch("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
     case "Digital Media":
-      await store.dispatch("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
+      await store.dispatch("setProjectsByCategory", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
       break;
     case "Visual Art":
-      await store.dispatch("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
+      await store.dispatch("setProjectsByCategory", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
       break;
     default:
   }
 
-	// console.log(projects.value.length, medias.value.length);
-	//
-	// if (projects.value.length || medias.value.length ) {
-	// 	await router.push(`/projects/${slugifyTitle(name)}`);
-	// } else {
-	// 	await router.push("/projects/waiting");
-	// }
   isMenuOpen.value = false;
 };
 </script>

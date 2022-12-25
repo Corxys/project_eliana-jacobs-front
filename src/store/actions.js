@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 
 // General
-import router from "../router";
+import router from "@/router";
 import gql from "graphql-tag";
 
 // Utils
-import graphqlClient from "../utils/graphql";
-import {slugifyTitle} from "../utils/slugifyTitle";
+import graphqlClient from "@/utils/graphql";
+import {slugifyTitle} from "@/utils/slugifyTitle";
 
 // Queries
 const PRACTICES_QUERY = gql`query Practices {practices {data {id attributes {title text image {src {data {attributes {url}}}copyright}}}}}`;
@@ -18,80 +18,72 @@ const PROJECTS_QUERY = gql`query Projects{projects (pagination: {limit:100}){dat
 export default function createActions() {
   return {
     /* GENERAL */
-    async getData({commit}) {
+    // On app initialization, get all data.
+    async getData({state, commit}) {
       console.debug("[app] data initialization...");
 
-      // Practices
+      // Get practices data
       console.debug("[app] get practices...");
       const responsePractices = await graphqlClient.query({"query": PRACTICES_QUERY});
       console.debug("[app] practices:", responsePractices.data.practices);
       commit("setPractices", {"practices": responsePractices.data.practices});
 
-      // News
+      // Get news data
       console.debug("[app] get news...");
       const responseNews = await graphqlClient.query({"query": NEWS_QUERY});
       console.debug("[app] news:", responseNews.data.news);
       commit("setNews", {"news": responseNews.data.news});
 
-      // Categories
+      // Get categories (circus, visual art, performance art, music, digital media) data
       console.debug("[app] get categories...");
       const responseCategories = await graphqlClient.query({"query": CATEGORIES_QUERY});
       console.debug("[app] categories:", responseCategories.data.categories);
       commit("setCategories", {"categories": responseCategories.data.categories});
 
-      // Filters
+      // Get filters (performance gallery, artistik gallery, videos / habiter, sound, video / papercutting & installation, archive) data
       console.debug("[app] get filters...");
       const responseFilters = await graphqlClient.query({"query": TYPES_QUERY});
       console.debug("[app] filters:", responseFilters.data);
       commit("setFilters", {"filters": responseFilters.data.types});
 
-      // Projects
+      // Get projects data
       console.debug("[app] get projects...");
       const responseProjects = await graphqlClient.query({"query": PROJECTS_QUERY});
       console.debug("[app] projects:", responseProjects.data);
       
-      const visualArtProjects = responseProjects.data.projects.data.filter((project) => project.attributes.category.data.attributes.name === "Visual Art");
-      const performanceArtProjects = responseProjects.data.projects.data.filter((project) => project.attributes.category.data.attributes.name === "Performance Art");
-      const musicProjects = responseProjects.data.projects.data.filter((project) => project.attributes.category.data.attributes.name === "Music");
-      const digitalMediaProjects = responseProjects.data.projects.data.filter((project) => project.attributes.category.data.attributes.name === "Digital Media");
+      // Use a copy of "projects" to next dispatched them by the different categories.
+      const dispatchedProjects = {...state.projects};
       
-      const circusMedias = [];
-      const circusProjects = responseProjects.data.projects.data.filter((project) => project.attributes.category.data.attributes.name === "Circus");
-      circusProjects.forEach((project) => project.attributes.medias.forEach((media) => circusMedias.push(media)));
-  
-      circusMedias.sort(() => {
-        return Math.random() - 0.5;
+      responseCategories.data.categories.data.forEach((category) => {
+        // Get the name of the category.
+        const categoryName = category.attributes.name;
+        // And filter projects to store them in the good category.
+        dispatchedProjects.data[categoryName.toLowerCase()] = responseProjects.data.projects.data.filter((project) => project.attributes.category.data.attributes.name === categoryName);
       });
       
-      commit("setProjects", {
-        circusProjects,
-        circusMedias,
-        visualArtProjects,
-        performanceArtProjects,
-        musicProjects,
-        digitalMediaProjects,
-      });
+      // For the circus projects, medias needs to be extracted and store in a specific key.
+      dispatchedProjects.data["circus"].forEach((project) => project.attributes.medias.forEach((media) => dispatchedProjects.medias.push(media)));
+      // And the medias are shuffled.
+      dispatchedProjects.medias.sort(() => Math.random() - 0.5);
+      
+      commit("setProjects", {"projects": dispatchedProjects});
     },
     
     /* PROJECTS */
     // Clicking on a link in the navigation bar.
-    setCategoryForProjects({state, commit}, {isFiltered, isTransitioned, category, layout}) {
-      let selectedProjects, selectedFilters = [];
+    async setProjectsByCategory({state, commit}, {isFiltered, isTransitioned, category, layout}) {
+      let selectedFilters = [];
       
       // Get projects for the categories (circus, music, performance art, digital media, visual art).
-      const projects = state.projects.data[category.toLowerCase()];
-  
-      // For the circus projects, the key is "projects.data", otherwise is "projects".
-      selectedProjects = projects.data ? projects.data : projects;
+      const selectedProjects = state.projects.data[category.toLowerCase()];
       
       // If there is projects in the selected category, select associated filters and push to the route.
       if (selectedProjects.length) {
         selectedFilters = state.filters.data.filter((filter) => {
           return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
         });
-        router.push(`/projects/${slugifyTitle(category)}`);
-  
-        commit("setCategoryForProjects", {
+        
+        commit("setProjectsByCategory", {
           isFiltered,
           isTransitioned,
           category,
@@ -99,10 +91,12 @@ export default function createActions() {
           selectedProjects,
           selectedFilters,
         });
+        
+        await router.push(`/projects/${slugifyTitle(category)}`);
       }
       // If not, push to the waiting route.
       else {
-        router.push("/projects/waiting");
+        await router.push("/projects/waiting");
       }
     },
     
@@ -127,6 +121,7 @@ export default function createActions() {
     setTransitionScreen({commit}, {isTransitioned}) {
       commit("setTransitionScreen", {isTransitioned});
     },
+    // Clicking on a filter.
     setSelectedFilter({state, commit}, {name}) {
       const circusMedias = [];
       let selectedProjects = {};
@@ -136,13 +131,13 @@ export default function createActions() {
         // And the selected filter is "All".
         if (name === "All") {
           // Take the all medias in the "Circus" project and displays them.
-          state.projects.data["circus"].data.forEach((project) => {
+          state.projects.data["circus"].forEach((project) => {
             project.attributes.medias.forEach((media) => circusMedias.push(media));
           });
         }
         
         // If the selected filter isn't "All".
-        state.projects.data["circus"].data.filter((project) => {
+        state.projects.data["circus"].filter((project) => {
           // Select the medias corresponding to the selected filter.
           if (project.attributes.type.data.attributes.name.toLowerCase() === name.toLowerCase()) {
             project.attributes.medias.forEach((media) => circusMedias.push(media));
@@ -162,7 +157,7 @@ export default function createActions() {
         return project.attributes.type.data.attributes.name.toLowerCase() === name.toLowerCase();
       });
       
-      commit("setSelectedFilter", {"selectedFilterName": name, selectedProjects});
+      commit("setSelectedFilter", {"selectedFilterName": name, circusMedias, selectedProjects});
     },
 	};
 }

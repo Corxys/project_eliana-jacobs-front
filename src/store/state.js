@@ -15,15 +15,13 @@ export default function createState() {
 		categories: [],
 		projects: {
 			data: {
-				"circus": {
-					data: [],
-					medias: [],
-				},
+				"circus": [],
 				"visual art": [],
 				"performance art": [],
 				"music": [],
 				"digital media": [],
 			},
+			medias: [],
 			selected: [],
 		},
 		project: {},

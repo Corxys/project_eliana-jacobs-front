@@ -23,7 +23,7 @@ const layoutProjects = computed(() => store.state.app.layoutProjects);
 const selectedFilter = computed(() => store.state.app.selectedFilter);
 const filters = computed(() => store.state.filters.selected);
 const projects = computed(() => store.state.projects.selected);
-const medias = computed(() => store.state.projects.data["circus"].medias);
+const medias = computed(() => store.state.projects.medias);
 
 // Methods
 async function selectFilter({name}) {
@@ -46,6 +46,7 @@ const displayedFilters = computed(() => {
 	if (route.fullPath !== "/projects/visual-art") {
 		const filtersMap = filters.value.map((filterMap) => filterMap);
 		filtersMap.unshift({"id": 0, "attributes": {"name": "All"}});
+		store.dispatch("setSelectedFilter", {"name": "All"});
 		return filtersMap;
 	}
 	return filters.value;
@@ -60,19 +61,19 @@ watch(() => route, () => {
 //   const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
 //   switch(categoryName) {
 //     case "circus":
-//       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": false, "category": categoryName, "layout": "gallery"});
+//       store.commit("setProjectsByCategory", {"isFiltered": true, "isTransitioned": false, "category": categoryName, "layout": "gallery"});
 //       break;
 //     case "performance art":
-//       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
+//       store.commit("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
 //       break;
 //     case "music":
-//       store.commit("setCategoryForProjects", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
+//       store.commit("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
 //       break;
 //     case "digital media":
-//       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
+//       store.commit("setProjectsByCategory", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
 //       break;
 //     case "visual art":
-//       store.commit("setCategoryForProjects", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
+//       store.commit("setProjectsByCategory", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
 //       break;
 //     default:
 //   }
@@ -108,7 +109,7 @@ watch(() => route, () => {
     <div v-if="projects.length || medias.length" class="projects__content">
       <!-- Gallery layout	-->
       <div v-if="layoutProjects === 'gallery'" class="projects__gallery">
-        <div v-if="medias.length" class="projects__gallery-images">
+        <div class="projects__gallery-images">
           <gallery-component :on-click="changeImageFocused" :images="medias" />
         </div>
         <div class="projects__gallery-highlight">
