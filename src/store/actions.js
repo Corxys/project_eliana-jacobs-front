@@ -83,7 +83,7 @@ export default function createActions() {
           return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
         });
         
-        commit("setProjectsByCategory", {
+        await commit("setProjectsByCategory", {
           isFiltered,
           isTransitioned,
           category,

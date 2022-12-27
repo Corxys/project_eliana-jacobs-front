@@ -4,6 +4,9 @@ import {computed} from "vue";
 import {useStore} from "vuex";
 import {marked} from "marked";
 
+// Images
+import shapeBottom from "@/assets/images/article_shape-01.png";
+
 // Icons
 import scheduleIcon from "../assets/icons/schedule.svg";
 import localisationIcon from "../assets/icons/localisation.svg";
@@ -27,72 +30,78 @@ const article = computed(() => store.state.article);
 </script>
 
 <template>
-  <div class="article">
-    <arrow-back-component />
-    <div class="article__header">
-      <h1 class="article__header-title">
-        {{article.attributes.title}}
-      </h1>
-      <div class="article__header-date">
-        Posted
-        <br>
-        {{formatDate(article.attributes.publishedAt)}}
+  <section class="article">
+    <img class="article__shape article__shape-01" :src="shapeBottom">
+    <div class="article__container">
+      <arrow-back-component />
+      <div class="article__header">
+        <h1 class="article__header-title">
+          {{article.attributes.title}}
+        </h1>
+        <div class="article__header-date">
+          Posted
+          <br>
+          {{formatDate(article.attributes.publishedAt)}}
+        </div>
       </div>
-    </div>
-    <div class="article__content">
-      <div class="article__sidebar">
-        <p class="article__sidebar-text" v-html="marked.parse(article.attributes.text)" />
-        <div class="article__sidebar-details">
-          <div class="article__sidebar-detail">
-            <img class="article__sidebar-icon" :src="scheduleIcon">
-            <div class="article__sidebar-info">
-              {{formatDate(article.attributes.date.date)}}, {{formatHour(article.attributes.date.start)}} to {{formatHour(article.attributes.date.end)}}
+      <div class="article__content">
+        <div class="article__sidebar">
+          <p class="article__sidebar-text" v-html="marked.parse(article.attributes.text)" />
+          <div class="article__sidebar-details">
+            <div class="article__sidebar-detail">
+              <img class="article__sidebar-icon" :src="scheduleIcon">
+              <div class="article__sidebar-info">
+                {{formatDate(article.attributes.date.date)}}, {{formatHour(article.attributes.date.start)}} to {{formatHour(article.attributes.date.end)}}
+              </div>
+            </div>
+            <div class="article__sidebar-detail">
+              <img class="article__sidebar-icon" :src="localisationIcon">
+              <!-- eslint-disable-next-line max-len -->
+              <a :href="'https://maps.google.com/?q=' + (article.attributes.address.name ? article.attributes.address.name + ', ' : '') + article.attributes.address.street + ', ' + article.attributes.address.cp + ', ' + article.attributes.address.city" target="_blank">
+                <div class="article__sidebar-info">
+                  {{article.attributes.address.name ? article.attributes.address.name + ", " : ""}}
+                  {{article.attributes.address.street}},
+                  {{article.attributes.address.cp}}
+                  {{article.attributes.address.city}}
+                </div>
+              </a>
+            </div>
+            <div v-if="article.attributes.email" class="article__sidebar-detail">
+              <img class="article__sidebar-icon" :src="emailIcon">
+              <a :href="`mailto:${article.attributes.email}`">
+                <div class="article__sidebar-info">
+                  {{article.attributes.email}}
+                </div>
+              </a>
             </div>
           </div>
-          <div class="article__sidebar-detail">
-            <img class="article__sidebar-icon" :src="localisationIcon">
-            <!-- eslint-disable-next-line max-len -->
-            <a :href="'https://maps.google.com/?q=' + (article.attributes.address.name ? article.attributes.address.name + ', ' : '') + article.attributes.address.street + ', ' + article.attributes.address.cp + ', ' + article.attributes.address.city" target="_blank">
-              <div class="article__sidebar-info">
-                {{article.attributes.address.name ? article.attributes.address.name + ", " : ""}}
-                {{article.attributes.address.street}},
-                {{article.attributes.address.cp}}
-                {{article.attributes.address.city}}
-              </div>
-            </a>
-          </div>
-          <div v-if="article.attributes.email" class="article__sidebar-detail">
-            <img class="article__sidebar-icon" :src="emailIcon">
-            <a :href="`mailto:${article.attributes.email}`">
-              <div class="article__sidebar-info">
-                {{article.attributes.email}}
-              </div>
+          <button-custom v-if="article.attributes.register" text="Register by email" :link="'mailto:' + article.attributes.register.email" :external="true" />
+          <div v-if="article.attributes.website" class="article__sidebar-link">
+            <img class="article__sidebar-icon" :src="linkIcon">
+            <a class="article__sidebar-info" href="/">
+              {{article.attributes.website}}
             </a>
           </div>
         </div>
-        <button-custom v-if="article.attributes.register" text="Register by email" :link="'mailto:' + article.attributes.register.email" :external="true" />
-        <div v-if="article.attributes.website" class="article__sidebar-link">
-          <img class="article__sidebar-icon" :src="linkIcon">
-          <a class="article__sidebar-info" href="/">
-            {{article.attributes.website}}
-          </a>
+        <div class="article__image">
+          <image-custom
+            :image="article.attributes.image.src.data.attributes"
+            :copyright="article.attributes.image.copyright"
+          />
         </div>
-      </div>
-      <div class="article__image">
-        <image-custom
-          :image="article.attributes.image.src.data.attributes"
-          :copyright="article.attributes.image.copyright"
-        />
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped lang="scss">
 .article {
-	padding-top: 130px;
-  padding-bottom: 130px;
-  &__header {
+	background: radial-gradient(circle at 81.06% 22.22%, #110F10, transparent 80%),radial-gradient(circle at 0.33% 9.55%, #110F10, transparent 60%),radial-gradient(circle at 79% 46%, #110F10, transparent 90%),radial-gradient(circle at 95.11% 84.11%, #110F10, transparent 100%),radial-gradient(circle at 63% 90.45%, #205251, transparent 31%),radial-gradient(circle at 50% 50%, #205251, #205251 100%);
+	&__container {
+		padding-top: 130px;
+		padding-bottom: 130px;
+	}
+	&__header {
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--spacing-between-vertical-elements);
@@ -138,5 +147,12 @@ const article = computed(() => store.state.article);
 		height: 100%;
 		margin-left: 15px;
   }
+	&__shape {
+		position: absolute;
+		&-01 {
+			bottom: 0;
+			left: 0;
+		}
+	}
 }
 </style>

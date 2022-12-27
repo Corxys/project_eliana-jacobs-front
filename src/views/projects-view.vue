@@ -4,13 +4,16 @@ import {ref, computed, watch} from "vue";
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
 
-// Utils
-import {slugifyTitle} from "@/utils/slugifyTitle";
-
 // Components
 import TransitionComponent from "@/components/transition-component.vue";
 import GalleryComponent from "@/components/gallery-component.vue";
 import ImageCustomComponent from "@/components/image-custom-component.vue";
+
+// Images
+import shapeBottom from "@/assets/images/projects_shape-01.png";
+
+// Utils
+import {slugifyTitle} from "@/utils/slugifyTitle";
 
 // Hook call
 const store = useStore();
@@ -36,7 +39,6 @@ async function selectFilter({name}) {
   }
   await store.dispatch("setSelectedFilter", {name});
 }
-
 
 // Methods
 const changeImageFocused = ({index}) => {
@@ -91,6 +93,8 @@ watch(() => route, () => {
         {'position': 'static', 'overflow': 'inherit'}
     ]"
   >
+    <img class="projects__shape projects__shape-01" :src="shapeBottom">
+
     <!-- Transition screen -->
     <transition-component v-if="hasFilter && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
 
@@ -148,8 +152,6 @@ watch(() => route, () => {
 .projects {
   display: flex;
   flex-direction: column;
-  padding-top: 130px;
-  padding-bottom: 130px;
   &__filters {
     display: flex;
     margin-bottom: 30px;
@@ -178,7 +180,9 @@ watch(() => route, () => {
       margin-right: 0;
     }
   }
-  &__content {}
+  &__content {
+		position: relative;
+	}
   &__gallery {
     display: flex;
     &-images, &-highlight {
@@ -191,25 +195,6 @@ watch(() => route, () => {
       display: flex;
       flex-flow: row wrap;
     }
-    //&-image {
-    //  flex: auto;
-    //  height: 100px;
-    //  min-width: 50px;
-    //  margin: 0 8px 8px 0;
-    //}
-    //&-src {
-    //  width: 100%;
-    //  height: 100%;
-    //  object-fit: cover;
-    //  object-position: center;
-    //  &--highlight {
-    //    height: auto;
-    //    position: sticky;
-    //    top: 0;
-    //    object-fit: contain;
-    //    object-position: top;
-    //  }
-    //}
     &-highlight {
 			position: sticky;
 			top: 30px;
@@ -251,5 +236,12 @@ watch(() => route, () => {
       &--link {}
     }
   }
+	&__shape {
+		position: absolute;
+		&-01 {
+			bottom: 0;
+			right: 0;
+		}
+	}
 }
 </style>

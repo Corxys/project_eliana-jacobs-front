@@ -1,37 +1,16 @@
 <script setup>
-import flower from "../assets/images/home_flower.png";
+// Components
+import FlowerComponent from "@/components/home-components/flower-component.vue";
+
+// Images
+import flower from "@/assets/images/home_flower.png";
 </script>
 
 <template>
   <div class="home">
     <div class="home__flower">
       <img class="home__flower-src" :src="flower" alt="">
-      <div class="svg">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 832.7 792.1" xml:space="preserve">
-          <g id="flower">
-            <clipPath id="flower__petal-01">
-              <path d="M193.3,293.3c-0.2,0.1-0.4,0.2-0.6,0.3c0,0-0.1,0-0.1,0.1c-1.8,0.9-3.6,1.8-5.3,2.7C51,365.5,0,375.6,0,375.6 s34.8,18.3,155.7,138c0.2,0.2,0.3,0.3,0.5,0.5c0,0,0.1,0.1,0.1,0.1c0,0,0.1,0,0.1,0.1c23.1,22.7,54.2,39.1,89.9,44.9 c90,14.7,164.5-37.4,177.1-114.5c12.6-77.1-30.7-148.4-131.5-164.8C256.6,274.1,222.3,279.5,193.3,293.3z" />
-            </clipPath>
-            <clipPath id="flower__petal-02">
-              <path d="M530,271.2c6.9-2.2,13.7-3.9,20.6-5.2c-1.3-33.2-11.9-63.7-29.1-88.4c-0.1-0.2-0.2-0.4-0.4-0.5 c0,0-0.1-0.1-0.1-0.1c-1.1-1.6-2.3-3.2-3.5-4.8C427.4,48.7,409.2,0,409.2,0s-12.5,37.3-111.1,175.9c-0.1,0.2-0.3,0.4-0.4,0.6 c0,0-0.1,0.1-0.1,0.1c0,0,0,0.1-0.1,0.1c-18.7,26.5-29.8,59.8-29.8,96c0,91.2,63.4,156.3,141.5,156.3c3.1,0,6.1-0.1,9.2-0.3 C410,361.9,452.5,295.7,530,271.2z" />
-            </clipPath>
-            <clipPath id="flower__petal-03">
-              <path d="M631.4,270.9c-0.2-0.1-0.5-0.1-0.7-0.2c-0.1,0-0.1,0-0.2-0.1c0,0-0.1,0-0.1,0c-30.9-9.8-66-10.3-100.5,0.6 c-86.4,27.4-129.3,106.7-106.6,180.8c61.9-47.4,151.7-34.4,207.2,37.8c8.6,11.1,15.5,22.9,20.9,35.1c18.2-10.8,33.7-24.7,45.9-40.5 c0.1-0.2,0.3-0.3,0.4-0.5c0,0,0.1-0.1,0.1-0.1c1.2-1.6,2.4-3.2,3.5-4.8c90.3-123.2,131.3-155.3,131.3-155.3S793.3,323,631.4,270.9z" />
-            </clipPath>
-            <clipPath id="flower__petal-04">
-              <path d="M665.5,584.9c0-0.2,0-0.5,0-0.7c0-0.1,0-0.1,0-0.2c0,0,0-0.1,0-0.1c-1.4-32.4-12.8-65.6-34.9-94.3 C575,417.5,485.1,404.5,423.2,452c59,47.3,69.5,134.8,16.6,206.4c-5.7,7.7-11.8,14.7-18.4,21.1c19.2,19.1,42.1,32.7,66,40.3 c0.2,0.1,0.4,0.1,0.6,0.2c0,0,0.1,0,0.1,0c1.9,0.6,3.8,1.1,5.7,1.7c146.7,42.8,190.8,70.3,190.8,70.3S671.8,754.9,665.5,584.9z" />
-            </clipPath>
-            <clipPath id="flower__petal-05">
-              <path d="M422.2,451.2c-15.6,73.5-88.4,122.2-175.8,107.9c-21.6-3.5-41.5-10.9-59-21.2c-5.1,15.3-7.8,30.9-8.2,46.3 c0,0.2,0,0.4,0,0.7c0,0,0,0.1,0,0.1c0,2-0.1,4,0,5.9c-0.7,152.8-15,202.8-15,202.8s32.2-22.6,193.8-75.5c0.2-0.1,0.5-0.1,0.7-0.2 c0.1,0,0.1,0,0.2-0.1c0,0,0.1,0,0.1,0c30.8-10.2,59.5-30.4,81-59.5C493,586.4,482.1,498.3,422.2,451.2z" />
-            </clipPath>
-            <image clip-path="url(#flower__petal-01)" xlink:href="https://img.freepik.com/photos-premium/astronaute-dans-espace-exterieur-ouvert-planete-terre-etoiles-fournissent-arriere-plan-formant-espace-au-dessus-planete-terre-lever-du-soleil-coucher-du-soleil-notre-maison-iss-elements-image-fournie-par-nasa_150455-16829.jpg?w=2000" />
-            <image clip-path="url(#flower__petal-02)" xlink:href="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" />
-            <image clip-path="url(#flower__petal-03)" xlink:href="https://thumbs.dreamstime.com/b/belle-for%C3%AAt-tropicale-%C3%A0-l-itin%C3%A9raire-am%C3%A9nag%C3%A9-pour-amateurs-de-la-nature-de-ka-d-ang-36703721.jpg" />
-            <image clip-path="url(#flower__petal-04)" xlink:href="https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive.jpg" />
-            <image clip-path="url(#flower__petal-05)" xlink:href="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" />
-          </g>
-        </svg>
-      </div>
+      <flower-component />
     </div>
   </div>
 </template>
