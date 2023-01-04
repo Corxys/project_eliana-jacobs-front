@@ -87,14 +87,8 @@ watch(() => route, () => {
 <template>
   <section
     class="projects"
-    :style="[
-      hasTransitionScreen ?
-        {'position': 'fixed', 'overflow': 'hidden'} :
-        {'position': 'static', 'overflow': 'inherit'}
-    ]"
+    :style="[hasTransitionScreen ? {'position': 'fixed', 'overflow': 'hidden'} : {'position': 'static', 'overflow': 'inherit'}]"
   >
-    <img class="projects__shape projects__shape-01" :src="shapeBottom">
-
     <!-- Transition screen -->
     <transition-component v-if="hasFilter && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
 
@@ -152,6 +146,8 @@ watch(() => route, () => {
 .projects {
   display: flex;
   flex-direction: column;
+  padding-top: 130px;
+  padding-bottom: 130px;
   &__filters {
     display: flex;
     margin-bottom: 30px;
