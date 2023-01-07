@@ -44,7 +44,7 @@ const getProjectsByCategory = async (name) => {
     case "Circus":
       await store.dispatch("setProjectsByCategory", {"isFiltered": true, "isTransitioned": false, "category": name, "layout": "gallery"});
       break;
-    case "Performance Art":
+    case "Art Performance":
       await store.dispatch("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
       break;
     case "Music":

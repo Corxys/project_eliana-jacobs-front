@@ -17,7 +17,7 @@ export default function createState() {
 			data: {
 				"circus": [],
 				"visual art": [],
-				"performance art": [],
+				"art performance": [],
 				"music": [],
 				"digital media": [],
 			},
