@@ -25,7 +25,6 @@ const undisplayedImageOnPreview = () => {
 
 <template>
   <div class="preview" @click="undisplayedImageOnPreview">
-    <!-- TODO: handle alt and video content	-->
     <img class="preview__image" :src="image">
   </div>
 </template>

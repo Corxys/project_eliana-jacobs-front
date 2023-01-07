@@ -34,21 +34,34 @@ const hasImageOnPreview = computed(() => store.state.app.hasImageOnPreview);
 const displayImageOnPreview = () => {
 	store.dispatch("setImageOnPreview", {"isImageOnPreview": true});
 };
+
+// Regex
+const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
 </script>
 
 <template>
   <div class="image">
-    <!-- TODO: handle video media -->
     <img
+      v-if="!image.link && mimesTypesCheck.test(image.src.data.attributes.mime)"
       class="image__src"
-      :src="image.url"
-      :alt="image.alternativeText"
+      :src="image.src.data.attributes.url"
+      :alt="image.src.data.attributes.alternativeText"
       @click="displayImageOnPreview"
     >
+    <iframe
+      v-else
+      width="560"
+      height="315"
+      :src="`https://www.youtube.com/embed/${image.link.split('=')[1]}`"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    />
     <span v-if="copyright" class="image__credits credits">
       {{copyright}}
     </span>
-    <preview-component v-if="hasPreview && hasImageOnPreview" :image="image.url" :copyright="copyright" />
+    <preview-component v-if="hasPreview && hasImageOnPreview" :image="image.src.data.attributes.url" :copyright="copyright" />
   </div>
 </template>
 

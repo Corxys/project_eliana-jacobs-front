@@ -83,9 +83,9 @@ const article = computed(() => store.state.article);
             </a>
           </div>
         </div>
-        <div class="article__image">
+        <div v-if="article.attributes.image.src.data.attributes" class="article__image">
           <image-custom-component
-            :image="article.attributes.image.src.data.attributes"
+            :image="article.attributes.image"
             :copyright="article.attributes.image.copyright"
           />
         </div>

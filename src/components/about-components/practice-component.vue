@@ -1,6 +1,6 @@
 <script setup>
 // Components
-import ImageCustom from "../image-custom-component.vue";
+import ImageCustomComponent from "../image-custom-component.vue";
 
 // Props
 defineProps({
@@ -13,8 +13,8 @@ defineProps({
 
 <template>
   <div class="practice">
-    <div class="practice__container">
-      <image-custom
+    <div v-if="practice.attributes.image.src.data.attributes" class="practice__container">
+      <image-custom-component
         :image="practice.attributes.image.src.data.attributes"
         :copyright="practice.attributes.image.copyright"
       />

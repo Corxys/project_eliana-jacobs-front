@@ -48,9 +48,9 @@ watch(() => route, () => {
           <gallery-component :images="project.attributes.medias" :on-click="changeImageFocused" />
         </div>
       </div>
-      <div class="project__highlight">
+      <div v-if="project.attributes.medias[indexOfFocusedImage]" class="project__highlight">
         <image-custom-component
-          :image="project.attributes.medias[indexOfFocusedImage].src.data.attributes"
+          :image="project.attributes.medias[indexOfFocusedImage]"
           :copyright="project.attributes.medias[indexOfFocusedImage].copyright"
           :has-preview="true"
         />

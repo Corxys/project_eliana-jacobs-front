@@ -7,13 +7,14 @@ import gql from "graphql-tag";
 // Utils
 import graphqlClient from "@/utils/graphql";
 import {slugifyTitle} from "@/utils/slugifyTitle";
+import {shuffleArray} from "@/utils/shuffleArray";
 
 // Queries
 const PRACTICES_QUERY = gql`query Practices {practices {data {id attributes {title text image {src {data {attributes {url}}}copyright}}}}}`;
-const NEWS_QUERY = gql`query News{news (pagination: {limit:100}){data{id attributes{address{name street cp city}date{date start end}email image {src {data {attributes {url alternativeText}}}copyright}publishedAt register{src}text title website}}}}`;
+const NEWS_QUERY = gql`query News{news (pagination: {limit:100}){data{id attributes{address{name street cp city}date{date start end}email image {src {data {attributes {url alternativeText mime}}}copyright link}publishedAt register{src}text title website}}}}`;
 const CATEGORIES_QUERY = gql`query Categories{categories{data{attributes{name}id}}}`;
 const TYPES_QUERY = gql`query Types{types{data{id attributes{name image{data{attributes{url alternativeText}}}category{data{id attributes{name}}}}}}}`;
-const PROJECTS_QUERY = gql`query Projects{projects (pagination: {limit:100}){data{id attributes{category{data{attributes{name}id}}date link{src}medias{copyright src{data{attributes{alternativeText mime url}}}id}name text type{data{id attributes{name}}}}}}}`;
+const PROJECTS_QUERY = gql`query Projects{projects (pagination: {limit:100}){data{id attributes{category{data{attributes{name}id}}date link{src} medias{copyright link src{data{attributes{alternativeText mime url}}}id}name text type{data{id attributes{name}}}}}}}`;
 
 export default function createActions() {
   return {
@@ -63,8 +64,6 @@ export default function createActions() {
       
       // For the circus projects, medias needs to be extracted and store in a specific key.
       dispatchedProjects.data["circus"].forEach((project) => project.attributes.medias.forEach((media) => dispatchedProjects.medias.push(media)));
-      // And the medias are shuffled.
-      dispatchedProjects.medias.sort(() => Math.random() - 0.5);
       
       commit("setProjects", {"projects": dispatchedProjects});
     },
@@ -134,6 +133,8 @@ export default function createActions() {
           state.projects.data["circus"].forEach((project) => {
             project.attributes.medias.forEach((media) => circusMedias.push(media));
           });
+          // Shuffle the medias.
+          shuffleArray(circusMedias);
         }
         
         // If the selected filter isn't "All".

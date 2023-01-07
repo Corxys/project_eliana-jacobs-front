@@ -113,9 +113,9 @@ watch(() => route, () => {
         <div class="projects__gallery-images">
           <gallery-component :on-click="changeImageFocused" :images="medias" />
         </div>
-        <div class="projects__gallery-highlight">
+        <div v-if="medias[indexOfFocusedImage].src.data.attributes" class="projects__gallery-highlight">
           <image-custom-component
-            :image="medias[indexOfFocusedImage].src.data.attributes"
+            :image="medias[indexOfFocusedImage]"
             :copyright="medias[indexOfFocusedImage].copyright"
             :has-preview="true"
           />
@@ -125,10 +125,14 @@ watch(() => route, () => {
       <!-- List layout -->
       <div v-else class="projects__list">
         <div v-for="project of projects" :key="project.id" class="projects__item">
-          <div class="projects__item-image projects__item-image--link" @click="store.dispatch('setProject', {'id': project.id})">
+          <div
+            v-if="project.attributes.medias[0].src.data.attributes"
+            class="projects__item-image projects__item-image--link"
+            @click="store.dispatch('setProject', {'id': project.id})"
+          >
             <router-link :to="`/project/${slugifyTitle(project.attributes.name)}`">
               <image-custom-component
-                :image="project.attributes.medias[0].src.data.attributes"
+                :image="project.attributes.medias[0]"
               />
             </router-link>
           </div>

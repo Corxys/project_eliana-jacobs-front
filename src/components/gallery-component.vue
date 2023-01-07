@@ -21,14 +21,15 @@ const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/
       <img
         v-if="mimesTypesCheck.test(image.src.data.attributes.mime)"
         :src="image.src.data.attributes.url ? image.src.data.attributes.url : ''"
-        :alt="image.src.data.attributes.alt ? image.src.data.attributes.alt : ''"
+        :alt="image.src.data.attributes.alternativeText ? image.src.data.attributes.alternativeText : ''"
         @click.stop="() => onClick({index})"
       >
-      <video
-        v-else
-        class="gallery__video"
-        :src="image.src.data.attributes.url ? media.src.data.attributes.url : ''"
-      />
+
+      <!--      <video-->
+      <!--        v-else-->
+      <!--        class="gallery__video"-->
+      <!--        :src="image.src.data.attributes.url ? image.src.data.attributes.url : ''"-->
+      <!--      />-->
     </div>
   </div>
 </template>
