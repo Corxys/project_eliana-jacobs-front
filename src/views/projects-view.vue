@@ -1,5 +1,5 @@
 <script setup>
-// Import
+// General
 import {ref, computed, watch} from "vue";
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
@@ -39,23 +39,24 @@ async function selectFilter({name}) {
   }
   await store.dispatch("setSelectedFilter", {name});
 }
-
-// Methods
 const changeImageFocused = ({index}) => {
 	indexOfFocusedImage.value = index;
 };
 
 // Computed
 const displayedFilters = computed(() => {
-	if (route.fullPath !== "/projects/visual-art") {
+	// "Circus" are the only projects page where the "All" filter is necessary.
+	if (route.fullPath === "/projects/circus") {
 		const filtersMap = filters.value.map((filterMap) => filterMap);
 		filtersMap.unshift({"id": 0, "attributes": {"name": "All"}});
 		store.dispatch("setSelectedFilter", {"name": "All"});
 		return filtersMap;
+	} else {
+		return filters.value;
 	}
-	return filters.value;
 });
 
+// Watchers
 watch(() => route, () => {
 	store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
 }, {"deep": true, "immediate": true});
@@ -148,6 +149,11 @@ watch(() => route, () => {
   flex-direction: column;
   padding-top: 130px;
   padding-bottom: 130px;
+	// Active only when the "transition-component" is displayed.
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
   &__filters {
     display: flex;
     margin-bottom: 30px;

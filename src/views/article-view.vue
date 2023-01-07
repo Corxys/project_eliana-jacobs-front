@@ -18,8 +18,8 @@ import {formatDate} from "@/utils/formatDate";
 import {formatHour} from "@/utils/formatHour";
 
 // Components
-import ButtonCustom from "../components/shared-components/custom-button-component.vue";
-import ImageCustom from "../components/image-custom-component.vue";
+import ButtonCustomComponent from "../components/shared-components/custom-button-component.vue";
+import ImageCustomComponent from "../components/image-custom-component.vue";
 import ArrowBackComponent from "@/components/arrow-back-component.vue";
 
 // Hook call
@@ -75,7 +75,7 @@ const article = computed(() => store.state.article);
               </a>
             </div>
           </div>
-          <button-custom v-if="article.attributes.register" text="Register by email" :link="'mailto:' + article.attributes.register.email" :external="true" />
+          <button-custom-component v-if="article.attributes.register" text="Register by email" :link="'mailto:' + article.attributes.register.email" :external="true" />
           <div v-if="article.attributes.website" class="article__sidebar-link">
             <img class="article__sidebar-icon" :src="linkIcon">
             <a class="article__sidebar-info" href="/">
@@ -84,7 +84,7 @@ const article = computed(() => store.state.article);
           </div>
         </div>
         <div class="article__image">
-          <image-custom
+          <image-custom-component
             :image="article.attributes.image.src.data.attributes"
             :copyright="article.attributes.image.copyright"
           />

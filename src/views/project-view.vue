@@ -6,9 +6,9 @@ import {useRoute} from "vue-router";
 import {marked} from "marked";
 
 // Components
-import ArrowBack from "@/components/arrow-back-component.vue";
-import ImageCustom from "@/components/image-custom-component.vue";
-import Gallery from "@/components/gallery-component.vue";
+import ArrowBackComponent from "@/components/arrow-back-component.vue";
+import ImageCustomComponent from "@/components/image-custom-component.vue";
+import GalleryComponent from "@/components/gallery-component.vue";
 
 // Hook call
 const store = useStore();
@@ -26,6 +26,7 @@ const changeImageFocused = ({index}) => {
   indexOfFocusedImage.value = index;
 };
 
+// Watchers
 watch(() => route, () => {
 	store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
 }, {"deep": true, "immediate": true});
@@ -33,7 +34,7 @@ watch(() => route, () => {
 
 <template>
   <section class="project">
-    <arrow-back />
+    <arrow-back-component />
     <div class="project__container">
       <div class="project__content">
         <h1 class="project__title">
@@ -44,11 +45,11 @@ watch(() => route, () => {
         </div>
         <p v-if="project.attributes.text" class="project__text" v-html="marked.parse(project.attributes.text)" />
         <div v-if="project.attributes.medias.length > 1" class="project__images">
-          <gallery :images="project.attributes.medias" :on-click="changeImageFocused" />
+          <gallery-component :images="project.attributes.medias" :on-click="changeImageFocused" />
         </div>
       </div>
       <div class="project__highlight">
-        <image-custom
+        <image-custom-component
           :image="project.attributes.medias[indexOfFocusedImage].src.data.attributes"
           :copyright="project.attributes.medias[indexOfFocusedImage].copyright"
           :has-preview="true"
