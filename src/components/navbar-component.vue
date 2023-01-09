@@ -21,15 +21,16 @@ import logotypeBlack from "../assets/images/logo-b.png";
 
 // Data
 import {links} from "@/assets/data/links";
+import {slugifyTitle} from "@/utils/slugifyTitle";
 
 // Inject
 let isMenuOpen = inject("isMenuOpen");
 
 // Props
 defineProps({
-  theme: {
-    type: String,
-    required: true,
+  "theme": {
+    "type": String,
+    "required": true,
   },
 });
 
@@ -40,24 +41,15 @@ const medias = computed(() => store.state.projects.data["circus"].medias);
 
 // Methods
 const getProjectsByCategory = async (name) => {
-  switch(name) {
-    case "Circus":
-      await store.dispatch("setProjectsByCategory", {"isFiltered": true, "isTransitioned": false, "category": name, "layout": "gallery"});
-      break;
-    case "Art Performance":
-      await store.dispatch("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
-      break;
-    case "Music":
-      await store.dispatch("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": name, "layout": "list"});
-      break;
-    case "Digital Media":
-      await store.dispatch("setProjectsByCategory", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
-      break;
-    case "Visual Art":
-      await store.dispatch("setProjectsByCategory", {"isFiltered": true, "isTransitioned": true, "category": name, "layout": "list"});
-      break;
-    default:
-  }
+	// For the Digital media and Visual art projects, a transition screen needs to be displayed.
+	if (name.toLowerCase() === "digital media" || name.toLowerCase() === "visual art") {
+		console.log("Digital media or Visual art projects.");
+		await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": true});
+	} else {
+		await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+	}
+
+	await router.push(`/projects/${slugifyTitle(name)}`);
 
   isMenuOpen.value = false;
 };
@@ -107,14 +99,18 @@ const getProjectsByCategory = async (name) => {
 
 <style scoped lang="scss">
 .navbar {
+	display: flex;
+	justify-content: space-between;
+	width: 100vw;
   /* Logo and menu burger positioning */
   &__logo, &__container {
-    z-index: 50;
-    position: fixed;
-    height: 105px;
+    z-index: 150;
+    height: 100px;
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
+		flex-wrap: nowrap;
   }
   &__logo {
     left: 30px;
@@ -233,5 +229,13 @@ const getProjectsByCategory = async (name) => {
       margin-bottom: 60px;
     }
   }
+}
+
+@media (min-width: 768px) {
+	.navbar {
+		&__logo, &__container {
+			position: fixed;
+		}
+	}
 }
 </style>

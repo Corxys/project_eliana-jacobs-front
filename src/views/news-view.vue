@@ -57,24 +57,28 @@ const news = computed(() => store.state.news);
 
 <style scoped lang="scss">
 .news {
-  padding-top: 130px;
+	padding: var(--container-padding);
+	padding-bottom: 0;
 	background: radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 55%),radial-gradient(circle at 14.11% 26.17%, #110F10, transparent 100%),radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),radial-gradient(circle at 63.61% 15.89%, #205251, transparent 100%),radial-gradient(circle at 59.06% 87.12%, #110F10, transparent 100%),radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+	&__container {
+		z-index: 10;
+		position: relative;
+	}
 	&__header {
-    padding-bottom: var(--spacing-box-section);
+    padding-bottom: 30px;
     border-bottom: 1px solid var(--epj-c-white);
-    margin-bottom: var(--spacing-box-section);
+    margin-bottom: 30px;
   }
-  &__title {}
-  &__highlight {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
-    gap: 0 30px;
-    height: 450px;
-    > :nth-child(1) {
-      grid-area: 1 / 1 / 2 / 2;
-    }
-  }
+  &__title {
+		margin-bottom: 30px;
+	}
+	&__highlight {
+		display: flex;
+		flex-direction: column;
+	}
+	&__main {
+		margin-bottom: 30px;
+	}
   &__column {
     display: grid;
     grid-template-columns: 1fr;
@@ -107,10 +111,27 @@ const news = computed(() => store.state.news);
 	&__shape {
 		position: absolute;
 		&-01 {
-			width: 940px;
-			top: -150px;
-			right: -120px;
+			width: 70%;
+			max-width: 940px;
+			top: -120px;
+			left: 140px;
 			transform: rotate(-10deg);
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	.news {
+		&__highlight {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: 1fr;
+			gap: 0 30px;
+			height: 450px;
+
+			> :nth-child(1) {
+				grid-area: 1 / 1 / 2 / 2;
+			}
 		}
 	}
 }

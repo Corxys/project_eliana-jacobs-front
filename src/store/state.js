@@ -7,6 +7,7 @@ export default function createState() {
 			selectedCategory: "",
 			layoutProjects: "",
 			hasImageOnPreview: false,
+			isLoading: true,
 		},
 		filters: {
 			data: {},

@@ -2,7 +2,7 @@
 // General
 import {ref, computed, watch} from "vue";
 import {useStore} from "vuex";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 
 // Components
 import TransitionComponent from "@/components/transition-component.vue";
@@ -18,6 +18,7 @@ import {slugifyTitle} from "@/utils/slugifyTitle";
 // Hook call
 const store = useStore();
 const route = useRoute();
+const router = useRouter();
 
 // Store
 const hasFilter = computed(() => store.state.app.hasFilter);
@@ -34,9 +35,7 @@ let indexOfFocusedImage = ref(0);
 // Methods
 async function selectFilter({name}) {
 	indexOfFocusedImage.value = 0;
-  if (hasTransitionScreen.value) {
-    await store.dispatch("setTransitionScreen", {"isTransitioned": false});
-  }
+	await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
   await store.dispatch("setSelectedFilter", {name});
 }
 const changeImageFocused = ({index}) => {
@@ -61,28 +60,11 @@ watch(() => route, () => {
 	store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
 }, {"deep": true, "immediate": true});
 
-// Watch
-// watch(() => route, (param) => {
-//   const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
-//   switch(categoryName) {
-//     case "circus":
-//       store.commit("setProjectsByCategory", {"isFiltered": true, "isTransitioned": false, "category": categoryName, "layout": "gallery"});
-//       break;
-//     case "performance art":
-//       store.commit("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
-//       break;
-//     case "music":
-//       store.commit("setProjectsByCategory", {"isFiltered": false, "isTransitioned": false, "category": categoryName, "layout": "list"});
-//       break;
-//     case "digital media":
-//       store.commit("setProjectsByCategory", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
-//       break;
-//     case "visual art":
-//       store.commit("setProjectsByCategory", {"isFiltered": true, "isTransitioned": true, "category": categoryName, "layout": "list"});
-//       break;
-//     default:
-//   }
-// }, {"deep": true, "immediate": true});
+// Watcher
+watch(() => route, (param) => {
+  const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
+	store.dispatch("setProjectsByCategory", {"category": categoryName});
+}, {"deep": true, "immediate": true});
 </script>
 
 <template>
@@ -151,8 +133,7 @@ watch(() => route, () => {
 .projects {
   display: flex;
   flex-direction: column;
-  padding-top: 130px;
-  padding-bottom: 130px;
+	padding: var(--container-padding);
 	// Active only when the "transition-component" is displayed.
 	top: 0;
 	bottom: 0;
@@ -160,6 +141,7 @@ watch(() => route, () => {
 	right: 0;
   &__filters {
     display: flex;
+		flex-wrap: wrap;
     margin-bottom: 30px;
   }
   &__filter {
@@ -172,6 +154,7 @@ watch(() => route, () => {
     color: var(--dark-filter-default-text-color);
     transition: 0.2s ease-in all;
     margin-right: 10px;
+		margin-bottom: 10px;
     &--active {
       border: 1px solid var(--both-filter-active-border-color);
       background-color: var(--both-filter-active-background-color);
@@ -210,7 +193,7 @@ watch(() => route, () => {
   }
   &__list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: 1fr;
     grid-column-gap: 30px;
     grid-row-gap: 30px;
   }
@@ -247,6 +230,14 @@ watch(() => route, () => {
 		&-01 {
 			bottom: 0;
 			right: 0;
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	.projects {
+		&__list {
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 }

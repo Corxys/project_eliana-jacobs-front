@@ -16,12 +16,22 @@ export default function createMutations() {
 		setProjects(state, {projects}) {
 			state.projects = {...state.projects, ...projects};
     },
+		setIsLoading(state, {isLoading}) {
+			state.app.isLoading = isLoading;
+		},
+		setHasFilter(state, {hasFiltered}) {
+			console.log("Set has filter:", hasFiltered);
+			state.app.hasFilter = hasFiltered;
+		},
+		setHasTransitionScreen(state, {hasTransitionScreen}) {
+			state.app.hasTransitionScreen = hasTransitionScreen;
+		},
+		setLayoutProjects(state, {layoutName}) {
+			state.app.layoutProjects = layoutName;
+		},
 		
 		// Projects
-		setProjectsByCategory(state, {isFiltered, isTransitioned, category, layout, selectedProjects, selectedFilters}) {
-			state.app.hasFilter = isFiltered;
-			state.app.hasTransitionScreen = isTransitioned;
-			state.app.layoutProjects = layout;
+		setProjectsByCategory(state, {category, selectedProjects, selectedFilters}) {
 			state.app.selectedCategory = category;
 			state.projects.selected = selectedProjects;
 			state.filters.selected = selectedFilters;

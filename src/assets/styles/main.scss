@@ -26,12 +26,11 @@ body {
 // Titles
 h1, h2, h3, h4 {
   font-family: var(--font-primary);
-  letter-spacing: 0.3rem;
   line-height: 1.2;
+  letter-spacing: 0.25rem;
 }
 h1 {
-  font-size: 40px;
-  margin-bottom: var(--spacing-between-vertical-elements);
+  font-size: var(--h1-font-size);
 }
 h2 {
   font-size: 25px;
@@ -55,11 +54,7 @@ p {
 
 .about, .news, .article, .contact, .projects, .project, .waiting {
   min-height: 100vh;
-  padding:
-    0
-    var(--spacing-section-padding-x)
-    0
-    var(--spacing-section-padding-x);
+  padding: 0 var(--spacing-section-padding-x) 0 var(--spacing-section-padding-x);
 }
 
 //.about, .news, .article, .contact, .project, .projects {

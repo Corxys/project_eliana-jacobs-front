@@ -1,12 +1,12 @@
 <script setup>
 defineProps({
-  icon: {
-    type: Array,
-    required: true,
+  "icon": {
+    "type": Array,
+    "required": true,
   },
-  link: {
-    type: String,
-    required: true,
+  "link": {
+    "type": String,
+    "required": true,
   },
 });
 </script>
@@ -28,8 +28,8 @@ defineProps({
   background-color: var(--color-button-background-default);
   border: 1px solid var(--color-button-background-default);
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   transition: 0.2s ease-in all;
   &:hover {
     background-color: var(--color-button-background-hover);

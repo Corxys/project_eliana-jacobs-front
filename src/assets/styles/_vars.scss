@@ -5,6 +5,34 @@
   src: url(../fonts/mr-darcy-bold.ttf) format("truetype");
 }
 
+// General
+:root {
+  // Colors
+  --color-button-background-default: var(--epj-c-main);
+}
+
+// Mobile
+:root {
+  // Heading
+  --h1-font-size: 20px;
+
+  // Semantic rules
+  --container-padding: 130px 10% 95px 10%;
+}
+
+// Desktop
+@media (min-width: 768px) {
+  :root {
+    // Heading
+    --h1-font-size: 40px;
+
+    // Semantic rules
+    --container-padding: 130px 20% 130px 20%;
+  }
+}
+
+
+
 /* Color palette */
 :root {
   --epj-c-black: #110F10;
@@ -53,7 +81,7 @@
   --color-background-light: var(--epj-c-light);
   --color-text-light: var(--epj-c-black);
 
-  --color-button-background-default: var(--epj-c-main);
+  ;
   --color-button-background-hover: var(--epj-c-black);
   --color-button-border-hover: var(--epj-c-white);
 
@@ -65,8 +93,6 @@
 
 /* Semantic text variables */
 :root {
-
-
   --spacing-subtitle-small: 30px;
   --spacing-subtitle-medium: 60px;
   --spacing-h3: 5px;
@@ -86,9 +112,7 @@
 
   --spacing-between-buttons: 10px;
 
-  --spacing-between-vertical-elements: 50px;
   --spacing-between-horizontal-elements: 30px;
-  --spacing-box-section: 60px;
 }
 
 

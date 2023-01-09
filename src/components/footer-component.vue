@@ -23,12 +23,18 @@
 
 <style scoped lang="scss">
 .footer {
+	position: absolute;
+	bottom: 0;
+	width: 100vw;
+	height: 30px;
+	display: flex;
+	justify-content: space-between;
   color: white;
   font-family: var(--font-primary);
   font-size: 12px;
   &__credits, &__notices {
-    position: fixed;
-    bottom: 30px;
+    position: absolute;
+		z-index: 150;
   }
   &__credits {
     left: 30px;
@@ -36,5 +42,13 @@
   &__notices {
     right: 30px;
   }
+}
+
+@media (min-width: 768px) {
+	.footer {
+		&__credits, &__notices {
+			position: fixed;
+		}
+	}
 }
 </style>

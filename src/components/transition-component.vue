@@ -4,10 +4,11 @@
 * - make animation on the hover (scale a bit)
 */
 
+// Props
 defineProps({
-  types: {
-    type: Array,
-    required: true,
+  "types": {
+    "type": Array,
+    "required": true,
   },
 });
 
@@ -18,7 +19,12 @@ const emit = defineEmits(["selectFilter"]);
 <template>
   <div class="transition">
     <div class="transition__filters">
-      <div v-for="type of types" :key="type.id" class="transition__filter">
+      <div
+        v-for="type of types"
+        :key="type.id"
+        class="transition__filter"
+        :style="width < 768 ? `height: calc(100% / ${types.length}); width: 100%`: `width: calc(100% / ${types.length}); height: auto`"
+      >
         <div class="transition__filter-image" @click="emit('selectFilter', {'name': type.attributes.name})">
           <img
             class="transition__filter-src"
@@ -41,21 +47,28 @@ const emit = defineEmits(["selectFilter"]);
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+	height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--epj-c-black);
-  &__filters {
+	&__filters {
     display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 30px;
+		height: 100vh;
   }
   &__filter {
-    margin: 30px;
-    width: 350px;
+    margin-bottom: 30px;
+		display: flex;
+		flex-direction: column;
     &-image {
-      height: 350px;
-      width: 350px;
-      cursor: pointer;
+			height: 100%;
+			width: 100%;
+			cursor: pointer;
+			overflow: hidden;
     }
     &-src {
       width: 100%;
@@ -69,5 +82,23 @@ const emit = defineEmits(["selectFilter"]);
       font-size: 30px;
     }
   }
+}
+
+@media (min-width: 768px) {
+	.transition {
+		&__filters {
+			flex-direction: row;
+		}
+		&__filter {
+			margin-right: 30px;
+			margin-bottom: 0;
+			&:last-child {
+				margin-right: 0;
+			}
+			&-image {
+				height: 350px;
+			}
+		}
+	}
 }
 </style>

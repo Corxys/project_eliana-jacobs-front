@@ -1,13 +1,13 @@
 <script setup>
 // Props
 defineProps({
-  images: {
-    type: Array,
-    required: true,
+  "images": {
+    "type": Array,
+    "required": true,
   },
   onClick: {
-    type: Function,
-    required: true,
+    "type": Function,
+    "required": true,
   },
 });
 

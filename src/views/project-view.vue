@@ -2,7 +2,7 @@
 // General
 import {ref, computed, watch} from "vue";
 import {useStore} from "vuex";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {marked} from "marked";
 
 // Components
@@ -13,10 +13,12 @@ import GalleryComponent from "@/components/gallery-component.vue";
 // Hook call
 const store = useStore();
 const route = useRoute();
+const router = useRouter();
 
 // Store
 const project = computed(() => store.state.project);
 const projectDate = computed(() => project.value.attributes.date.slice(0, 4));
+const selectedFilter = computed(() => store.state.app.selectedFilter);
 
 // Ref
 let indexOfFocusedImage = ref(0);
@@ -24,6 +26,11 @@ let indexOfFocusedImage = ref(0);
 // Methods
 const changeImageFocused = ({index}) => {
   indexOfFocusedImage.value = index;
+};
+const backOnProjectsPage = async () => {
+	await store.dispatch("setSelectedFilter", {"name": selectedFilter.value});
+	// await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+	await router.back();
 };
 
 // Watchers
@@ -34,7 +41,7 @@ watch(() => route, () => {
 
 <template>
   <section class="project">
-    <arrow-back-component />
+    <arrow-back-component :on-click="backOnProjectsPage" />
     <div class="project__container">
       <div class="project__content">
         <h1 class="project__title">
@@ -61,31 +68,52 @@ watch(() => route, () => {
 
 <style scoped lang="scss">
 .project {
-  padding-top: 130px;
-  padding-bottom: 130px;
+	padding: var(--container-padding);
   &__container {
     display: flex;
+		flex-direction: column-reverse;
   }
   &__text {
     white-space: pre-wrap;
   }
   &__content, &__highlight {
-    width: 50%;
+    width: 100%;
   }
+	&__title {
+		margin: 30px 0;
+	}
   &__date {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
   }
   &__highlight {
-    position: sticky;
-    top: 30px;
     height: 100%;
-    margin-left: 30px;
-    :deep(.image__src) {
-			cursor: pointer;
-      width: 100%;
-      object-fit: cover;
-      object-position: top center;
-    }
+    margin-left: 0;
   }
+}
+
+@media (min-width: 768px) {
+	.project {
+		&__container {
+			flex-direction: row;
+		}
+		&__date {
+			margin-bottom: 50px;
+		}
+		&__content, &__highlight {
+			width: 50%;
+		}
+		&__highlight {
+			position: sticky;
+			top: 30px;
+			height: 100%;
+			margin-left: 30px;
+			:deep(.image__src) {
+				cursor: pointer;
+				width: 100%;
+				object-fit: cover;
+				object-position: top center;
+			}
+		}
+	}
 }
 </style>

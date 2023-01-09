@@ -42,19 +42,18 @@ const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/
 <template>
   <div class="image">
     <img
-      v-if="!image.link && mimesTypesCheck.test(image.src.data.attributes.mime)"
+      v-if="!image.link"
       class="image__src"
       :src="image.src.data.attributes.url"
       :alt="image.src.data.attributes.alternativeText"
       @click="displayImageOnPreview"
     >
     <iframe
-      v-else
+      v-if="image.link"
+      class="image__src"
       width="560"
       height="315"
       :src="`https://www.youtube.com/embed/${image.link.split('=')[1]}`"
-      title="YouTube video player"
-      frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen
     />

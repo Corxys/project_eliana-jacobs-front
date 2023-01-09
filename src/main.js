@@ -19,8 +19,10 @@ import "./assets/styles/main.scss";
 
 store.dispatch("getData")
 	.then(() => {
-		// TODO: use this scope to handle the loading screen
+		// const loadingScreen = document.querySelector(".container__loader");
+		// loadingScreen.style.opacity = 0;
 		console.debug("[app] data initialized.");
+		// store.dispatch("setIsLoading", {"isLoading": false});
 	})
 	.catch((error) => {
 		console.error("An error occurred while retrieving the data.");

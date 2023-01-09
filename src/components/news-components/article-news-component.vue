@@ -10,8 +10,8 @@ import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 
 // Utils
-import {formatDate} from "../../utils/formatDate.js";
-import {slugifyTitle} from "../../utils/slugifyTitle.js";
+import {formatDate} from "@/utils/formatDate";
+import {slugifyTitle} from "@/utils/slugifyTitle";
 
 // Hook call
 const store = useStore();
@@ -19,13 +19,13 @@ const router = useRouter();
 
 // Props
 defineProps({
-  type: {
-    type: String,
-    required: true,
+  "type": {
+    "type": String,
+    "required": true,
   },
-  article: {
-    type: Object,
-    required: true,
+  "article": {
+    "type": Object,
+    "required": true,
   },
 });
 
@@ -38,7 +38,9 @@ const getArticle = (article) => {
 
 <template>
   <div v-if="type === 'small'" class="news-article--small">
-    <div class="image" @click="getArticle(article)" />
+    <div class="link--image" @click="getArticle(article)">
+      <img class="image" :src="article.attributes.image.src.data.attributes.url" alt="">
+    </div>
     <div class="content">
       <h4 class="title" @click="getArticle(article)">
         <span>
@@ -91,14 +93,18 @@ const getArticle = (article) => {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 1fr;
+	overflow: hidden;
   .link--image {
     grid-area: 1 / 1 / 2 / 2;
-  }
+		height: 100%;
+		overflow: hidden;
+	}
   .image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     background-color: white;
+
   }
   .content {
     margin-left: 10px;
@@ -108,11 +114,13 @@ const getArticle = (article) => {
 // News article (medium)
 .news-article--medium {
   margin-bottom: 30px;
+	overflow: hidden;
   .image {
     width: 100%;
-    height: 100%;
+    height: 145px;
     max-height: 245px;
     object-fit: cover;
+
   }
   .title {
     margin: 10px 0 5px 0;
@@ -128,8 +136,10 @@ const getArticle = (article) => {
   height: 450px;
   padding: 5px;
   border: 1px solid var(--epj-c-white);
+	overflow: hidden;
   .link--image {
     grid-area: 1 / 1 / 3 / 2;
+		height: 100%;
     overflow: hidden;
   }
   .image {
@@ -138,6 +148,7 @@ const getArticle = (article) => {
     object-fit: cover;
     transform: scale(1);
     transition: all 0.3s ease-in-out;
+
     &:hover {
       transform: scale(1.05);
     }

@@ -10,7 +10,7 @@ import {slugifyTitle} from "@/utils/slugifyTitle";
 import {shuffleArray} from "@/utils/shuffleArray";
 
 // Queries
-const PRACTICES_QUERY = gql`query Practices {practices {data {id attributes {title text image {src {data {attributes {url}}}copyright}}}}}`;
+const PRACTICES_QUERY = gql`query Practices {practices {data {id attributes {title text image {src {data {attributes {url}}} link copyright}}}}}`;
 const NEWS_QUERY = gql`query News{news (pagination: {limit:100}){data{id attributes{address{name street cp city}date{date start end}email image {src {data {attributes {url alternativeText mime}}}copyright link}publishedAt register{src}text title website}}}}`;
 const CATEGORIES_QUERY = gql`query Categories{categories{data{attributes{name}id}}}`;
 const TYPES_QUERY = gql`query Types{types{data{id attributes{name image{data{attributes{url alternativeText}}}category{data{id attributes{name}}}}}}}`;
@@ -67,31 +67,56 @@ export default function createActions() {
       
       commit("setProjects", {"projects": dispatchedProjects});
     },
+    setIsLoading({commit}, {isLoading}) {
+      commit("setIsLoading", {isLoading});
+    },
+    setHasFilter({commit}, {hasFiltered}) {
+      commit("setHasFilter", {hasFiltered});
+    },
+    setHasTransitionScreen({commit}, {hasTransitionScreen}) {
+      commit("setHasTransitionScreen", {hasTransitionScreen});
+    },
+    setLayoutProjects({commit}, {layoutName}) {
+      commit("setLayoutProjects", {layoutName});
+    },
     
     /* PROJECTS */
     // Clicking on a link in the navigation bar.
-    async setProjectsByCategory({state, commit}, {isFiltered, isTransitioned, category, layout}) {
-      let selectedFilters = [];
-      
+    async setProjectsByCategory({state, commit, dispatch}, {category}) {
       // Get projects for the categories (circus, music, performance art, digital media, visual art).
-      const selectedProjects = state.projects.data[category.toLowerCase()];
+      let selectedProjects = state.projects.data[category.toLowerCase()];
       
+      let selectedFilters = [];
       // If there is projects in the selected category, select associated filters and push to the route.
       if (selectedProjects.length) {
         selectedFilters = state.filters.data.filter((filter) => {
           return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
         });
         
+        // If there is filters for the selected projects, allow them to be displayed.
+        if (selectedFilters.length) {
+          dispatch("setHasFilter", {"hasFiltered": true});
+        }
+        
+        if (state.app.selectedFilter !== "All") {
+          // If the selected filter isn't "All", select the projects corresponding to the selected filter.
+          selectedProjects = state.projects.data[category].filter((project) => {
+            return project.attributes.type.data.attributes.name === state.app.selectedFilter;
+          });
+        }
+        
+        // Select the appropriate layout for the projects.
+        if (category.toLowerCase() === "circus") {
+          dispatch("setLayoutProjects", {"layoutName": "gallery"});
+        } else {
+          dispatch("setLayoutProjects", {"layoutName": "list"});
+        }
+        
         await commit("setProjectsByCategory", {
-          isFiltered,
-          isTransitioned,
           category,
-          layout,
           selectedProjects,
           selectedFilters,
         });
-        
-        await router.push(`/projects/${slugifyTitle(category)}`);
       }
       // If not, push to the waiting route.
       else {
@@ -151,11 +176,12 @@ export default function createActions() {
       // When the selected category isn't "Circus", displays all projects.
       if (name === "All") {
         selectedProjects = state.projects.data[state.app.selectedCategory.toLowerCase()];
+        return;
       }
-      
+  
       // If the selected filter isn't "All", select the projects corresponding to the selected filter.
-      selectedProjects = state.projects.data[state.app.selectedCategory.toLowerCase()].filter((project) => {
-        return project.attributes.type.data.attributes.name.toLowerCase() === name.toLowerCase();
+      selectedProjects = state.projects.data[state.app.selectedCategory].filter((project) => {
+        return project.attributes.type.data.attributes.name === name;
       });
       
       commit("setSelectedFilter", {"selectedFilterName": name, circusMedias, selectedProjects});
