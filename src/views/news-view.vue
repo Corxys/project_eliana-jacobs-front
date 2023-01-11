@@ -1,4 +1,7 @@
 <script setup>
+/* eslint-disable max-len */
+// Disable error on line 65.
+
 // General
 import {computed} from "vue";
 import {useStore} from "vuex";
@@ -18,7 +21,7 @@ const news = computed(() => store.state.news);
 
 <template>
   <section class="news">
-    <img class="news__shape news__shape-01" :src="shapeTop">
+    <img class="news__shape news__shape-01" :src="shapeTop" alt="Shape in the top of the site.">
     <div class="news__container">
       <h1 class="news__title">
         News

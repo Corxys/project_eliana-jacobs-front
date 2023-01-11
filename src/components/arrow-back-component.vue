@@ -1,16 +1,9 @@
 <script setup>
-// General
-import {useRouter} from "vue-router";
-
 // Props
 defineProps({
 	"onClick": {
 		"type": Function,
-		"required": false,
-		"default": () => {
-			const router = useRouter();
-			router.back();
-		},
+		"required": true,
 	}
 });
 </script>

@@ -91,7 +91,7 @@ const getArticle = (article) => {
 // News article (small)
 .news-article--small {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 50%);
   grid-template-rows: 1fr;
 	overflow: hidden;
   .link--image {

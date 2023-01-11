@@ -83,19 +83,23 @@ export default function createActions() {
     /* PROJECTS */
     // Clicking on a link in the navigation bar.
     async setProjectsByCategory({state, commit, dispatch}, {category}) {
+      console.log(category)
       // Get projects for the categories (circus, music, performance art, digital media, visual art).
       let selectedProjects = state.projects.data[category.toLowerCase()];
+      console.log(state.projects.data[category.toLowerCase()])
       
       let selectedFilters = [];
       // If there is projects in the selected category, select associated filters and push to the route.
       if (selectedProjects.length) {
+        console.log("There is projects!");
         selectedFilters = state.filters.data.filter((filter) => {
           return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
         });
+        console.log("Selected filters:", selectedFilters)
         
         // If there is filters for the selected projects, allow them to be displayed.
         if (selectedFilters.length) {
-          dispatch("setHasFilter", {"hasFiltered": true});
+          await dispatch("setHasFilter", {"hasFiltered": true});
         }
         
         if (state.app.selectedFilter !== "All") {
@@ -103,13 +107,14 @@ export default function createActions() {
           selectedProjects = state.projects.data[category].filter((project) => {
             return project.attributes.type.data.attributes.name === state.app.selectedFilter;
           });
+          console.log("Filter isn't 'All' and this is selected projects:", selectedProjects);
         }
         
         // Select the appropriate layout for the projects.
         if (category.toLowerCase() === "circus") {
-          dispatch("setLayoutProjects", {"layoutName": "gallery"});
+          await dispatch("setLayoutProjects", {"layoutName": "gallery"});
         } else {
-          dispatch("setLayoutProjects", {"layoutName": "list"});
+          await dispatch("setLayoutProjects", {"layoutName": "list"});
         }
         
         await commit("setProjectsByCategory", {
@@ -117,6 +122,8 @@ export default function createActions() {
           selectedProjects,
           selectedFilters,
         });
+  
+        await router.push(`/projects/${slugifyTitle(category.toLowerCase())}`);
       }
       // If not, push to the waiting route.
       else {
@@ -151,7 +158,8 @@ export default function createActions() {
       let selectedProjects = {};
       
       // When the selected category corresponds to "Circus".
-      if (state.app.selectedCategory === "Circus") {
+      if (state.app.selectedCategory === "circus") {
+        console.log("Circus projects!")
         // And the selected filter is "All".
         if (name === "All") {
           // Take the all medias in the "Circus" project and displays them.
@@ -161,14 +169,17 @@ export default function createActions() {
           // Shuffle the medias.
           shuffleArray(circusMedias);
         }
-        
         // If the selected filter isn't "All".
-        state.projects.data["circus"].filter((project) => {
-          // Select the medias corresponding to the selected filter.
-          if (project.attributes.type.data.attributes.name.toLowerCase() === name.toLowerCase()) {
-            project.attributes.medias.forEach((media) => circusMedias.push(media));
-          }
-        });
+        else {
+          console.log("Filter isn't 'All'!");
+          state.projects.data["circus"].filter((project) => {
+            // Select the medias corresponding to the selected filter.
+            if (project.attributes.type.data.attributes.name === name) {
+              project.attributes.medias.forEach((media) => circusMedias.push(media));
+            }
+          });
+        }
+        
         commit("setSelectedFilter", {"selectedFilterName": name, circusMedias});
         return;
       }

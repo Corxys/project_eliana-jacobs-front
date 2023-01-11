@@ -49,7 +49,7 @@ const getProjectsByCategory = async (name) => {
 		await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
 	}
 
-	await router.push(`/projects/${slugifyTitle(name)}`);
+	await store.dispatch("setProjectsByCategory", {"category": name})
 
   isMenuOpen.value = false;
 };

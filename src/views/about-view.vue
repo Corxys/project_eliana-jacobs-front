@@ -1,4 +1,7 @@
 <script setup>
+/* eslint-disable max-len */
+// Disable error on line 60.
+
 // General
 import {useStore} from "vuex";
 import {computed} from "vue";
@@ -46,8 +49,8 @@ const practices = computed(() => store.state.practices);
         </div>
       </article>
     </main>
-    <img class="about__shape about__shape-01" :src="shapeTopRight">
-    <img class="about__shape about__shape-02" :src="shapeBottomLeft">
+    <img class="about__shape about__shape-01" :src="shapeTopRight" alt="Shape in the bottom right of the site.">
+    <img class="about__shape about__shape-02" :src="shapeBottomLeft" alt="Shape in the bottom left of the site.">
   </div>
 </template>
 
