@@ -20,23 +20,27 @@ const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
+// Getters
+const filters = computed(() => store.getters.filters);
+const projects = computed(() => store.getters.projects);
+const medias = computed(() => store.getters.medias);
+const layout = computed(() => store.getters.layout);
+const filtered = computed(() => store.getters.filtered);
+
 // Store
-const hasFilter = computed(() => store.state.app.hasFilter);
 const hasTransitionScreen = computed(() => store.state.app.hasTransitionScreen);
-const layoutProjects = computed(() => store.state.app.layoutProjects);
 const selectedFilter = computed(() => store.state.app.selectedFilter);
-const filters = computed(() => store.state.filters.selected);
-const projects = computed(() => store.state.projects.selected);
-const medias = computed(() => store.state.projects.medias);
+const selectedCategory = computed(() => store.state.app.selectedCategory);
 
 // Ref
 let indexOfFocusedImage = ref(0);
 
 // Methods
-async function selectFilter({name}) {
+const selectFilter = ({name}) => {
+	console.log("Select filter:", name)
 	indexOfFocusedImage.value = 0;
-	await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
-  await store.dispatch("setSelectedFilter", {name});
+	store.dispatch("setFilter", {"filter": name.toLowerCase()});
+	store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
 }
 const changeImageFocused = ({index}) => {
 	indexOfFocusedImage.value = index;
@@ -47,8 +51,8 @@ const displayedFilters = computed(() => {
 	// "Circus" are the only projects page where the "All" filter is necessary.
 	if (route.fullPath === "/projects/circus") {
 		const filtersMap = filters.value.map((filterMap) => filterMap);
-		filtersMap.unshift({"id": 0, "attributes": {"name": "All"}});
-		store.dispatch("setSelectedFilter", {"name": "All"});
+		filtersMap.unshift({"id": 0, "attributes": {"name": "all"}});
+		store.dispatch("setFilter", {"filter": "all"});
 		return filtersMap;
 	} else {
 		return filters.value;
@@ -63,25 +67,26 @@ watch(() => route, () => {
 // Watcher
 watch(() => route, (param) => {
   const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
-	store.dispatch("setProjectsByCategory", {"category": categoryName});
+	store.dispatch("setCategory", {"category": categoryName});
 }, {"deep": true, "immediate": true});
 </script>
 
 <template>
   <section
+		v-if="projects"
     class="projects"
     :style="[hasTransitionScreen ? {'position': 'fixed', 'overflow': 'hidden'} : {'position': 'static', 'overflow': 'inherit'}]"
   >
     <!-- Transition screen -->
-    <transition-component v-if="filters.length && hasFilter && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
+    <transition-component v-if="filtered && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
 
     <!-- Filters -->
-    <div v-if="hasFilter" class="projects__filters">
+    <div v-if="filtered" class="projects__filters">
       <div
         v-for="filter of displayedFilters"
         :key="filter.id"
         class="projects__filter"
-        :class="{'projects__filter--active': filter.attributes.name === selectedFilter}"
+        :class="{'projects__filter--active': filter.attributes.name.toLowerCase() === selectedFilter}"
         @click="selectFilter({'name': filter.attributes.name})"
       >
         {{filter.attributes.name}}
@@ -89,9 +94,9 @@ watch(() => route, (param) => {
     </div>
 
     <!-- Projects -->
-    <div v-if="projects.length || medias.length" class="projects__content">
+    <div v-if="projects || medias" class="projects__content">
       <!-- Gallery layout	-->
-      <div v-if="layoutProjects === 'gallery'" class="projects__gallery">
+      <div v-if="layout === 'gallery'" class="projects__gallery">
         <div class="projects__gallery-images">
           <gallery-component :on-click="changeImageFocused" :images="medias" />
         </div>
@@ -127,6 +132,11 @@ watch(() => route, (param) => {
       </div>
     </div>
   </section>
+	<section v-else>
+		<div class="waiting">
+			There's currently no project in the {{selectedCategory}} category, come back soon!
+		</div>
+	</section>
 </template>
 
 <style scoped lang="scss">
@@ -232,6 +242,12 @@ watch(() => route, (param) => {
 			right: 0;
 		}
 	}
+}
+
+.waiting {
+	padding-top: 130px;
+	padding-bottom: 130px;
+	text-align: center;
 }
 
 @media (min-width: 768px) {

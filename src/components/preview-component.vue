@@ -25,7 +25,7 @@ const undisplayedImageOnPreview = () => {
 
 <template>
   <div class="preview" @click="undisplayedImageOnPreview">
-    <img class="preview__image" :src="image">
+    <img class="preview__image" :src="image" alt="Preview of the selected image.">
   </div>
 </template>
 

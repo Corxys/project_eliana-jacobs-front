@@ -1,13 +1,11 @@
 export default function createState() {
 	return {
 		app: {
-			hasFilter: false,
-			hasTransitionScreen: false,
-			selectedFilter: "All",
-			selectedCategory: "",
-			layoutProjects: "",
-			hasImageOnPreview: false,
 			isLoading: true,
+			hasTransitionScreen: false,
+			hasImageOnPreview: false,
+			selectedFilter: "all",
+			selectedCategory: "",
 		},
 		filters: {
 			data: {},

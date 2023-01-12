@@ -28,8 +28,8 @@ const changeImageFocused = ({index}) => {
   indexOfFocusedImage.value = index;
 };
 const backOnProjectsPage = async () => {
-	await store.dispatch("setSelectedFilter", {"name": selectedFilter.value});
-	// await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+	await store.dispatch("setFilter", {"filter": selectedFilter.value});
+	await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
 	await router.back();
 };
 

@@ -1,6 +1,6 @@
 export default function createMutations() {
 	return {
-    // General
+    // GENERAL
     setPractices(state, {practices}) {
       state.practices = practices.data;
     },
@@ -35,11 +35,9 @@ export default function createMutations() {
 			state.app.selectedCategory = category;
 		},
 		
-		// Projects
-		setProjectsByCategory(state, {category, selectedProjects, selectedFilters}) {
-			state.app.selectedCategory = category;
-			state.projects.selected = selectedProjects;
-			state.filters.selected = selectedFilters;
+		// FILTERS
+		setFilter(state, {filter}) {
+			state.app.selectedFilter = filter;
 		},
 		
 		// Preview
@@ -61,10 +59,10 @@ export default function createMutations() {
 		setTransitionScreen(state, {isTransitioned}) {
 			state.app.hasTransitionScreen = isTransitioned;
 		},
-    setSelectedFilter(state, {selectedFilterName, circusMedias = [], selectedProjects = []}) {
-      state.app.selectedFilter = selectedFilterName;
-			state.projects.medias = circusMedias;
-			state.projects.selected = selectedProjects;
-    },
+    // setSelectedFilter(state, {selectedFilterName, circusMedias = [], selectedProjects = []}) {
+		// 	state.app.selectedFilter = selectedFilterName;
+		// 	state.projects.medias = circusMedias;
+		// 	state.projects.selected = selectedProjects;
+		// },
 	};
 }

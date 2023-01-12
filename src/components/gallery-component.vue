@@ -5,7 +5,7 @@ defineProps({
     "type": Array,
     "required": true,
   },
-  onClick: {
+  "onClick": {
     "type": Function,
     "required": true,
   },

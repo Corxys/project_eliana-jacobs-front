@@ -7,7 +7,6 @@ import gql from "graphql-tag";
 // Utils
 import graphqlClient from "@/utils/graphql";
 import {slugifyTitle} from "@/utils/slugifyTitle";
-import {shuffleArray} from "@/utils/shuffleArray";
 
 // Queries
 const PRACTICES_QUERY = gql`query Practices {practices {data {id attributes {title text image {src {data {attributes {url}}} link copyright}}}}}`;
@@ -18,8 +17,14 @@ const PROJECTS_QUERY = gql`query Projects{projects (pagination: {limit:100}){dat
 
 export default function createActions() {
   return {
-    /* GENERAL */
-    // On app initialization, get all data.
+    /**
+     * GENERAL
+     * @method
+     * @name getData
+     * @param {function} state
+     * @param {function} commit
+     * On app initialization, get all data.
+     **/
     async getData({state, commit}) {
       console.debug("[app] data initialization...");
 
@@ -80,133 +85,124 @@ export default function createActions() {
       commit("setLayoutProjects", {layoutName});
     },
     
-    // CATEGORIES
-    
     /**
+     * CATEGORY
      * @method
      * @name setCategory
      * @param {function} commit
-     * @param {string} category - name of the selected category in the navbar component
+     * @param {function} dispatch
+     * @param {function} getters
+     * @param {string} category - Name of the selected category in the navbar component.
+     * Set category for projects (allows the getter to retrieve the data).
      **/
-    setCategory({commit}, {category}) {
-      commit("setCategory", {category});
+    async setCategory({commit, dispatch, getters}, {category}) {
+      await commit("setCategory", {category});
+  
+      // For the Digital media and Visual art projects, a transition screen needs to be displayed.
+      if (category === "digital media" || category === "visual art") {
+      	await dispatch("setHasTransitionScreen", {"hasTransitionScreen": true});
+      } else {
+      	await dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+      }
+      
+      await router.push(`/projects/${slugifyTitle(category)}`);
     },
     
-    /* PROJECTS */
-    // Clicking on a link in the navigation bar.
-    async setProjectsByCategory({state, commit, dispatch}, {category}) {
-      // console.log(category);
-      // // Get projects for the categories (circus, music, performance art, digital media, visual art).
-      // let selectedProjects = state.projects.data[category.toLowerCase()];
-      // console.log(state.projects.data[category.toLowerCase()]);
-      //
-      // let selectedFilters = [];
-      // // If there is projects in the selected category, select associated filters and push to the route.
-      // if (selectedProjects.length) {
-      //   console.log("There is projects!");
-      //   selectedFilters = state.filters.data.filter((filter) => {
-      //     return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
-      //   });
-      //   console.log("Selected filters:", selectedFilters);
-      //
-      //   // If there is filters for the selected projects, allow them to be displayed.
-      //   if (selectedFilters.length) {
-      //     await dispatch("setHasFilter", {"hasFiltered": true});
-      //     await router.push("/projects/transition-screen");
-      //   }
-      //
-      //   if (state.app.selectedFilter !== "All") {
-      //     // If the selected filter isn't "All", select the projects corresponding to the selected filter.
-      //     selectedProjects = state.projects.data[category.toLowerCase()].filter((project) => {
-      //       return project.attributes.type.data.attributes.name === state.app.selectedFilter;
-      //     });
-      //     console.log("Filter isn't 'All' and this is selected projects:", selectedProjects);
-      //   }
-      //
-      //   // Select the appropriate layout for the projects.
-      //   if (category.toLowerCase() === "circus") {
-      //     await dispatch("setLayoutProjects", {"layoutName": "gallery"});
-      //   } else {
-      //     await dispatch("setLayoutProjects", {"layoutName": "list"});
-      //   }
-      //
-      //   await commit("setProjectsByCategory", {
-      //     category,
-      //     selectedProjects,
-      //     selectedFilters,
-      //   });
-      // }
-      // // If not, push to the waiting route.
-      // else {
-      //   await router.push("/projects/waiting");
-      // }
+    /**
+     * FILTER
+     * @method
+     * @name setFilter
+     * @param {function} commit
+     * @param {function} dispatch
+     * @param {function} getters
+     * @param {string} filter - Name of the selected filter in the filters.
+     * Set category for projects (allows the getter to retrieve the data).
+     **/
+    async setFilter({commit, dispatch, getters}, {filter}) {
+      await commit("setFilter", {filter});
     },
     
-    /* PREVIEW */
+    // PREVIEW
     setImageOnPreview({commit}, {isImageOnPreview}) {
       commit("setImageOnPreview", {isImageOnPreview});
     },
   
-    /* PROJECT */
-    setProject({state, commit}, {id}) {
-      const project = state.projects.selected.find((project) => project.id === id);
+    // PROJECT
+    setProject({state, commit, getters}, {id}) {
+      const project = getters.projects.find((project) => project.id === id);
       commit("setProject", {project});
     },
   
-    /* ARTICLE */
+    // ARTICLE
     setArticle({state, commit}, {id}) {
       const article = state.news.find((article) => article.id == id);
       commit("setArticle", {article});
     },
   
-    /* FILTERS */
+    // FILTERS
     setTransitionScreen({commit}, {isTransitioned}) {
       commit("setTransitionScreen", {isTransitioned});
     },
-    // Clicking on a filter.
-    setSelectedFilter({state, commit}, {name}) {
-      const circusMedias = [];
-      let selectedProjects = {};
-      
-      // When the selected category corresponds to "Circus".
-      if (state.app.selectedCategory === "circus") {
-        console.log("Circus projects!");
-        // And the selected filter is "All".
-        if (name === "All") {
-          // Take the all medias in the "Circus" project and displays them.
-          state.projects.data["circus"].forEach((project) => {
-            project.attributes.medias.forEach((media) => circusMedias.push(media));
-          });
-          // Shuffle the medias.
-          shuffleArray(circusMedias);
-        }
-        // If the selected filter isn't "All".
-        else {
-          console.log("Filter isn't 'All'!");
-          state.projects.data["circus"].filter((project) => {
-            // Select the medias corresponding to the selected filter.
-            if (project.attributes.type.data.attributes.name === name) {
-              project.attributes.medias.forEach((media) => circusMedias.push(media));
-            }
-          });
-        }
-        
-        commit("setSelectedFilter", {"selectedFilterName": name, circusMedias});
-        return;
-      }
-      
-      // When the selected category isn't "Circus", displays all projects.
-      if (name === "All") {
-        selectedProjects = state.projects.data[state.app.selectedCategory.toLowerCase()];
-        return;
-      }
   
-      // If the selected filter isn't "All", select the projects corresponding to the selected filter.
-      selectedProjects = state.projects.data[state.app.selectedCategory].filter((project) => {
-        return project.attributes.type.data.attributes.name === name;
-      });
-      
-      commit("setSelectedFilter", {"selectedFilterName": name, circusMedias, selectedProjects});
-    },
+    /* PROJECTS */
+    // Clicking on a link in the navigation bar.
+    // async setProjectsByCategory({state, commit, dispatch}, {category}) {
+    // // Get projects for the categories (circus, music, performance art, digital media, visual art).
+    // let selectedProjects = state.projects.data[category.toLowerCase()];
+    // console.log(state.projects.data[category.toLowerCase()]);
+    //
+    // let selectedFilters = [];
+    //
+    // // If there is projects in the selected category, select associated filters and push to the route.
+    // if (selectedProjects.length) {
+    //   console.log("There is projects!");
+    //   selectedFilters = state.filters.data.filter((filter) => {
+    //     return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
+    //   });
+    //
+    //   if (state.app.selectedFilter !== "All") {
+    //     // If the selected filter isn't "All", select the projects corresponding to the selected filter.
+    //     selectedProjects = state.projects.data[category.toLowerCase()].filter((project) => {
+    //       return project.attributes.type.data.attributes.name === state.app.selectedFilter;
+    //     });
+    //     console.log("Filter isn't 'All' and this is selected projects:", selectedProjects);
+    //   }
+    //
+    //   await commit("setProjectsByCategory", {
+    //     category,
+    //     selectedProjects,
+    //     selectedFilters,
+    //   });
+    // }
+    // // If not, push to the waiting route.
+    // else {
+    //   await router.push("/projects/waiting");
+    // }
+    // },
+    // // Clicking on a filter.
+    // setSelectedFilter({state, commit}, {name}) {
+    //   const circusMedias = [];
+    //   let selectedProjects = {};
+    //
+    //   // When the selected category corresponds to "Circus".
+    //   if (state.app.selectedCategory === "circus") {
+    //
+    //     commit("setSelectedFilter", {"selectedFilterName": name, circusMedias});
+    //     return;
+    //   }
+    //
+    //   // When the selected category isn't "Circus", displays all projects.
+    //   if (name === "all") {
+    //     selectedProjects = state.projects.data[state.app.selectedCategory.toLowerCase()];
+    //     return;
+    //   }
+    //
+    //   // // If the selected filter isn't "All", select the projects corresponding to the selected filter.
+    //   // selectedProjects = state.projects.data[state.app.selectedCategory].filter((project) => {
+    //   //   return project.attributes.type.data.attributes.name === name;
+    //   // });
+    //
+    //   commit("setSelectedFilter", {"selectedFilterName": name, circusMedias, selectedProjects});
+    // },
 	};
 }

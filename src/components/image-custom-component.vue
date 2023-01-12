@@ -34,9 +34,6 @@ const hasImageOnPreview = computed(() => store.state.app.hasImageOnPreview);
 const displayImageOnPreview = () => {
 	store.dispatch("setImageOnPreview", {"isImageOnPreview": true});
 };
-
-// Regex
-const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
 </script>
 
 <template>
