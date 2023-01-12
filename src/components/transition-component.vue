@@ -18,23 +18,23 @@ const emit = defineEmits(["selectFilter"]);
 
 <template>
   <div class="transition">
-    <div class="transition__filters">
+    <div v-if="types.length" class="transition__filters">
       <div
         v-for="type of types"
         :key="type.id"
         class="transition__filter"
-        :style="width < 768 ? `height: calc(100% / ${types.length}); width: 100%`: `width: calc(100% / ${types.length}); height: auto`"
       >
-        <div class="transition__filter-image" @click="emit('selectFilter', {'name': type.attributes.name})">
-          <img
-            class="transition__filter-src"
-            :src="type.attributes.image.data.attributes.url ? type.attributes.image.data.attributes.url : ''"
-            :alt="type.attributes.image.data.attributes.alternativeText ? type.attributes.image.data.attributes.alternativeText : ''"
-          >
-        </div>
-        <h2 class="transition__filter-name" @click="emit('selectFilter', {'name': type.attributes.name})">
-          {{type.attributes.name}}
-        </h2>
+        {{type.attributes.image.data.attributes.url}}
+        <!--        <div v-if="type.attributes" class="transition__filter-image" @click="emit('selectFilter', {'name': type.attributes.name})">-->
+        <img
+          class="transition__filter-src"
+          :src="type.attributes.image.data.attributes.url ? type.attributes.image.data.attributes.url : ''"
+          :alt="type.attributes.image.data.attributes.alternativeText ? type.attributes.image.data.attributes.alternativeText : ''"
+        >
+        <!--        </div>-->
+        <!--        <h2 class="transition__filter-name" @click="emit('selectFilter', {'name': type.attributes.name})">-->
+        <!--          {{type.attributes.name}}-->
+        <!--        </h2>-->
       </div>
     </div>
   </div>

@@ -40,16 +40,18 @@ const projects = computed(() => store.state.projects.selected);
 const medias = computed(() => store.state.projects.data["circus"].medias);
 
 // Methods
-const getProjectsByCategory = async (name) => {
+const getProjectsByCategory = (name) => {
+  store.dispatch("setCategory", {"category": name});
 	// For the Digital media and Visual art projects, a transition screen needs to be displayed.
-	if (name.toLowerCase() === "digital media" || name.toLowerCase() === "visual art") {
-		console.log("Digital media or Visual art projects.");
-		await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": true});
-	} else {
-		await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
-	}
 
-	await store.dispatch("setProjectsByCategory", {"category": name})
+	// if (name.toLowerCase() === "digital media" || name.toLowerCase() === "visual art") {
+	// 	console.log("Digital media or Visual art projects.");
+	// 	await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": true});
+	// } else {
+	// 	await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+	// }
+
+	store.dispatch("setProjectsByCategory", {"category": name});
 
   isMenuOpen.value = false;
 };

@@ -80,55 +80,66 @@ export default function createActions() {
       commit("setLayoutProjects", {layoutName});
     },
     
+    // CATEGORIES
+    
+    /**
+     * @method
+     * @name setCategory
+     * @param {function} commit
+     * @param {string} category - name of the selected category in the navbar component
+     **/
+    setCategory({commit}, {category}) {
+      commit("setCategory", {category});
+    },
+    
     /* PROJECTS */
     // Clicking on a link in the navigation bar.
     async setProjectsByCategory({state, commit, dispatch}, {category}) {
-      console.log(category)
-      // Get projects for the categories (circus, music, performance art, digital media, visual art).
-      let selectedProjects = state.projects.data[category.toLowerCase()];
-      console.log(state.projects.data[category.toLowerCase()])
-      
-      let selectedFilters = [];
-      // If there is projects in the selected category, select associated filters and push to the route.
-      if (selectedProjects.length) {
-        console.log("There is projects!");
-        selectedFilters = state.filters.data.filter((filter) => {
-          return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
-        });
-        console.log("Selected filters:", selectedFilters)
-        
-        // If there is filters for the selected projects, allow them to be displayed.
-        if (selectedFilters.length) {
-          await dispatch("setHasFilter", {"hasFiltered": true});
-        }
-        
-        if (state.app.selectedFilter !== "All") {
-          // If the selected filter isn't "All", select the projects corresponding to the selected filter.
-          selectedProjects = state.projects.data[category].filter((project) => {
-            return project.attributes.type.data.attributes.name === state.app.selectedFilter;
-          });
-          console.log("Filter isn't 'All' and this is selected projects:", selectedProjects);
-        }
-        
-        // Select the appropriate layout for the projects.
-        if (category.toLowerCase() === "circus") {
-          await dispatch("setLayoutProjects", {"layoutName": "gallery"});
-        } else {
-          await dispatch("setLayoutProjects", {"layoutName": "list"});
-        }
-        
-        await commit("setProjectsByCategory", {
-          category,
-          selectedProjects,
-          selectedFilters,
-        });
-  
-        await router.push(`/projects/${slugifyTitle(category.toLowerCase())}`);
-      }
-      // If not, push to the waiting route.
-      else {
-        await router.push("/projects/waiting");
-      }
+      // console.log(category);
+      // // Get projects for the categories (circus, music, performance art, digital media, visual art).
+      // let selectedProjects = state.projects.data[category.toLowerCase()];
+      // console.log(state.projects.data[category.toLowerCase()]);
+      //
+      // let selectedFilters = [];
+      // // If there is projects in the selected category, select associated filters and push to the route.
+      // if (selectedProjects.length) {
+      //   console.log("There is projects!");
+      //   selectedFilters = state.filters.data.filter((filter) => {
+      //     return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
+      //   });
+      //   console.log("Selected filters:", selectedFilters);
+      //
+      //   // If there is filters for the selected projects, allow them to be displayed.
+      //   if (selectedFilters.length) {
+      //     await dispatch("setHasFilter", {"hasFiltered": true});
+      //     await router.push("/projects/transition-screen");
+      //   }
+      //
+      //   if (state.app.selectedFilter !== "All") {
+      //     // If the selected filter isn't "All", select the projects corresponding to the selected filter.
+      //     selectedProjects = state.projects.data[category.toLowerCase()].filter((project) => {
+      //       return project.attributes.type.data.attributes.name === state.app.selectedFilter;
+      //     });
+      //     console.log("Filter isn't 'All' and this is selected projects:", selectedProjects);
+      //   }
+      //
+      //   // Select the appropriate layout for the projects.
+      //   if (category.toLowerCase() === "circus") {
+      //     await dispatch("setLayoutProjects", {"layoutName": "gallery"});
+      //   } else {
+      //     await dispatch("setLayoutProjects", {"layoutName": "list"});
+      //   }
+      //
+      //   await commit("setProjectsByCategory", {
+      //     category,
+      //     selectedProjects,
+      //     selectedFilters,
+      //   });
+      // }
+      // // If not, push to the waiting route.
+      // else {
+      //   await router.push("/projects/waiting");
+      // }
     },
     
     /* PREVIEW */
@@ -159,7 +170,7 @@ export default function createActions() {
       
       // When the selected category corresponds to "Circus".
       if (state.app.selectedCategory === "circus") {
-        console.log("Circus projects!")
+        console.log("Circus projects!");
         // And the selected filter is "All".
         if (name === "All") {
           // Take the all medias in the "Circus" project and displays them.

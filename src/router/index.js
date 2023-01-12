@@ -48,6 +48,11 @@ const router = createRouter({
       component: () => import("../views/projects-view.vue"),
     },
     {
+      path: "/projects/transition-screen",
+      name: "transition",
+      component: () => import("../views/transition-view.vue"),
+    },
+    {
       path: "/projects/waiting",
       name: "waiting",
       component: () => import("../views/waiting-view.vue"),

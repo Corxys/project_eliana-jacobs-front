@@ -30,6 +30,11 @@ export default function createMutations() {
 			state.app.layoutProjects = layoutName;
 		},
 		
+		// CATEGORIES
+		setCategory(state, {category}) {
+			state.app.selectedCategory = category;
+		},
+		
 		// Projects
 		setProjectsByCategory(state, {category, selectedProjects, selectedFilters}) {
 			state.app.selectedCategory = category;

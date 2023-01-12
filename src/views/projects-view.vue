@@ -73,7 +73,7 @@ watch(() => route, (param) => {
     :style="[hasTransitionScreen ? {'position': 'fixed', 'overflow': 'hidden'} : {'position': 'static', 'overflow': 'inherit'}]"
   >
     <!-- Transition screen -->
-    <transition-component v-if="hasFilter && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
+    <transition-component v-if="filters.length && hasFilter && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
 
     <!-- Filters -->
     <div v-if="hasFilter" class="projects__filters">
