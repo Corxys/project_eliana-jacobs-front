@@ -5,6 +5,7 @@ import {useStore} from "vuex";
 
 // Components
 import PreviewComponent from "@/components/preview-component.vue";
+import AudioPlayerComponent from "@/components/project-components/audio-player-component.vue";
 
 // Props
 defineProps({
@@ -34,12 +35,16 @@ const hasImageOnPreview = computed(() => store.state.app.hasImageOnPreview);
 const displayImageOnPreview = () => {
 	store.dispatch("setImageOnPreview", {"isImageOnPreview": true});
 };
+
+// Regex
+const imageMimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
+const audioMimesTypesCheck = /audio\/mp3|audio\/wav|audio\/ogg/;
 </script>
 
 <template>
   <div class="image">
     <img
-      v-if="!image.link"
+      v-if="imageMimesTypesCheck.test(image.src.data.attributes.mime)"
       class="image__src"
       :src="image.src.data.attributes.url"
       :alt="image.src.data.attributes.alternativeText"
@@ -54,6 +59,9 @@ const displayImageOnPreview = () => {
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen
     />
+		<div v-if="audioMimesTypesCheck.test(image.src.data.attributes.mime)">
+			<audio-player-component :media="image" />
+		</div>
     <span v-if="copyright" class="image__credits credits">
       {{copyright}}
     </span>

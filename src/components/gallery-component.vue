@@ -12,24 +12,22 @@ defineProps({
 });
 
 // Regex
-const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
+const imageMimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
 </script>
 
 <template>
   <div class="gallery">
     <div v-for="(image, index) of images" :key="image.id" class="gallery__image">
       <img
-        v-if="mimesTypesCheck.test(image.src.data.attributes.mime)"
+        v-if="imageMimesTypesCheck.test(image.src.data.attributes.mime)"
         :src="image.src.data.attributes.url ? image.src.data.attributes.url : ''"
         :alt="image.src.data.attributes.alternativeText ? image.src.data.attributes.alternativeText : ''"
         @click.stop="() => onClick({index})"
       >
-
-      <!--      <video-->
-      <!--        v-else-->
-      <!--        class="gallery__video"-->
-      <!--        :src="image.src.data.attributes.url ? image.src.data.attributes.url : ''"-->
-      <!--      />-->
+			<!-- Audio file -->
+			<div v-else class="gallery__audio" @click.stop="() => onClick({index})">
+				<font-awesome-icon class="gallery__audio-icon" :icon="['fas', 'volume-high']" />
+			</div>
     </div>
   </div>
 </template>
@@ -54,5 +52,16 @@ const mimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/
       transition: all 0.3s ease-in-out;
     }
   }
+	&__audio {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: var(--epj-c-main);
+		&-icon {
+			font-size: 30px;
+			margin-bottom: 8px;
+			margin-right: 10px;
+		}
+	}
 }
 </style>

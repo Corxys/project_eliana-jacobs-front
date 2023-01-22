@@ -1,7 +1,16 @@
 <!--suppress CssUnknownTarget, HtmlUnknownAttribute -->
 <script setup>
 // General
-// import {ref} from "vue";
+defineProps({
+	"flowerHeight": {
+		"type": Number,
+		"required": true,
+	},
+	"flowerWidth": {
+		"type": Number,
+		"required": true,
+	},
+});
 
 // Images
 import music from "@/assets/images/petal_music.jpg";
@@ -30,6 +39,8 @@ import digitalMedia from "@/assets/images/petal_digital-media.jpg";
       class="flower"
       x="0px"
       y="0px"
+			:height="`${flowerHeight - 15}px`"
+			:width="`${flowerWidth - 30}px`"
       viewBox="0 0 832.7 792.1"
       style="pointer-events: fill"
     >
@@ -167,8 +178,8 @@ import digitalMedia from "@/assets/images/petal_digital-media.jpg";
 <style scoped lang="scss">
 .flower {
 	position: relative;
-	width: 900px;
-	height: 900px;
+	//width: 900px;
+	//height: 900px;
 	&__tooltip {
 		position: absolute;
 		z-index: 10;

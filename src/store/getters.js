@@ -14,17 +14,17 @@ export default function createGetters() {
       return filters.length ? filters : null;
     },
     projects(state) {
-      console.log("Projects getters.");
+      // console.log("Projects getters.");
       let projects = [];
       
       if (state.app.selectedCategory) {
-        console.log("Selected category: true.");
+        // console.log("Selected category: true.");
         // If the selected filter is "all", select all the projects.
         if (state.app.selectedFilter === "all") {
-          console.log("Selected filter: 'all'.");
+          // console.log("Selected filter: 'all'.");
           projects = state.projects.data[state.app.selectedCategory.toLowerCase()];
         } else {
-          console.log("Selected filter: !'all'.")
+          // console.log("Selected filter: !'all'.")
           // If the selected filter isn't "all", select the projects corresponding to the selected filter.
           projects = state.projects.data[state.app.selectedCategory].filter((project) => {
             return project.attributes.type.data.attributes.name.toLowerCase() === state.app.selectedFilter;

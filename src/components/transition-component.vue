@@ -27,6 +27,7 @@ const emit = defineEmits(["selectFilter"]);
         v-for="type of types"
         :key="type.id"
         class="transition__filter"
+				:style="`width: calc(100vw / ${types.length}); height: calc(100vh / ${types.length})`"
       >
 				<div v-if="type.attributes" class="transition__filter-image" @click="emit('selectFilter', {'name': type.attributes.name})">
 					<img
@@ -64,19 +65,18 @@ const emit = defineEmits(["selectFilter"]);
 		align-items: center;
 		padding: 30px;
 		height: 100vh;
+		width: 100vw;
   }
   &__filter {
     margin-bottom: 30px;
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-		max-width: 250px;
 		&:last-child {
 			margin-bottom: 0;
 		}
     &-image {
-			max-height: 125px;
-			min-height: 125px;
+			height: 100%;
 			width: 100%;
 			cursor: pointer;
 			overflow: hidden;

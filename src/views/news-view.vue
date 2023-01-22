@@ -7,7 +7,7 @@ import {computed} from "vue";
 import {useStore} from "vuex";
 
 // Components
-import ArticleNews from "../components/news-components/article-news-component.vue";
+import ArticleNews from "@/components/news-components/article-news-component.vue";
 
 // Images
 import shapeTop from "@/assets/images/new_shape-01.png";

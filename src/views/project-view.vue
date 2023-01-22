@@ -19,6 +19,7 @@ const router = useRouter();
 const project = computed(() => store.state.project);
 const projectDate = computed(() => project.value.attributes.date.slice(0, 4));
 const selectedFilter = computed(() => store.state.app.selectedFilter);
+const selectedCategory = computed(() => store.state.app.selectedCategory);
 
 // Ref
 let indexOfFocusedImage = ref(0);

@@ -4,8 +4,8 @@ import {ref} from "vue";
 import emailjs from "@emailjs/browser";
 
 // Components
-import IconSocial from "../components/shared-components/icon-social-component.vue";
-import CustomButton from "../components/shared-components/custom-button-component.vue";
+import IconSocialComponent from "@/components/shared-components/icon-social-component.vue";
+import CustomButtonComponent from "@/components/shared-components/custom-button-component.vue";
 
 // Refs
 const form = ref(null);
@@ -109,10 +109,10 @@ const sendEmail = () => {
         </div>
         <div class="contact__footer">
           <div class="contact__icons">
-            <icon-social :icon="['fab', 'instagram']" link="https://www.instagram.com/__e_l_i_a_n_a__/" />
-            <icon-social :icon="['fab', 'youtube']" link="https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51VQ" />
+            <icon-social-component :icon="['fab', 'instagram']" link="https://www.instagram.com/__e_l_i_a_n_a__/" />
+            <icon-social-component :icon="['fab', 'youtube']" link="https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51VQ" />
           </div>
-          <custom-button text="Submit" />
+          <custom-button-component text="Submit" />
         </div>
         <div class="contact__error-message">
           {{errorMessage}}

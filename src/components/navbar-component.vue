@@ -16,8 +16,8 @@ const router = useRouter();
 const store = useStore();
 
 // Images
-import logotypeWhite from "../assets/images/logo-w.png";
-import logotypeBlack from "../assets/images/logo-b.png";
+import logotypeWhite from "@/assets/images/logo-w.png";
+import logotypeBlack from "@/assets/images/logo-b.png";
 
 // Data
 import {links} from "@/assets/data/links";

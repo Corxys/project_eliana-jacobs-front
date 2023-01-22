@@ -37,7 +37,7 @@ let indexOfFocusedImage = ref(0);
 
 // Methods
 const selectFilter = ({name}) => {
-	console.log("Select filter:", name)
+	// console.log("Select filter:", name)
 	indexOfFocusedImage.value = 0;
 	store.dispatch("setFilter", {"filter": name.toLowerCase()});
 	store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});

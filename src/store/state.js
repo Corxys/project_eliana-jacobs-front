@@ -9,7 +9,6 @@ export default function createState() {
 		},
 		filters: {
 			data: {},
-			selected: [],
 		},
 		categories: [],
 		projects: {
@@ -21,7 +20,6 @@ export default function createState() {
 				"digital media": [],
 			},
 			medias: [],
-			selected: [],
 		},
 		project: {},
 		practices: [],
