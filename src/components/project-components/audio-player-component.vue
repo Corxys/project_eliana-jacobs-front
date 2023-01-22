@@ -9,10 +9,16 @@ defineProps({
 </script>
 
 <template>
-	<div class="interview-page__audio__file">
-		<div class="interview-page__audio__file__source">
-			<audio :id="media.id" :src="media.src.data.attributes.url" controls>
-			</audio>
-		</div>
+	<div class="player">
+		<audio :id="media.id" class="player__src" :src="media.src.data.attributes.url" controls>
+		</audio>
 	</div>
 </template>
+
+<style scoped lang="scss">
+.player {
+	&__src {
+		width: 100%;
+	}
+}
+</style>

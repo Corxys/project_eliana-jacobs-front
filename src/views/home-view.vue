@@ -44,7 +44,7 @@ const setSizeOfTheFlower = (event) => {
 		<div class="home__container">
 			<div class="home__flower">
 				<img class="home__flower-src" :src="flower" alt="">
-				<flower-component :flower-height="flowerHeight" :flower-width="flowerWidth" class="home__flower-svg" />
+				<flower-component :flower-height="flowerHeight" :flower-width="flowerWidth" />
 			</div>
 		</div>
   </div>
@@ -70,6 +70,7 @@ const setSizeOfTheFlower = (event) => {
       height: 100vh;
     }
     &-src {
+			pointer-events: none;
 			max-width: 100vw;
 			height: auto;
 			overflow: hidden;

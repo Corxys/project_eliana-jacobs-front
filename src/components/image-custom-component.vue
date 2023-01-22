@@ -44,7 +44,7 @@ const audioMimesTypesCheck = /audio\/mp3|audio\/wav|audio\/ogg/;
 <template>
   <div class="image">
     <img
-      v-if="imageMimesTypesCheck.test(image.src.data.attributes.mime)"
+      v-if="!image.link && imageMimesTypesCheck.test(image.src.data.attributes.mime)"
       class="image__src"
       :src="image.src.data.attributes.url"
       :alt="image.src.data.attributes.alternativeText"
