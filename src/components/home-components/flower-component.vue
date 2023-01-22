@@ -201,7 +201,7 @@ const getProjectsByCategory = (event) => {
 	justify-content: center;
 	align-items: center;
 	width: 100vw;
-	height: 100vh;
+	height: calc(var(--100-vh, 1vh) * 100);
 	&__svg {
 		position: relative;
 	}
