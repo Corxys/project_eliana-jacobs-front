@@ -1,5 +1,5 @@
 <script setup>
-// Genereal
+// General
 import {ref, onMounted, onUnmounted} from "vue";
 
 // Components
@@ -21,7 +21,6 @@ const flowerHeight = ref(0);
 onMounted(() => {
 	flowerWidth.value = window.innerWidth;
 	flowerHeight.value = window.innerHeight;
-	// console.log(window.innerHeight)
 	window.addEventListener("resize", setSizeOfTheFlower);
 });
 onUnmounted(() => {
@@ -60,7 +59,7 @@ const setSizeOfTheFlower = (event) => {
 	overflow: hidden;
 	&__container {
 		width: 100%;
-		height: 100%;
+		height: calc(var(--100-vh, 1vh) * 100);
 		overflow: hidden;
 	}
   &__flower {
