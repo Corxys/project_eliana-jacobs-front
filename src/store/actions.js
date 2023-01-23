@@ -95,14 +95,14 @@ export default function createActions() {
      * @param {string} category - Name of the selected category in the navbar component.
      * Set category for projects (allows the getter to retrieve the data).
      **/
-    async setCategory({commit, dispatch, getters}, {category}) {
+    async setCategory({commit, dispatch}, {category}) {
       await commit("setCategory", {category});
   
       // For the Digital media and Visual art projects, a transition screen needs to be displayed.
       if (category === "digital media" || category === "visual art") {
-      	await dispatch("setHasTransitionScreen", {"hasTransitionScreen": true});
+        await dispatch("setHasTransitionScreen", {"hasTransitionScreen": true});
       } else {
-      	await dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+        await dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
       }
       
       await router.push(`/projects/${slugifyTitle(category)}`);

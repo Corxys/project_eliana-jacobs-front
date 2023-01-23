@@ -41,7 +41,7 @@ const hideTooltip = () => {
 	tooltipText.value = "";
 };
 const moveTooltip = (event) => {
-	const target = document.querySelector(`.flower__tooltip`);
+	const target = document.querySelector(".flower__tooltip");
 	target.style.top = (event.clientY + 2) + "px";
 	target.style.left = (event.clientX + 2) + "px";
 };
@@ -54,24 +54,31 @@ const getProjectsByCategory = (event) => {
 
 <template>
   <div class="flower">
-		<div class="flower__tooltip">
-			{{tooltipText}}
-		</div>
+    <div class="flower__tooltip">
+      {{tooltipText}}
+    </div>
     <svg
       class="flower__svg"
       x="0px"
       y="0px"
-			:height="`${flowerHeight - 50}px`"
-			:width="`${flowerWidth - 30}px`"
+      :height="`${flowerHeight}px`"
+      :width="`${flowerWidth}px`"
       viewBox="0 0 832.7 792.1"
     >
-			<!-- Petal 1 -->
-      <g class="flower__petal flower__petal-01" id="Art performance" @mouseenter="displayTooltip" @mousemove="moveTooltip" @mouseleave="hideTooltip" @click.stop="getProjectsByCategory">
+      <!-- Petal 1 -->
+      <g
+        id="Art performance"
+        class="flower__petal flower__petal-01"
+        @mouseenter="displayTooltip"
+        @mousemove="moveTooltip"
+        @mouseleave="hideTooltip"
+        @click.stop="getProjectsByCategory"
+      >
         <defs>
           <path
             id="SVGID_1_"
             d="M193.3,293.3c-0.2,0.1-0.4,0.2-0.6,0.3c0,0-0.1,0-0.1,0.1c-1.8,0.9-3.6,1.8-5.3,2.7	C51,365.5,0,375.6,0,375.6s34.8,18.3,155.7,138c0.2,0.2,0.3,0.3,0.5,0.5l0.1,0.1c0,0,0.1,0,0.1,0.1c23.1,22.7,54.2,39.1,89.9,44.9 c90,14.7,164.5-37.4,177.1-114.5s-30.7-148.4-131.5-164.8C256.6,274.1,222.3,279.5,193.3,293.3z"
-					/>
+          />
         </defs>
         <clipPath id="SVGID_00000181770052971814633530000000290739838189137797_">
           <use xlink:href="#SVGID_1_" style="overflow:visible" />
@@ -87,8 +94,15 @@ const getProjectsByCategory = (event) => {
         </g>
       </g>
 
-			<!-- Petal 2 -->
-      <g class="flower__petal flower__petal-02" id="Circus" @mouseenter="displayTooltip" @mousemove="moveTooltip" @mouseleave="hideTooltip" @click="getProjectsByCategory">
+      <!-- Petal 2 -->
+      <g
+        id="Circus"
+        class="flower__petal flower__petal-02"
+        @mouseenter="displayTooltip"
+        @mousemove="moveTooltip"
+        @mouseleave="hideTooltip"
+        @click="getProjectsByCategory"
+      >
         <defs>
           <path
             id="SVGID_00000090266364474443077110000012638213831180463233_"
@@ -113,8 +127,15 @@ const getProjectsByCategory = (event) => {
           />
         </g>
       </g>
-			<!-- Petal 3 -->
-      <g class="flower__petal flower__petal-03" id="Visual art" @mouseenter="displayTooltip" @mousemove="moveTooltip" @mouseleave="hideTooltip" @click="getProjectsByCategory">
+      <!-- Petal 3 -->
+      <g
+        id="Visual art"
+        class="flower__petal flower__petal-03"
+        @mouseenter="displayTooltip"
+        @mousemove="moveTooltip"
+        @mouseleave="hideTooltip"
+        @click="getProjectsByCategory"
+      >
         <defs>
           <path
             id="SVGID_00000043443998604319363350000004483554710250153368_"
@@ -139,8 +160,15 @@ const getProjectsByCategory = (event) => {
           />
         </g>
       </g>
-			<!-- Petal 4 -->
-      <g class="flower__petal flower__petal-04" id="Music" @mouseenter="displayTooltip" @mousemove="moveTooltip" @mouseleave="hideTooltip" @click="getProjectsByCategory">
+      <!-- Petal 4 -->
+      <g
+        id="Music"
+        class="flower__petal flower__petal-04"
+        @mouseenter="displayTooltip"
+        @mousemove="moveTooltip"
+        @mouseleave="hideTooltip"
+        @click="getProjectsByCategory"
+      >
         <defs>
           <path
             id="SVGID_00000178922333451864009520000004111467456522529704_"
@@ -166,7 +194,14 @@ const getProjectsByCategory = (event) => {
         </g>
       </g>
       <!-- Petal 5 -->
-      <g class="flower__petal flower__petal-05" id="Digital media" @mouseenter="displayTooltip" @mousemove="moveTooltip" @mouseleave="hideTooltip" @click="getProjectsByCategory">
+      <g
+        id="Digital media"
+        class="flower__petal flower__petal-05"
+        @mouseenter="displayTooltip"
+        @mousemove="moveTooltip"
+        @mouseleave="hideTooltip"
+        @click="getProjectsByCategory"
+      >
         <defs>
           <path
             id="path-petal-05"
@@ -200,10 +235,15 @@ const getProjectsByCategory = (event) => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 100vw;
-	height: calc(var(--100-vh, 1vh) * 100);
-	&__svg {
-		position: relative;
+  width: 100%;
+  height: 100%;
+  &__svg {
+		position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 90%;
 	}
 	&__tooltip {
 		position: absolute;

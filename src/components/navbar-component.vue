@@ -33,9 +33,6 @@ defineProps({
   },
 });
 
-// Getters
-const projects = computed(() => store.getters.projects);
-
 // State
 const categories = computed(() => store.state.categories);
 

@@ -41,7 +41,7 @@ const selectFilter = ({name}) => {
 	indexOfFocusedImage.value = 0;
 	store.dispatch("setFilter", {"filter": name.toLowerCase()});
 	store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
-}
+};
 const changeImageFocused = ({index}) => {
 	indexOfFocusedImage.value = index;
 };
@@ -73,7 +73,7 @@ watch(() => route, (param) => {
 
 <template>
   <section
-		v-if="projects"
+    v-if="projects"
     class="projects"
     :style="[hasTransitionScreen ? {'position': 'fixed', 'overflow': 'hidden'} : {'position': 'static', 'overflow': 'inherit'}]"
   >
@@ -132,11 +132,11 @@ watch(() => route, (param) => {
       </div>
     </div>
   </section>
-	<section v-else>
-		<div class="waiting">
-			There's currently no project in the {{selectedCategory}} category, come back soon!
-		</div>
-	</section>
+  <section v-else>
+    <div class="waiting">
+      There's currently no project in the {{selectedCategory}} category, come back soon!
+    </div>
+  </section>
 </template>
 
 <style scoped lang="scss">

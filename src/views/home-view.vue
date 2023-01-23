@@ -36,16 +36,16 @@ const setSizeOfTheFlower = (event) => {
 
 <template>
   <div class="home">
-		<div class="home__shapes">
-			<img class="home__shape home__shape-01" :src="shapeLeftTop" alt="Shape in the top left of the side." />
-			<img class="home__shape home__shape-02" :src="shapeLeftBottom" alt="Shape in the bottom left of the side." />
-			<img class="home__shape home__shape-03" :src="shapeRightTop" alt="Shape in the top right of the side." />
-			<img class="home__shape home__shape-04" :src="shapeRightBottom" alt="Shape in the top right of the side." />
-		</div>
-		<div class="home__flower">
-			<img class="home__flower-shape" :src="flower" alt="">
-			<flower-component :flower-height="flowerHeight" :flower-width="flowerWidth" />
-		</div>
+    <div class="home__shapes">
+      <img class="home__shape home__shape-01" :src="shapeLeftTop" alt="Shape in the top left of the side.">
+      <img class="home__shape home__shape-02" :src="shapeLeftBottom" alt="Shape in the bottom left of the side.">
+      <img class="home__shape home__shape-03" :src="shapeRightTop" alt="Shape in the top right of the side.">
+      <img class="home__shape home__shape-04" :src="shapeRightBottom" alt="Shape in the top right of the side.">
+    </div>
+    <div class="home__flower">
+      <img class="home__flower-shape" :src="flower" alt="">
+      <flower-component :flower-height="flowerHeight" :flower-width="flowerWidth" />
+    </div>
   </div>
 </template>
 
@@ -58,8 +58,8 @@ const setSizeOfTheFlower = (event) => {
 	height: calc(var(--100-vh, 1vh) * 100);
 	overflow: hidden;
 	&__container {
-		width: 100%;
-		height: calc(var(--100-vh, 1vh) * 100);
+		width: 100vw;
+		height: 100%;
 		overflow: hidden;
 	}
   &__flower {
@@ -111,8 +111,10 @@ const setSizeOfTheFlower = (event) => {
 	.home {
 		&__flower {
 			&-shape {
-				height: calc(var(--100-vh, 1vh) * 100);
+				height: auto;
 				width: auto;
+        max-height: 100vh;
+        max-width: 100vw;
 			}
 		}
 	}
