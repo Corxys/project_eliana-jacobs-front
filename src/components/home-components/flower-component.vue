@@ -33,17 +33,14 @@ let tooltipText = ref("");
 const displayTooltip = (event) => {
 	const target = document.querySelector(".flower__tooltip");
 	target.style.display = "block";
-	tooltipText.value = event.target.id;
+  target.innerHTML = event.target.id;
+  target.style.top = (event.target.getBoundingClientRect().top + (event.target.getBoundingClientRect().height / 2)) - (target.getBoundingClientRect().height / 2) + "px";
+  target.style.left = (event.target.getBoundingClientRect().left + (event.target.getBoundingClientRect().width / 2)) - (target.getBoundingClientRect().width / 2) + "px";
 };
 const hideTooltip = () => {
 	const target = document.querySelector(".flower__tooltip");
 	target.style.display = "none";
 	tooltipText.value = "";
-};
-const moveTooltip = (event) => {
-	const target = document.querySelector(".flower__tooltip");
-	target.style.top = (event.clientY + 2) + "px";
-	target.style.left = (event.clientX + 2) + "px";
 };
 const getProjectsByCategory = (event) => {
 	const flower = event.target.closest(".flower__petal");
@@ -54,9 +51,7 @@ const getProjectsByCategory = (event) => {
 
 <template>
   <div class="flower">
-    <div class="flower__tooltip">
-      {{tooltipText}}
-    </div>
+    <div class="flower__tooltip" />
     <svg
       class="flower__svg"
       x="0px"
@@ -70,7 +65,6 @@ const getProjectsByCategory = (event) => {
         id="Art performance"
         class="flower__petal flower__petal-01"
         @mouseenter="displayTooltip"
-        @mousemove="moveTooltip"
         @mouseleave="hideTooltip"
         @click.stop="getProjectsByCategory"
       >
@@ -85,6 +79,7 @@ const getProjectsByCategory = (event) => {
         </clipPath>
         <g transform="matrix(1 0 0 1 0 1.525879e-05)" style="clip-path:url(#SVGID_00000181770052971814633530000000290739838189137797_);">
           <image
+            class="flower__petal--image"
             style="overflow:visible"
             width="3857"
             height="3857"
@@ -118,7 +113,7 @@ const getProjectsByCategory = (event) => {
         <g style="clip-path:url(#SVGID_00000113339469024594871880000017756546414844136069_);">
 
           <image
-            class="petal-02"
+            class="flower__petal--image"
             style="overflow:visible;"
             width="4032"
             height="2688"
@@ -151,7 +146,7 @@ const getProjectsByCategory = (event) => {
         <g style="clip-path:url(#SVGID_00000103985328193008530800000008135543856864860041_);">
 
           <image
-            class="petal-03"
+            class="flower__petal--image"
             style="overflow:visible;"
             width="750"
             height="741"
@@ -184,7 +179,7 @@ const getProjectsByCategory = (event) => {
         <g transform="matrix(1 0 0 1 0 0)" style="clip-path:url(#SVGID_00000042697362760462214870000012711698149196813705_);">
 
           <image
-            class="petal-04"
+            class="flower__petal--image"
             style="overflow:visible;"
             width="867"
             height="586"
@@ -217,7 +212,7 @@ const getProjectsByCategory = (event) => {
         <g style="clip-path:url(#clip-petal-05);">
 
           <image
-            class="petal-05"
+            class="flower__petal--image"
             style="overflow:visible;"
             width="1201"
             height="659"
@@ -237,13 +232,23 @@ const getProjectsByCategory = (event) => {
 	align-items: center;
   width: 100%;
   height: 100%;
+  background: radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+  &__petal {
+    &--image {
+      cursor: pointer;
+      transition: all 0.2s ease;
+      &:hover {
+        filter: blur(40px)
+      }
+    }
+  }
   &__svg {
 		position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 95%;
 	}
 	&__tooltip {
 		position: absolute;
@@ -255,6 +260,8 @@ const getProjectsByCategory = (event) => {
 		font-size: 25px;
 		color: var(--epj-c-white);
 		white-space: nowrap;
+    pointer-events: none;
+    cursor: pointer;
 		&--bold {
 			font-weight: 700;
 			margin-bottom: 5px;
