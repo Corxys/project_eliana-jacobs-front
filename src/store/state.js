@@ -6,6 +6,7 @@ export default function createState() {
 			hasImageOnPreview: false,
 			selectedFilter: "all",
 			selectedCategory: "",
+			theme: "dark",
 		},
 		filters: {
 			data: {},

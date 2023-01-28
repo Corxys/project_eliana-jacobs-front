@@ -159,22 +159,9 @@ watch(() => route, (param) => {
     padding: 7px 12px;
     font-family: var(--font-primary);
     text-transform: uppercase;
-    border: 1px solid var(--dark-filter-default-border-color);
-    background-color: var(--dark-filter-default-background-color);
-    color: var(--dark-filter-default-text-color);
     transition: 0.2s ease-in all;
     margin-right: 10px;
 		margin-bottom: 10px;
-    &--active {
-      border: 1px solid var(--both-filter-active-border-color);
-      background-color: var(--both-filter-active-background-color);
-      color: var(--both-filter-active-text-color);
-    }
-    :hover {
-      border: 1px solid var(--dark-filter-hover-border-color);
-      background-color: var(--dark-filter-hover-background-color);
-      color: var(--dark-filter-hover-text-color);
-    }
     &:last-child {
       margin-right: 0;
     }
@@ -210,7 +197,6 @@ watch(() => route, (param) => {
   &__item {
     width: 100%;
     padding: 5px;
-    border: 1px solid var(--epj-c-white);
     &-image {
       width: 100%;
       height: 350px;

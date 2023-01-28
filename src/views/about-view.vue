@@ -113,7 +113,7 @@ const practices = computed(() => store.state.practices);
 		}
 		&-02 {
 			width: 80%;
-			top: 135%;
+			top: 90%;
 			left: 0;
 		}
 	}

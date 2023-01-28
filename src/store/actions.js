@@ -105,6 +105,11 @@ export default function createActions() {
         await dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
       }
       
+      if (!category) {
+        console.log("No category of projects selected!");
+        return;
+      }
+      
       await router.push(`/projects/${slugifyTitle(category)}`);
     },
     

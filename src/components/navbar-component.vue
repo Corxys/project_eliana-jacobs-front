@@ -2,7 +2,6 @@
 /*
 * TODO:
 * - fix size of the icon in the social button
-* - color of the navbar elements (logo & text) need to matches with the routes => white for dark theme, black for white theme
 * - navbar shifts when the scrollbar appears
 */
 
@@ -40,7 +39,13 @@ const categories = computed(() => store.state.categories);
 const getProjectsByCategory = (name) => {
   store.dispatch("setCategory", {"category": name.toLowerCase()});
 	store.dispatch("setFilter", {"filter": "all"});
-
+  isMenuOpen.value = false;
+};
+const goOnPage = (src) => {
+  console.log(src);
+  router.push(src);
+  store.dispatch("setCategory", {"category": ""});
+  store.dispatch("setFilter", {"filter": "all"});
   isMenuOpen.value = false;
 };
 </script>
@@ -49,7 +54,8 @@ const getProjectsByCategory = (name) => {
   <nav class="navbar">
     <div class="navbar__logo">
       <router-link to="/">
-        <img class="navbar__logo-src" alt="Eliana's handwritten" :src="theme === 'dark' ? logotypeBlack : logotypeWhite">
+        <img v-if="theme === 'dark'" class="navbar__logo-src" alt="Name of Eliana's handwritten (white version)" :src="logotypeWhite">
+        <img v-else class="navbar__logo-src" alt="Name of Eliana's handwritten (black version)" :src="logotypeBlack">
       </router-link>
     </div>
     <div class="navbar__container">
@@ -67,7 +73,7 @@ const getProjectsByCategory = (name) => {
         v-for="link of links"
         :key="link.id"
         class="navbar__link"
-        @click="router.push(link.src); isMenuOpen = false"
+        @click="goOnPage(link.src)"
       >
         <span class="navbar__link-text">
           {{link.name}}
@@ -109,7 +115,6 @@ const getProjectsByCategory = (name) => {
     }
   }
   &__container {
-    color: var(--color-text-dark);
     right: 30px;
   }
 
@@ -119,7 +124,6 @@ const getProjectsByCategory = (name) => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: var(--color-text-dark);
     &-burger {
       position: relative;
       width: 30px;
@@ -130,7 +134,6 @@ const getProjectsByCategory = (name) => {
         display: block;
         width: 100%;
         height: 4px;
-        background-color: var(--epj-c-white);
       }
       &:before, &:after {
         content: "";
@@ -150,7 +153,6 @@ const getProjectsByCategory = (name) => {
         transition: transform 0.2s;
         &:before {
           content: "";
-          background-color: var(--epj-c-white);
           width: 100%;
           height: 4px;
           position: absolute;
