@@ -5,7 +5,7 @@ import emailjs from "@emailjs/browser";
 
 // Components
 import IconSocialComponent from "@/components/shared-components/icon-social-component.vue";
-import CustomButtonComponent from "@/components/shared-components/custom-button-component.vue";
+import CustomButtonComponent from "@/components/shared-components/button-custom-component.vue";
 
 // Refs
 const form = ref(null);
