@@ -42,7 +42,6 @@ const getProjectsByCategory = (name) => {
   isMenuOpen.value = false;
 };
 const goOnPage = (src) => {
-  console.log(src);
   router.push(src);
   store.dispatch("setCategory", {"category": ""});
   store.dispatch("setFilter", {"filter": "all"});

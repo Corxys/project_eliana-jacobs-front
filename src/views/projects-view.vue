@@ -31,13 +31,13 @@ const filtered = computed(() => store.getters.filtered);
 const hasTransitionScreen = computed(() => store.state.app.hasTransitionScreen);
 const selectedFilter = computed(() => store.state.app.selectedFilter);
 const selectedCategory = computed(() => store.state.app.selectedCategory);
+const keysOfProjects = computed(() => store.state.projects.data);
 
 // Ref
 let indexOfFocusedImage = ref(0);
 
 // Methods
 const selectFilter = ({name}) => {
-	// console.log("Select filter:", name)
 	indexOfFocusedImage.value = 0;
 	store.dispatch("setFilter", {"filter": name.toLowerCase()});
 	store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
@@ -60,14 +60,15 @@ const displayedFilters = computed(() => {
 });
 
 // Watchers
-watch(() => route, () => {
-	store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
-}, {"deep": true, "immediate": true});
-
-// Watcher
 watch(() => route, (param) => {
-  const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
-	store.dispatch("setCategory", {"category": categoryName});
+	Object.keys(keysOfProjects.value).forEach((key) => {
+		if (param.path.includes(key.split(" ").join("-"))) {
+			// "/projects/category-name" > "projects/category-name" > ["projects", "category-name"] > ["category", "name"] > "category name"
+			const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
+			store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
+			store.dispatch("setCategory", {"category": categoryName});
+		}
+	})
 }, {"deep": true, "immediate": true});
 </script>
 
@@ -77,6 +78,8 @@ watch(() => route, (param) => {
     class="projects"
     :style="[hasTransitionScreen ? {'position': 'fixed', 'overflow': 'hidden'} : {'position': 'static', 'overflow': 'inherit'}]"
   >
+		<img v-if="layout === 'gallery'" class="projects__shape projects__shape-01" :src="shapeBottom" alt="Shape in the bottom of the site.">
+
     <!-- Transition screen -->
     <transition-component v-if="filtered && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
 
@@ -117,14 +120,14 @@ watch(() => route, (param) => {
             class="projects__item-image projects__item-image--link"
             @click="store.dispatch('setProject', {'id': project.id})"
           >
-            <router-link :to="`/project/${slugifyTitle(project.attributes.name)}`">
+            <router-link :to="`/projects/${selectedCategory.split(' ').join('-')}/${slugifyTitle(project.attributes.name)}`">
               <image-custom-component
                 :image="project.attributes.medias[0]"
               />
             </router-link>
           </div>
           <h2 class="projects__item-title projects__item-title--link" @click="store.dispatch('setProject', {'id': project.id})">
-            <router-link :to="`/project/${slugifyTitle(project.attributes.name)}`">
+            <router-link :to="`/projects/${selectedCategory.split(' ').join('-')}/${slugifyTitle(project.attributes.name)}`">
               {{project.attributes.name}}
             </router-link>
           </h2>
@@ -218,7 +221,6 @@ watch(() => route, (param) => {
     }
     &-title {
       margin-top: 5px;
-      &--link {}
     }
   }
 	&__shape {
@@ -226,6 +228,14 @@ watch(() => route, (param) => {
 		&-01 {
 			bottom: 0;
 			right: 0;
+		}
+	}
+	&__shape {
+		position: fixed;
+		height: 60%;
+		&-01 {
+			bottom: 0;
+			right: 20%;
 		}
 	}
 }

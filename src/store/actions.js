@@ -106,7 +106,6 @@ export default function createActions() {
       }
       
       if (!category) {
-        console.log("No category of projects selected!");
         return;
       }
       
@@ -148,66 +147,5 @@ export default function createActions() {
     setTransitionScreen({commit}, {isTransitioned}) {
       commit("setTransitionScreen", {isTransitioned});
     },
-  
-    /* PROJECTS */
-    // Clicking on a link in the navigation bar.
-    // async setProjectsByCategory({state, commit, dispatch}, {category}) {
-    // // Get projects for the categories (circus, music, performance art, digital media, visual art).
-    // let selectedProjects = state.projects.data[category.toLowerCase()];
-    // console.log(state.projects.data[category.toLowerCase()]);
-    //
-    // let selectedFilters = [];
-    //
-    // // If there is projects in the selected category, select associated filters and push to the route.
-    // if (selectedProjects.length) {
-    //   console.log("There is projects!");
-    //   selectedFilters = state.filters.data.filter((filter) => {
-    //     return filter.attributes.category.data.attributes.name.toLowerCase() === category.toLowerCase();
-    //   });
-    //
-    //   if (state.app.selectedFilter !== "All") {
-    //     // If the selected filter isn't "All", select the projects corresponding to the selected filter.
-    //     selectedProjects = state.projects.data[category.toLowerCase()].filter((project) => {
-    //       return project.attributes.type.data.attributes.name === state.app.selectedFilter;
-    //     });
-    //     console.log("Filter isn't 'All' and this is selected projects:", selectedProjects);
-    //   }
-    //
-    //   await commit("setProjectsByCategory", {
-    //     category,
-    //     selectedProjects,
-    //     selectedFilters,
-    //   });
-    // }
-    // // If not, push to the waiting route.
-    // else {
-    //   await router.push("/projects/waiting");
-    // }
-    // },
-    // // Clicking on a filter.
-    // setSelectedFilter({state, commit}, {name}) {
-    //   const circusMedias = [];
-    //   let selectedProjects = {};
-    //
-    //   // When the selected category corresponds to "Circus".
-    //   if (state.app.selectedCategory === "circus") {
-    //
-    //     commit("setSelectedFilter", {"selectedFilterName": name, circusMedias});
-    //     return;
-    //   }
-    //
-    //   // When the selected category isn't "Circus", displays all projects.
-    //   if (name === "all") {
-    //     selectedProjects = state.projects.data[state.app.selectedCategory.toLowerCase()];
-    //     return;
-    //   }
-    //
-    //   // // If the selected filter isn't "All", select the projects corresponding to the selected filter.
-    //   // selectedProjects = state.projects.data[state.app.selectedCategory].filter((project) => {
-    //   //   return project.attributes.type.data.attributes.name === name;
-    //   // });
-    //
-    //   commit("setSelectedFilter", {"selectedFilterName": name, circusMedias, selectedProjects});
-    // },
 	};
 }

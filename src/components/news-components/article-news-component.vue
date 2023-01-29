@@ -104,7 +104,6 @@ const getArticle = (article) => {
     height: 100%;
     object-fit: cover;
     background-color: white;
-
   }
   .content {
     margin-left: 10px;
@@ -120,7 +119,6 @@ const getArticle = (article) => {
     height: 145px;
     max-height: 245px;
     object-fit: cover;
-
   }
   .title {
     margin: 10px 0 5px 0;
@@ -146,12 +144,6 @@ const getArticle = (article) => {
     height: 100%;
     width: 100%;
     object-fit: cover;
-    transform: scale(1);
-    transition: all 0.3s ease-in-out;
-
-    &:hover {
-      transform: scale(1.05);
-    }
   }
   .content {
     margin-top: 5px;

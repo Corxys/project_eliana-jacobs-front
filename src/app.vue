@@ -1,6 +1,6 @@
 <script setup>
 // General
-import { ref, provide, computed, watch } from "vue";
+import {ref, provide, computed, watch} from "vue";
 import {RouterView} from "vue-router";
 import {DefaultApolloClient} from "@vue/apollo-composable";
 import {ApolloClient, InMemoryCache} from "@apollo/client/core";
@@ -31,12 +31,10 @@ const isTransitionScreenOpen = ref(false);
 
 // Watchers
 watch(() => route, (param) => {
-  console.log("Route updating!", param.fullPath);
-  if (
-    param.fullPath === "/projects/visual-art" ||
-    param.fullPath === "/projects/art-performance" ||
-    param.fullPath === "/projects/digital-media"
-  ) {
+	if (param.fullPath.includes("/projects/visual-art") ||
+		param.fullPath.includes("/projects/art-performance") ||
+		param.fullPath.includes("/projects/digital-media")
+	) {
     colorTheme.value = "light";
   } else {
     colorTheme.value = "dark";
@@ -47,16 +45,17 @@ watch(() => route, (param) => {
 provide("isMenuOpen", isMenuOpen);
 provide("isTransitionScreenOpen", isTransitionScreenOpen);
 provide(DefaultApolloClient, apolloClient);
+provide("colorTheme", colorTheme);
 </script>
 
 <template>
   <div :class="['theme', `theme--${colorTheme}`]">
     <navbar-component :theme="colorTheme" />
+    <footer-component />
     <div :class="['container', `theme--${colorTheme}`, {'container--stuck': isMenuOpen}]">
       <!--    <div v-if="isLoading" class="container__loader" />-->
       <router-view />
     </div>
-    <footer-component />
   </div>
 </template>
 

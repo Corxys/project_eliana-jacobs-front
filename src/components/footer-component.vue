@@ -23,10 +23,7 @@
 
 <style scoped lang="scss">
 .footer {
-	position: absolute;
-	bottom: 0;
 	width: 100vw;
-	height: 30px;
 	display: flex;
 	justify-content: space-between;
   color: white;
@@ -34,6 +31,7 @@
   font-size: 12px;
   &__credits, &__notices {
     position: absolute;
+		bottom: 30px;
 		z-index: 150;
   }
   &__credits {

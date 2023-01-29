@@ -1,4 +1,7 @@
 <script setup>
+// General
+import {inject} from "vue";
+
 // Props
 defineProps({
 	"onClick": {
@@ -6,10 +9,13 @@ defineProps({
 		"required": true,
 	}
 });
+
+// Inject
+const colorTheme = inject("colorTheme");
 </script>
 
 <template>
-  <div class="arrow-back" @click="onClick">
+  <div :class="colorTheme === 'dark' ? 'arrow-back' : 'arrow-back arrow-back--light'" @click="onClick">
     <div class="arrow-back__body" />
     <div class="arrow-back__text">
       Back
@@ -24,6 +30,12 @@ defineProps({
   align-items: center;
   position: relative;
   margin-bottom: 30px;
+	&--light {
+		.arrow-back__body {
+			border-top: 2px solid var(--epj-c-black);
+			border-right: 2px solid var(--epj-c-black);
+		}
+	}
   &:hover {
     .arrow-back__body {
       left: -5px;

@@ -20,7 +20,6 @@ export default function createMutations() {
 			state.app.isLoading = isLoading;
 		},
 		setHasFilter(state, {hasFiltered}) {
-			// console.log("Set has filter:", hasFiltered);
 			state.app.hasFilter = hasFiltered;
 		},
 		setHasTransitionScreen(state, {hasTransitionScreen}) {

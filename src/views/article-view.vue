@@ -29,7 +29,7 @@ import {formatDate} from "@/utils/formatDate";
 import {formatHour} from "@/utils/formatHour";
 
 // Components
-import ButtonCustomComponent from "@/components/shared-components/custom-button-component.vue";
+import ButtonCustomComponent from "@/components/shared-components/button-custom-component.vue";
 import ImageCustomComponent from "@/components/image-custom-component.vue";
 import ArrowBackComponent from "@/components/arrow-back-component.vue";
 

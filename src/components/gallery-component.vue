@@ -1,4 +1,7 @@
 <script setup>
+// General
+import {inject} from "vue";
+
 // Props
 defineProps({
   "images": {
@@ -13,6 +16,9 @@ defineProps({
 
 // Regex
 const imageMimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
+
+// Inject
+const colorTheme = inject("colorTheme");
 </script>
 
 <template>
@@ -26,7 +32,11 @@ const imageMimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|im
       >
 			<!-- Audio file -->
 			<div v-else class="gallery__audio" @click.stop="() => onClick({index})">
-				<font-awesome-icon class="gallery__audio-icon" :icon="['fas', 'volume-high']" />
+				<font-awesome-icon
+					:class="colorTheme === 'dark' ? 'gallery__audio-icon' : 'gallery__audio-icon gallery__audio-icon--light'"
+					class="gallery__audio-icon"
+					:icon="['fas', 'volume-high']"
+				/>
 			</div>
     </div>
   </div>
@@ -59,8 +69,9 @@ const imageMimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|im
 		background-color: var(--epj-c-main);
 		&-icon {
 			font-size: 30px;
-			margin-bottom: 8px;
+			margin-bottom: 5px;
 			margin-right: 10px;
+			color: var(--epj-c-white);
 		}
 	}
 }

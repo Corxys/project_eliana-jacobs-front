@@ -38,14 +38,14 @@ const router = createRouter({
       component: () => import("../views/news-view.vue"),
     },
     {
-      path: "/project/:slug",
-      name: "project",
-      component: () => import("../views/project-view.vue"),
-    },
-    {
       path: "/projects/:slug",
       name: "projects",
       component: () => import("../views/projects-view.vue"),
+    },
+    {
+      path: "/projects/:slug/:slug",
+      name: "project",
+      component: () => import("../views/project-view.vue"),
     },
   ],
 });

@@ -82,12 +82,13 @@ const audioMimesTypesCheck = /audio\/mp3|audio\/wav|audio\/ogg/;
      width: 100%;
    }
   &__credits {
-   display: none;
-   position: absolute;
-   left: 0;
-   bottom: 0;
-   background-color: var(--epj-c-main);
-   padding: 7px 10px 5px 10px;
+		display: none;
+   	position: absolute;
+   	left: 0;
+   	bottom: 0;
+		color: var(--epj-c-white);
+   	background-color: var(--epj-c-main);
+   	padding: 7px 10px 5px 10px;
  }
 }
 </style>

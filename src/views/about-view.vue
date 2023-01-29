@@ -1,6 +1,5 @@
 <script setup>
 /* eslint-disable max-len */
-// Disable error on line 60.
 
 // General
 import {useStore} from "vuex";
@@ -8,7 +7,7 @@ import {computed} from "vue";
 
 // Components
 import IconSocialComponent from "@/components/shared-components/icon-social-component.vue";
-import ButtonCustomComponent from "@/components/shared-components/custom-button-component.vue";
+import ButtonCustomComponent from "@/components/shared-components/button-custom-component.vue";
 import PracticeComponent from "@/components/about-components/practice-component.vue";
 
 // Images
@@ -113,7 +112,7 @@ const practices = computed(() => store.state.practices);
 		}
 		&-02 {
 			width: 80%;
-			top: 90%;
+			bottom: 5%;
 			left: 0;
 		}
 	}
