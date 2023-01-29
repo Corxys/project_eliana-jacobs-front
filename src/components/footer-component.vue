@@ -7,11 +7,7 @@
       <router-link to="/about">
         EPJ
       </router-link>
-      &
-      <a href="https://jennblngr.com">
-        JLB
-      </a>
-      © 2022
+      & JLB © 2022
     </div>
     <div class="footer__notices">
       <router-link to="/legal-notices">

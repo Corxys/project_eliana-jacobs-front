@@ -15,7 +15,7 @@ const colorTheme = inject("colorTheme");
 </script>
 
 <template>
-  <div :class="colorTheme === 'dark' ? 'arrow-back' : 'arrow-back arrow-back--light'" @click="onClick">
+  <div class="arrow-back" :class="colorTheme === 'dark' ? '' : 'arrow-back--light'" @click="onClick">
     <div class="arrow-back__body" />
     <div class="arrow-back__text">
       Back

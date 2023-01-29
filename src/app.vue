@@ -21,9 +21,6 @@ import FooterComponent from "./components/footer-component.vue";
 const store = useStore();
 const route = useRoute();
 
-// State
-const isLoading = computed(() => store.state.app.isLoading);
-
 // Ref
 const colorTheme = ref("dark");
 const isMenuOpen = ref(false);

@@ -6,12 +6,11 @@
 */
 
 // General
-import {useStore} from "vuex";
 import {useRouter} from "vue-router";
+import {useStore} from "vuex";
 
 // Utils
 import {formatDate} from "@/utils/formatDate";
-import {slugifyTitle} from "@/utils/slugifyTitle";
 
 // Hook call
 const store = useStore();
@@ -32,7 +31,6 @@ defineProps({
 // Actions
 const getArticle = (article) => {
   store.dispatch("setArticle", {id: article.id});
-  router.push(`/article/${slugifyTitle(article.attributes.title)}`);
 };
 </script>
 

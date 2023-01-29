@@ -132,15 +132,19 @@ export default function createActions() {
     },
   
     // PROJECT
-    setProject({state, commit, getters}, {id}) {
+    async setProject({state, commit, getters}, {id}) {
       const project = getters.projects.find((project) => project.id === id);
+      window.localStorage.setItem("project", JSON.stringify(project))
       commit("setProject", {project});
+      await router.push(`/projects/${state.app.selectedCategory.split(' ').join('-')}/${slugifyTitle(project.attributes.name)}`);
     },
   
     // ARTICLE
-    setArticle({state, commit}, {id}) {
-      const article = state.news.find((article) => article.id == id);
+    async setArticle({state, commit}, {id}) {
+      const article = state.news.find((article) => article.id === id);
+      window.localStorage.setItem("article", JSON.stringify(article));
       commit("setArticle", {article});
+      await router.push(`/article/${slugifyTitle(article.attributes.title)}`);
     },
   
     // FILTERS

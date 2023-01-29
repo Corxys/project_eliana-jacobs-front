@@ -13,6 +13,14 @@ export default function createGetters() {
       
       return filters.length ? filters : null;
     },
+    article(state) {
+      const article = window.localStorage.getItem("article");
+      return article ? JSON.parse(article) : state.article;
+    },
+    project(state) {
+      const project = window.localStorage.getItem("project");
+      return project ? JSON.parse(project) : state.project;
+    },
     projects(state) {
       let projects = [];
       

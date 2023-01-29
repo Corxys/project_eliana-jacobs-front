@@ -43,13 +43,22 @@ const audioMimesTypesCheck = /audio\/mp3|audio\/wav|audio\/ogg/;
 
 <template>
   <div class="image">
-    <img
-      v-if="!image.link && imageMimesTypesCheck.test(image.src.data.attributes.mime)"
-      class="image__src"
-      :src="image.src.data.attributes.url"
-      :alt="image.src.data.attributes.alternativeText"
-      @click="displayImageOnPreview"
-    >
+		<div class="image__container">
+			<img
+				v-if="!image.link && imageMimesTypesCheck.test(image.src.data.attributes.mime)"
+				class="image__src"
+				:src="image.src.data.attributes.url"
+				:alt="image.src.data.attributes.alternativeText"
+				@click="displayImageOnPreview"
+			>
+			<div v-if="hasPreview" class="image__trigger">
+				<font-awesome-icon
+					:class="colorTheme === 'dark' ? 'gallery__audio-icon' : 'gallery__audio-icon gallery__audio-icon--light'"
+					class="gallery__audio-icon"
+					:icon="['fas', 'magnifying-glass']"
+				/>
+			</div>
+		</div>
     <iframe
       v-if="image.link"
       class="image__src"
@@ -72,7 +81,26 @@ const audioMimesTypesCheck = /audio\/mp3|audio\/wav|audio\/ogg/;
 <style scoped lang="scss">
 .image {
   width: 100%;
+	height: 100%;
   position: relative;
+	&__container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+	&__trigger {
+		cursor: pointer;
+		position: absolute;
+		height: 30px;
+		width: 30px;
+		bottom: 0;
+		right: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: var(--epj-c-main);
+		color: var(--epj-c-white);
+	}
   &:hover {
     .credits {
       display: block;

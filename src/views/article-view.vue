@@ -1,6 +1,5 @@
 <script setup>
 /* eslint-disable max-len */
-// Disable max length error on line 71 and 110.
 
 /**
  * @property {string} street
@@ -37,8 +36,8 @@ import ArrowBackComponent from "@/components/arrow-back-component.vue";
 const store = useStore();
 const router = useRouter();
 
-// State
-const article = computed(() => store.state.article);
+// Getters
+const article = computed(() => store.getters.article);
 </script>
 
 <template>

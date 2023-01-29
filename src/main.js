@@ -21,7 +21,10 @@ store.dispatch("getData")
 	.then(() => {
 		// const loadingScreen = document.querySelector(".container__loader");
 		// loadingScreen.style.opacity = 0;
+
 		console.debug("[app] data initialized.");
+		
+		// localStorage ? articleObject.value = JSON.parse(localStorage) : article;
 		// store.dispatch("setIsLoading", {"isLoading": false});
 	})
 	.catch((error) => {

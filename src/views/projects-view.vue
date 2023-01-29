@@ -12,9 +12,6 @@ import ImageCustomComponent from "@/components/image-custom-component.vue";
 // Images
 import shapeBottom from "@/assets/images/projects_shape-01.png";
 
-// Utils
-import {slugifyTitle} from "@/utils/slugifyTitle";
-
 // Hook call
 const store = useStore();
 const route = useRoute();
@@ -120,16 +117,12 @@ watch(() => route, (param) => {
             class="projects__item-image projects__item-image--link"
             @click="store.dispatch('setProject', {'id': project.id})"
           >
-            <router-link :to="`/projects/${selectedCategory.split(' ').join('-')}/${slugifyTitle(project.attributes.name)}`">
-              <image-custom-component
-                :image="project.attributes.medias[0]"
-              />
-            </router-link>
+						<image-custom-component
+							:image="project.attributes.medias[0]"
+						/>
           </div>
           <h2 class="projects__item-title projects__item-title--link" @click="store.dispatch('setProject', {'id': project.id})">
-            <router-link :to="`/projects/${selectedCategory.split(' ').join('-')}/${slugifyTitle(project.attributes.name)}`">
-              {{project.attributes.name}}
-            </router-link>
+						{{project.attributes.name}}
           </h2>
         </div>
       </div>
