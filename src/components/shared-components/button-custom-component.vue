@@ -17,11 +17,11 @@ defineProps({
 </script>
 
 <template>
-  <router-link v-if="link && external" :to="link" class="button">
+  <a v-if="link && external" :to="link" class="button">
     <button class="button__content">
 			{{text}}
     </button>
-  </router-link>
+  </a>
   <a v-if="link && !external" :href="link" class="button">
     <button class="button__content">
 			{{text}}
