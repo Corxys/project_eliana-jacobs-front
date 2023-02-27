@@ -38,7 +38,6 @@ defineProps({
 		width: 100%;
 	}
 	:deep(.image) {
-		margin-bottom: 30px;
 		width: 100%;
 	}
   &__text {

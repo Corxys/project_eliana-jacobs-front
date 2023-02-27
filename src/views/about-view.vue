@@ -93,8 +93,10 @@ const practices = computed(() => store.state.practices);
 		margin-bottom: 30px;
 	}
 	&__practices {
+		:deep(.image) {
+			height: auto;
+		}
 		:deep(.practice) {
-			margin-bottom: 30px;
 			&:last-child {
 				margin-bottom: 0;
 			}
