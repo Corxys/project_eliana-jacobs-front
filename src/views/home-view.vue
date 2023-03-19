@@ -6,12 +6,12 @@ import {ref, onMounted, onUnmounted} from "vue";
 import FlowerComponent from "@/components/home-components/flower-component.vue";
 
 // Images
-import flower from "@/assets/images/home_flower.png";
+import flower from "@/assets/images/shapes/home-flower.png";
 
-import shapeLeftTop from "@/assets/images/home_shape-01.png";
-import shapeLeftBottom from "@/assets/images/home_shape-02.png";
-import shapeRightTop from "@/assets/images/home_shape-03.png";
-import shapeRightBottom from "@/assets/images/home_shape-04.png";
+import shapeLeftTop from "@/assets/images/shapes/home-01.png";
+import shapeLeftBottom from "@/assets/images/shapes/home-02.png";
+import shapeRightTop from "@/assets/images/shapes/home-03.png";
+import shapeRightBottom from "@/assets/images/shapes/home-04.png";
 
 // Ref
 const flowerWidth = ref(0);
@@ -81,16 +81,16 @@ const setSizeOfTheFlower = (event) => {
 	&__shape {
 		position: absolute;
 		&-01 {
-			max-width: 406px;
 			top: 12%;
 			left: 0;
 			width: 40%;
+			max-width: 406px;
 		}
 		&-02 {
 			left: 0;
 			bottom: 10%;
-			max-width: 380px;
 			width: 20%;
+			max-width: 380px;
 		}
 		&-03 {
 			width: 30%;

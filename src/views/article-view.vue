@@ -15,7 +15,7 @@ import {useRouter} from "vue-router";
 import {marked} from "marked";
 
 // Images
-import shapeBottom from "@/assets/images/article_shape-01.png";
+import shapeBottom from "@/assets/images/shapes/article-01.png";
 
 // Icons
 import scheduleIcon from "@/assets/icons/schedule.svg";

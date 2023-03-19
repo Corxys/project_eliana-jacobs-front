@@ -10,7 +10,7 @@ import GalleryComponent from "@/components/gallery-component.vue";
 import ImageCustomComponent from "@/components/image-custom-component.vue";
 
 // Images
-import shapeBottom from "@/assets/images/projects_shape-01.png";
+import shapeBottom from "@/assets/images/shapes/projects-01.png";
 
 // Hook call
 const store = useStore();

@@ -11,8 +11,8 @@ import ButtonCustomComponent from "@/components/shared-components/button-custom-
 import PracticeComponent from "@/components/about-components/practice-component.vue";
 
 // Images
-import shapeTopRight from "@/assets/images/about_shape-01.png";
-import shapeBottomLeft from "@/assets/images/about_shape-02.png";
+import shapeTopRight from "@/assets/images/shapes/about-01.png";
+import shapeBottomLeft from "@/assets/images/shapes/about-02.png";
 
 // Hook call
 const store = useStore();

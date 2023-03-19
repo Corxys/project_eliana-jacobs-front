@@ -10,7 +10,7 @@ import {useStore} from "vuex";
 import ArticleNews from "@/components/news-components/article-news-component.vue";
 
 // Images
-import shapeTop from "@/assets/images/new_shape-01.png";
+import shapeTop from "@/assets/images/shapes/news-01.png";
 
 // Hook call
 const store = useStore();
