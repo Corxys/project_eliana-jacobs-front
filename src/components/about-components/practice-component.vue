@@ -1,6 +1,6 @@
 <script setup>
 // Components
-import ImageCustomComponent from "../image-custom-component.vue";
+import ImageCustomComponent from "../shared-components/image-custom-component.vue";
 
 // Props
 defineProps({
@@ -15,7 +15,7 @@ defineProps({
   <div class="practice">
     <div v-if="practice" class="practice__container">
       <image-custom-component
-        :image="practice.attributes.image"
+        :media="practice.attributes.image"
         :copyright="practice.attributes.image.copyright"
       />
     </div>

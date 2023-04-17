@@ -7,7 +7,7 @@ import {marked} from "marked";
 
 // Components
 import ArrowBackComponent from "@/components/arrow-back-component.vue";
-import ImageCustomComponent from "@/components/image-custom-component.vue";
+import ImageCustomComponent from "@/components/shared-components/image-custom-component.vue";
 import GalleryComponent from "@/components/gallery-component.vue";
 
 // Hook call
@@ -59,7 +59,7 @@ watch(() => route, () => {
       </div>
       <div v-if="project.attributes.medias[indexOfFocusedImage]" class="project__highlight">
         <image-custom-component
-          :image="project.attributes.medias[indexOfFocusedImage]"
+          :media="project.attributes.medias[indexOfFocusedImage]"
           :copyright="project.attributes.medias[indexOfFocusedImage].copyright"
           :has-preview="true"
         />

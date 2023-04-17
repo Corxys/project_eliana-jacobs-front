@@ -1,32 +1,34 @@
 <script setup>
-// General
 import {ref, provide, computed, watch} from "vue";
-import {RouterView} from "vue-router";
+import {useStore} from "vuex";
+import {RouterView, useRoute} from "vue-router";
 import {DefaultApolloClient} from "@vue/apollo-composable";
 import {ApolloClient, InMemoryCache} from "@apollo/client/core";
-import {useStore} from "vuex";
-import {useRoute} from "vue-router";
 
-const cache = new InMemoryCache();
-const apolloClient = new ApolloClient({
-  "uri": "https://eliana-jacobs-back.herokuapp.com/graphql",
-  cache
-});
+import loadingScreenLogotype from "@/assets/images/logo-loading-screen.png";
 
-// Components
-import NavbarComponent from "./components/navbar-component.vue";
+import NavbarComponent from "@/components/navbar-component.vue";
 import FooterComponent from "./components/footer-component.vue";
 
-// Hook call
 const store = useStore();
 const route = useRoute();
 
-// Ref
-const colorTheme = ref("dark");
 const isMenuOpen = ref(false);
-const isTransitionScreenOpen = ref(false);
+const colorTheme = ref("dark");
+const isLoading = computed(() => store.state.app.isLoading);
 
-// Watchers
+const apolloClient = new ApolloClient({
+  "uri": "https://eliana-jacobs-back.herokuapp.com/graphql",
+  "cache": new InMemoryCache()
+});
+
+provide("isMenuOpen", isMenuOpen);
+provide("colorTheme", colorTheme);
+provide(DefaultApolloClient, apolloClient);
+
+// // Ref
+// const isTransitionScreenOpen = ref(false);
+
 watch(() => route, (param) => {
 	if (param.fullPath.includes("/projects/visual-art") ||
 		param.fullPath.includes("/projects/art-performance") ||
@@ -38,25 +40,94 @@ watch(() => route, (param) => {
   }
 }, {"deep": true, "immediate": true});
 
-// Provider
-provide("isMenuOpen", isMenuOpen);
-provide("isTransitionScreenOpen", isTransitionScreenOpen);
-provide(DefaultApolloClient, apolloClient);
-provide("colorTheme", colorTheme);
+// provide("isTransitionScreenOpen", isTransitionScreenOpen);
 </script>
 
 <template>
-  <div :class="['theme', `theme--${colorTheme}`]">
-    <navbar-component :theme="colorTheme" />
-    <footer-component />
-    <div :class="['container', `theme--${colorTheme}`, {'container--stuck': isMenuOpen}]">
-      <!--    <div v-if="isLoading" class="container__loader" />-->
+  <div
+    class="app__container"
+    :class="{'stuck': isLoading || isMenuOpen}"
+  >
+    <!-- LOADING SCREEN -->
+    <transition name="loading" duration="500">
+      <div v-if="isLoading" class="loading-screen">
+        <div class="loading-screen__container">
+          <img
+            class="loading-screen__logo"
+            :src="loadingScreenLogotype"
+            alt="Eliana's logotype"
+          >
+          <h4 class="loading-screen__text">
+            Loading screen
+          </h4>
+        </div>
+      </div>
+    </transition>
+
+    <!-- MAIN -->
+    <main
+      class="main"
+      :class="`theme--${colorTheme}`"
+    >
+      <navbar-component />
       <router-view />
-    </div>
+      <footer-component />
+    </main>
   </div>
 </template>
 
 <style lang="scss">
+@import "./assets/styles/transitions.scss";
+
+.app {
+  &__container {
+    position: relative;
+    .stuck {
+      overflow: hidden;
+    }
+  }
+}
+
+.main {
+  z-index: -100;
+  position: absolute;
+}
+
+// LOADING SCREEN
+.loading-screen {
+  z-index: 500;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 20px;
+    animation: loadingScreen 2s ease infinite;
+  }
+  &__logo {
+    width: 217px;
+  }
+  &__text {
+    font-size: 14px;
+  }
+}
+
+@keyframes loadingScreen {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
 .theme {
   width: 100%;
   height: 100%;

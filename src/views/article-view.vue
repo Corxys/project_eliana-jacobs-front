@@ -29,7 +29,7 @@ import {formatHour} from "@/utils/formatHour";
 
 // Components
 import ButtonCustomComponent from "@/components/shared-components/button-custom-component.vue";
-import ImageCustomComponent from "@/components/image-custom-component.vue";
+import ImageCustomComponent from "@/components/shared-components/image-custom-component.vue";
 import ArrowBackComponent from "@/components/arrow-back-component.vue";
 
 // Hook call
@@ -95,7 +95,7 @@ const article = computed(() => store.getters.article);
         </div>
         <div v-if="article.attributes.image.src.data.attributes" class="article__image">
           <image-custom-component
-            :image="article.attributes.image"
+            :media="article.attributes.image"
             :copyright="article.attributes.image.copyright"
           />
         </div>

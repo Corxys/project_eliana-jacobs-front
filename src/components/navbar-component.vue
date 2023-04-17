@@ -1,41 +1,21 @@
 <script setup>
-/*
-* TODO:
-* - fix size of the icon in the social button
-* - navbar shifts when the scrollbar appears
-*/
-
-// General
 import {computed, inject} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
+import gsap from "gsap";
 
-// Hook call
+import logotypeWhite from "@/assets/images/logo-navbar-w.png";
+import logotypeBlack from "@/assets/images/logo-navbar-b.png";
+
+import {links} from "@/assets/data/links";
+
 const router = useRouter();
 const store = useStore();
 
-// Images
-import logotypeWhite from "@/assets/images/logo-w.png";
-import logotypeBlack from "@/assets/images/logo-b.png";
-
-// Data
-import {links} from "@/assets/data/links";
-
-// Inject
 let isMenuOpen = inject("isMenuOpen");
-
-// Props
-defineProps({
-  "theme": {
-    "type": String,
-    "required": true,
-  },
-});
-
-// State
+let colorTheme = inject("colorTheme");
 const categories = computed(() => store.state.categories);
 
-// Methods
 const getProjectsByCategory = (name) => {
   store.dispatch("setCategory", {"category": name.toLowerCase()});
 	store.dispatch("setFilter", {"filter": "all"});
@@ -47,150 +27,252 @@ const goOnPage = (src) => {
   store.dispatch("setFilter", {"filter": "all"});
   isMenuOpen.value = false;
 };
+
+// Transitions
+const onBeforeEnter = (el) => {
+  gsap.set(el, {
+    "scaleY": 0,
+  });
+};
+const onEnter = (el, done) => {
+  gsap.to(el, {
+    "duration": 0.5,
+    "scaleY": 1,
+    "ease": "power2.inOut",
+    "onComplete": done,
+  });
+};
+const onAfterEnter = () => {
+  gsap.to(".navbar__link", {
+    "duration": 0.5,
+    "opacity": 1,
+    "ease": "power2.inOut",
+    "stagger": 0.1,
+  });
+};
+const onBeforeLeave = () => {
+  gsap.to(".navbar__link", {
+    "duration": 0.5,
+    "opacity": 0,
+    "ease": "power2.inOut",
+    "stagger": 0.1,
+  });
+};
+const onLeave = (el, done) => {
+  gsap.to(el, {
+    "delay": el.querySelectorAll(".navbar__link").length * 0.1 + 0.5,
+    "scaleY": 0,
+    "onComplete": done,
+  });
+};
 </script>
 
 <template>
+  <!-- NAVBAR -->
   <nav class="navbar">
+    <!-- LOGO-->
     <div class="navbar__logo">
       <router-link to="/">
-        <img v-if="theme === 'dark'" class="navbar__logo-src" alt="Name of Eliana's handwritten (white version)" :src="logotypeWhite">
-        <img v-else class="navbar__logo-src" alt="Name of Eliana's handwritten (black version)" :src="logotypeBlack">
+        <img
+          v-if="colorTheme === 'dark'"
+          class="navbar__logo-src"
+          alt="Name of Eliana's handwritten (white version)"
+          :src="logotypeWhite"
+        >
+        <img
+          v-else
+          class="navbar__logo-src"
+          alt="Name of Eliana's handwritten (black version)"
+          :src="logotypeBlack"
+        >
       </router-link>
     </div>
-    <div class="navbar__container">
-      <div class="navbar__button" @click="isMenuOpen = !isMenuOpen">
-        <div class="navbar__button-burger" :class="{'navbar__button-burger--active': isMenuOpen}">
-          <span class="navbar__button-icon" :class="{'navbar__button-icon--white': theme === 'dark'}" />
+
+    <!-- MENU -->
+    <div class="navbar__menu">
+      <!-- MENU LINES WITH BEFORE AFTER TO MAKE TOP & BOTTOM LINES -->
+      <div
+        class="navbar__menu-lines"
+        :class="{
+          'navbar__menu-lines--white': colorTheme === 'dark',
+          'navbar__menu-lines--active': isMenuOpen,
+        }"
+        @click="isMenuOpen = !isMenuOpen"
+      >
+        <!-- MIDDLE LINE WITH BEFORE TO MAKE CROSS ANIMATION -->
+        <span
+          class="navbar__menu-line"
+          :class="{
+            'navbar__menu-line--white': colorTheme === 'dark',
+            'navbar__menu-line--active': isMenuOpen,
+          }"
+        />
+      </div>
+
+      <!-- MENU TEXT -->
+      <div
+        class="navbar__menu-text"
+        :class="{'navbar__menu-text--white': colorTheme === 'dark'}"
+      >
+        MENU
+      </div>
+    </div>
+
+    <!-- MENU OVERLAY -->
+    <transition
+      @before-enter="onBeforeEnter"
+      @enter="onEnter"
+      @after-enter="onAfterEnter"
+      @before-leave="onBeforeLeave"
+      @leave="onLeave"
+    >
+      <div v-if="isMenuOpen" class="navbar__overlay">
+        <div
+          v-for="link of links"
+          :key="link.id"
+          class="navbar__link"
+          @click="goOnPage(link.src)"
+        >
+          <span class="navbar__link-text">
+            {{link.name}}
+          </span>
         </div>
-        <span class="navbar__button-text" :class="{'navbar__button-text--white': theme === 'dark'}">
-          MENU
-        </span>
+        <div
+          v-for="category of categories"
+          :key="category.id"
+          class="navbar__link"
+          @click="getProjectsByCategory(category.attributes.name)"
+        >
+          <span class="navbar__link-text">
+            {{category.attributes.name}}
+          </span>
+        </div>
       </div>
-    </div>
-    <div v-if="isMenuOpen" class="navbar__menu">
-      <div
-        v-for="link of links"
-        :key="link.id"
-        class="navbar__link"
-        @click="goOnPage(link.src)"
-      >
-        <span class="navbar__link-text">
-          {{link.name}}
-        </span>
-      </div>
-      <div
-        v-for="category of categories"
-        :key="category.id"
-        class="navbar__link"
-        @click="getProjectsByCategory(category.attributes.name)"
-      >
-        <span class="navbar__link-text">
-          {{category.attributes.name}}
-        </span>
-      </div>
-    </div>
+    </transition>
   </nav>
 </template>
 
 <style scoped lang="scss">
+@import "../assets/styles/transitions";
+
+// NAVBAR
 .navbar {
-	display: flex;
-	justify-content: space-between;
 	width: 100vw;
-  /* Logo and menu burger positioning */
-  &__logo, &__container {
-    z-index: 150;
-    height: 100px;
+
+  // LOGO & MENU BURGER
+  &__logo, &__menu {
+    z-index: 400;
     position: absolute;
+    height: 100px;
     display: flex;
-    justify-content: center;
     align-items: center;
-		flex-wrap: nowrap;
-  }
-  &__logo {
-    left: 30px;
-    &-src {
-      width: 108px;
-    }
-  }
-  &__container {
-    right: 30px;
+    flex-wrap: nowrap;
   }
 
-  /* Menu burger styling */
-  &__button {
+  // LOGO
+  &__logo {
+    left: 30px;
+  }
+
+  // MENU BURGER
+  &__menu {
     cursor: pointer;
+    right: 30px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    &-burger {
+    justify-content: center;
+    row-gap: 8px;
+
+    // MENU BURGER LINES
+    &-lines {
       position: relative;
-      width: 30px;
-      height: 24px;
-      margin-bottom: 8px;
-      span, &:before, &:after {
-        position: absolute;
-        display: block;
-        width: 100%;
-        height: 4px;
-      }
+      width: 42px;
+      height: 30px;
+
+      // TOP & BOTTOM LINES
       &:before, &:after {
         content: "";
+        position: absolute;
+        width: 100%;
+        height: 4px;
+        background-color: var(--color-text-light);
         transition: width 0.2s ease-in-out 0.4s;
       }
-      &:after {
+      &:before {
         top: 0;
         left: 0;
       }
-      &:before {
+      &:after {
         bottom: 0;
         right: 0;
       }
-      span {
-        top: 50%;
-        margin-top: -2px;
-        transition: transform 0.2s;
-        &:before {
-          content: "";
-          width: 100%;
-          height: 4px;
-          position: absolute;
-          left: 0;
-          transition: transform 0.2s;
+
+      // WHITE THEME TOP & BOTTOM LINES
+      &--white {
+        &:before, &:after {
+          background-color: var(--color-text-dark)
         }
       }
+
+      // MENU ACTIVE TOP & BOTTOM LINES
       &--active {
-        &:after {
-          transition: all 0.2s;
+        &:before, &:after {
           width: 0;
-          left: 0;
-        }
-        &:before {
-          transition: all 0.2s;
-          width: 0;
-          right: 0;
-        }
-        span {
-          transform: rotate(45deg);
-          transition: 0.3s transform 0.4s ;
-          &:before {
-            transform: rotate(-90deg);
-            transition: 0.3s transform 0.4s ;
-          }
+          transition: all 0.2s ease-in-out;
         }
       }
     }
+
+    // MIDDLE LINE
+    &-line {
+      position: absolute;
+      top: 50%;
+      margin-top: -2px;
+      display: block;
+      width: 100%;
+      height: 4px;
+      background-color: red;
+      transition: transform 0.2s ease-in-out;
+
+      &:before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: var(--color-text-light);
+        transition: transform 0.2s ease-in-out;
+      }
+
+      // WHITE THEME MIDDLE LINE
+      &--white {
+        background-color: var(--color-text-dark);
+        &:before, &:after {
+          background-color: var(--color-text-dark);
+        }
+      }
+
+      &--active {
+        transform: rotate(-45deg);
+        transition: 0.3s transform 0.4s ease-in-out;
+
+        &:before {
+          transform: rotate(90deg);
+          transition: 0.3s transform 0.4s ease-in-out;
+        }
+      }
+    }
+
+    // BUTTON TEXT
     &-text {
-      font-size: 11px;
       &--white {
         color: var(--color-text-dark);
       }
     }
   }
 
-  /* Menu with links positioning and styling */
-  &__menu {
-    z-index: 10;
+  // OVERLAY
+  &__overlay {
+    z-index: 100;
     position: absolute;
     top: 0;
     left: 0;
@@ -202,8 +284,14 @@ const goOnPage = (src) => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transform-origin: top center;
+
+    &--open {
+      height: 100vh;
+    }
   }
   &__link {
+    opacity: 0;
     cursor: pointer;
     font-size: 35px;
     font-family: var(--font-primary);
@@ -222,9 +310,10 @@ const goOnPage = (src) => {
   }
 }
 
+// RESPONSIVE DESKTOP
 @media (min-width: 768px) {
 	.navbar {
-		&__logo, &__container {
+		&__logo, &__menu {
 			position: fixed;
 		}
 	}

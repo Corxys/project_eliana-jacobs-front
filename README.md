@@ -1,35 +1,23 @@
-# project_eliana-jacobs-front
+# Eliana Jacobs (front)
+Lorem ipsum dolor sit amet.
 
-This template should help get you started developing with Vue 3 in Vite.
+## Pre-requisites
+You can use your IDE and your favorite browser.
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
+## Installation
+```
+# install packages
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# compile and hot-reload for development
 npm run dev
-```
 
-### Compile and Minify for Production
-
-```sh
+# compile and minify for production
 npm run build
-```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
+# lint with ESLint
 npm run lint
 ```
+
+## Developed with
+JavaScript, Vue.js, Vite, SASS

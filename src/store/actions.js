@@ -1,19 +1,9 @@
-/* eslint-disable max-len */
-
-// General
 import router from "@/router";
-import gql from "graphql-tag";
 
-// Utils
 import graphqlClient from "@/utils/graphql";
 import {slugifyTitle} from "@/utils/slugifyTitle";
 
-// Queries
-const PRACTICES_QUERY = gql`query Practices {practices {data {id attributes {title text image {src {data {attributes {url alternativeText mime}}} link copyright}}}}}`;
-const NEWS_QUERY = gql`query News{news (pagination: {limit:100}){data{id attributes{address{name street cp city}date{date start end}email image {src {data {attributes {url alternativeText mime}}}copyright link}publishedAt register{src}text title website}}}}`;
-const CATEGORIES_QUERY = gql`query Categories{categories{data{attributes{name}id}}}`;
-const TYPES_QUERY = gql`query Types{types{data{id attributes{name image{data{attributes{url alternativeText}}}category{data{id attributes{name}}}}}}}`;
-const PROJECTS_QUERY = gql`query Projects{projects (pagination: {limit:100}){data{id attributes{category{data{attributes{name}id}}date link{src} medias{copyright link src{data{attributes{alternativeText mime url}}}id}name text type{data{id attributes{name}}}}}}}`;
+import {PRACTICES_QUERY, NEWS_QUERY, CATEGORIES_QUERY, TYPES_QUERY, PROJECTS_QUERY} from "@/requests";
 
 export default function createActions() {
   return {
@@ -134,9 +124,9 @@ export default function createActions() {
     // PROJECT
     async setProject({state, commit, getters}, {id}) {
       const project = getters.projects.find((project) => project.id === id);
-      window.localStorage.setItem("project", JSON.stringify(project))
+      window.localStorage.setItem("project", JSON.stringify(project));
       commit("setProject", {project});
-      await router.push(`/projects/${state.app.selectedCategory.split(' ').join('-')}/${slugifyTitle(project.attributes.name)}`);
+      await router.push(`/projects/${state.app.selectedCategory.split(" ").join("-")}/${slugifyTitle(project.attributes.name)}`);
     },
   
     // ARTICLE

@@ -1,30 +1,30 @@
 export default function createState() {
 	return {
-		app: {
-			isLoading: true,
-			hasTransitionScreen: false,
-			hasImageOnPreview: false,
-			selectedFilter: "all",
-			selectedCategory: "",
-			colorTheme: "dark",
+		"app": {
+			"hasTransitionScreen": false,
+			"hasImageOnPreview": false,
+			"selectedFilter": "all",
+			"selectedCategory": "",
+			"colorTheme": "dark",
+			"isLoading": true,
 		},
-		filters: {
-			data: {},
+		"filters": {
+			"data": {},
 		},
-		categories: [],
-		projects: {
-			data: {
+		"categories": [],
+		"projects": {
+			"data": {
 				"circus": [],
 				"visual art": [],
 				"art performance": [],
 				"music": [],
 				"digital media": [],
 			},
-			medias: [],
+			"medias": [],
 		},
-		project: {},
-		practices: [],
-		news: [],
-		article: {},
+		"project": {},
+		"practices": [],
+		"news": [],
+		"article": {},
 	};
 }

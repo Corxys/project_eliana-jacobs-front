@@ -27,6 +27,7 @@
     "destyle.css": "^3.0.2",
     "graphql": "^15.8.0",
     "graphql-tag": "^2.12.6",
+    "gsap": "^3.11.5",
     "marked": "^4.2.3",
     "vue": "^3.2.41",
     "vue-apollo": "^3.1.0",

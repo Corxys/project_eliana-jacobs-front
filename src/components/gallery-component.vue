@@ -26,18 +26,18 @@ const colorTheme = inject("colorTheme");
     <div v-for="(image, index) of images" :key="image.id" class="gallery__image">
       <img
         v-if="imageMimesTypesCheck.test(image.src.data.attributes.mime)"
-        :src="image.src.data.attributes.url ? image.src.data.attributes.url : ''"
+        :src="image.src.data.attributes.formats.thumbnail.url ? image.src.data.attributes.formats.thumbnail.url : image.src.data.attributes.url"
         :alt="image.src.data.attributes.alternativeText ? image.src.data.attributes.alternativeText : ''"
         @click.stop="() => onClick({index})"
       >
-			<!-- Audio file -->
-			<div v-else class="gallery__audio" @click.stop="() => onClick({index})">
-				<font-awesome-icon
-					:class="colorTheme === 'dark' ? 'gallery__audio-icon' : 'gallery__audio-icon gallery__audio-icon--light'"
-					class="gallery__audio-icon"
-					:icon="['fas', 'volume-high']"
-				/>
-			</div>
+      <!-- Audio file -->
+      <div v-else class="gallery__audio" @click.stop="() => onClick({index})">
+        <font-awesome-icon
+          :class="colorTheme === 'dark' ? 'gallery__audio-icon' : 'gallery__audio-icon gallery__audio-icon--light'"
+          class="gallery__audio-icon"
+          :icon="['fas', 'volume-high']"
+        />
+      </div>
     </div>
   </div>
 </template>

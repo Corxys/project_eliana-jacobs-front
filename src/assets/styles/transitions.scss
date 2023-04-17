@@ -1,0 +1,10 @@
+// LOADING SCREEN
+.loading-leave-from {
+  opacity: 1;
+}
+.loading-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+.loading-leave-to {
+  opacity: 0;
+}

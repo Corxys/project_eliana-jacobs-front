@@ -22,10 +22,13 @@ store.dispatch("getData")
 		// const loadingScreen = document.querySelector(".container__loader");
 		// loadingScreen.style.opacity = 0;
 
-		console.debug("[app] data initialized.");
+		
 		
 		// localStorage ? articleObject.value = JSON.parse(localStorage) : article;
-		// store.dispatch("setIsLoading", {"isLoading": false});
+		store.dispatch("setIsLoading", {"isLoading": false})
+			.then(() => {
+				console.debug("[app] data initialized.");
+			});
 	})
 	.catch((error) => {
 		console.error("An error occurred while retrieving the data.");

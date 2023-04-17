@@ -5,6 +5,14 @@
   src: url(../fonts/mr-darcy-bold.ttf) format("truetype");
 }
 
+// PROJECTS
+:root {
+  --card-border-color: var(--epj-c-black);
+  --card-text-hover-color: var(--epj-c-main);
+  --image-custom-preview-background-color: var(--epj-c-main);
+  --image-custom-preview-text-color: var(--epj-c-white);
+}
+
 // General
 :root {
   // Size
