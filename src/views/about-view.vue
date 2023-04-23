@@ -19,6 +19,7 @@ const store = useStore();
 
 // State
 const practices = computed(() => store.state.practices);
+const cv = computed(() => store.state.cv);
 </script>
 
 <template>
@@ -35,7 +36,7 @@ const practices = computed(() => store.state.practices);
           </div>
           <div class="about__buttons">
             <button-custom-component text="Contact me" link="/contact" :external="false" />
-            <button-custom-component text="Download my CV" link="/" :external="true" />
+            <button-custom-component text="Download my CV" :link="cv.data.attributes.link" :external="true" />
           </div>
         </div>
       </header>
@@ -82,13 +83,9 @@ const practices = computed(() => store.state.practices);
 		}
 	}
 	&__buttons {
-		:deep(.button) {
-			margin-right: 10px;
-			&:last-child {
-				margin-right: 0;
-			}
-		}
-	}
+    display: flex;
+    column-gap: 10px;
+  }
 	&__subtitle {
 		margin-bottom: 30px;
 	}

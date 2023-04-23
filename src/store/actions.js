@@ -3,7 +3,7 @@ import router from "@/router";
 import graphqlClient from "@/utils/graphql";
 import {slugifyTitle} from "@/utils/slugifyTitle";
 
-import {PRACTICES_QUERY, NEWS_QUERY, CATEGORIES_QUERY, TYPES_QUERY, PROJECTS_QUERY} from "@/requests";
+import {PRACTICES_QUERY, NEWS_QUERY, CATEGORIES_QUERY, TYPES_QUERY, PROJECTS_QUERY, CV_QUERY} from "@/requests";
 
 export default function createActions() {
   return {
@@ -23,7 +23,12 @@ export default function createActions() {
       const responsePractices = await graphqlClient.query({"query": PRACTICES_QUERY});
       console.debug("[app] practices:", responsePractices.data.practices);
       commit("setPractices", {"practices": responsePractices.data.practices});
-
+      
+      console.debug("[app] get cv...");
+      const responseCV = await graphqlClient.query({"query": CV_QUERY});
+      console.debug("[app] cv:", responseCV.data.cv);
+      commit("setCV", {"cv": responseCV.data.cv});
+      
       // Get news data
       console.debug("[app] get news...");
       const responseNews = await graphqlClient.query({"query": NEWS_QUERY});

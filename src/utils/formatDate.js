@@ -1,23 +1,23 @@
 const months = [
-  {number: 1, name: "January"},
-  {number: 2, name: "February"},
-  {number: 3, name: "March"},
-  {number: 4, name: "April"},
-  {number: 5, name: "May"},
-  {number: 6, name: "June"},
-  {number: 7, name: "July"},
-  {number: 8, name: "August"},
-  {number: 9, name: "September"},
-  {number: 10, name: "October"},
-  {number: 11, name: "November"},
-  {number: 12, name: "December"},
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const formatDate = (date) => {
   const y = new Date(date).getFullYear();
   const m = new Date(date).getMonth() + 1;
   const d = new Date(date).getDate();
-  return `${months.find(month => month.number === m).name} ${d}, ${y}`;
+  return `${months[m]} ${d}, ${y}`;
 };
 
 export {formatDate};
