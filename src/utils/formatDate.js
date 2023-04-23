@@ -15,7 +15,7 @@ const months = [
 
 const formatDate = (date) => {
   const y = new Date(date).getFullYear();
-  const m = new Date(date).getMonth() + 1;
+  const m = new Date(date).getMonth();
   const d = new Date(date).getDate();
   return `${months[m]} ${d}, ${y}`;
 };
