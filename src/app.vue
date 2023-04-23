@@ -16,6 +16,7 @@ const route = useRoute();
 const isMenuOpen = ref(false);
 const colorTheme = ref("dark");
 const isLoading = computed(() => store.state.app.isLoading);
+const hasTransitionScreen = computed(() => store.state.app.hasTransitionScreen);
 
 const apolloClient = new ApolloClient({
   "uri": "https://eliana-jacobs-back.herokuapp.com/graphql",
@@ -44,10 +45,7 @@ watch(() => route, (param) => {
 </script>
 
 <template>
-  <div
-    class="app__container"
-    :class="{'stuck': isLoading || isMenuOpen}"
-  >
+  <div class="app__container">
     <!-- LOADING SCREEN -->
     <transition name="loading" duration="500">
       <div v-if="isLoading" class="loading-screen">
@@ -70,7 +68,12 @@ watch(() => route, (param) => {
       :class="`theme--${colorTheme}`"
     >
       <navbar-component />
-      <router-view />
+      <div
+        class="main__container"
+        :class="{'main__container--stuck': isLoading || isMenuOpen || hasTransitionScreen}"
+      >
+        <router-view />
+      </div>
       <footer-component />
     </main>
   </div>
@@ -82,15 +85,19 @@ watch(() => route, (param) => {
 .app {
   &__container {
     position: relative;
-    .stuck {
-      overflow: hidden;
-    }
   }
 }
 
 .main {
   z-index: -100;
   position: absolute;
+
+  &__container {
+    width: 100vw;
+    &--stuck {
+      position: fixed;
+    }
+  }
 }
 
 // LOADING SCREEN

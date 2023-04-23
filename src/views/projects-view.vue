@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, watch} from "vue";
+import {ref, computed, watch, inject} from "vue";
 import {useStore} from "vuex";
 import {useRoute, useRouter} from "vue-router";
 
@@ -7,6 +7,7 @@ import TransitionComponent from "@/components/transition-component.vue";
 import GalleryComponent from "@/components/gallery-component.vue";
 import ImageCustomComponent from "@/components/shared-components/image-custom-component.vue";
 import CardComponent from "@/components/projects-components/card-component.vue";
+import PlaceholderComponent from "@/components/projects-components/placeholder-component.vue";
 
 import shapeBottom from "@/assets/images/shapes/projects-01.png";
 
@@ -22,7 +23,6 @@ const filtered = computed(() => store.getters.filtered);
 
 const hasTransitionScreen = computed(() => store.state.app.hasTransitionScreen);
 const selectedFilter = computed(() => store.state.app.selectedFilter);
-const selectedCategory = computed(() => store.state.app.selectedCategory);
 const keysOfProjects = computed(() => store.state.projects.data);
 
 let indexOfFocusedImage = ref(0);
@@ -62,164 +62,138 @@ watch(() => route, (param) => {
 </script>
 
 <template>
-  <section
-    v-if="projects"
-    class="projects"
-    :style="[hasTransitionScreen ? {'position': 'fixed', 'overflow': 'hidden'} : {'position': 'static', 'overflow': 'inherit'}]"
-  >
-    <img v-if="layout === 'gallery'" class="projects__shape projects__shape-01" :src="shapeBottom" alt="Shape in the bottom of the site.">
-
-    <!-- Transition screen -->
-    <transition-component v-if="filtered && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
-
-    <!-- Filters -->
-    <div v-if="filtered" class="projects__filters">
-      <div
-        v-for="filter of displayedFilters"
-        :key="filter.id"
-        class="projects__filter"
-        :class="{'projects__filter--active': filter.attributes.name.toLowerCase() === selectedFilter}"
-        @click="selectFilter({'name': filter.attributes.name})"
-      >
-        {{filter.attributes.name}}
-      </div>
-    </div>
-
-    <!-- Projects -->
-    <div v-if="projects || medias" class="projects__content">
-      <!-- Gallery layout	-->
-      <div v-if="layout === 'gallery'" class="projects__gallery">
-        <div class="projects__gallery-images">
-          <gallery-component :on-click="changeImageFocused" :images="medias" />
+  <section class="projects">
+    <div
+      v-if="projects"
+      class="projects__container"
+    >
+      <!-- Filters -->
+      <div v-if="filtered" class="projects__filters">
+        <div
+          v-for="filter of displayedFilters"
+          :key="filter.id"
+          class="projects__filter"
+          :class="{'projects__filter--active': filter.attributes.name.toLowerCase() === selectedFilter}"
+          @click="selectFilter({'name': filter.attributes.name})"
+        >
+          <span>
+            {{filter.attributes.name}}
+          </span>
         </div>
-        <div v-if="medias[indexOfFocusedImage].src.data.attributes" class="projects__gallery-highlight">
-          <image-custom-component
-            :media="medias[indexOfFocusedImage]"
-            :copyright="medias[indexOfFocusedImage].copyright"
-            :has-preview="true"
+      </div>
+
+      <!-- Transition screen -->
+      <transition-component v-if="filtered && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
+
+      <!-- Projects -->
+      <div v-if="projects || medias" class="projects__content">
+        <!-- Gallery layout	-->
+        <div v-if="layout === 'gallery'" class="projects__gallery">
+          <img v-if="layout === 'gallery'" class="projects__shape projects__shape-01" :src="shapeBottom" alt="Shape in the bottom of the site.">
+
+          <div class="projects__gallery-images">
+            <gallery-component :on-click="changeImageFocused" :images="medias" />
+          </div>
+          <div v-if="medias[indexOfFocusedImage].src.data.attributes" class="projects__gallery-highlight">
+            <image-custom-component
+              :media="medias[indexOfFocusedImage]"
+              :copyright="medias[indexOfFocusedImage].copyright"
+              :has-preview="true"
+            />
+          </div>
+        </div>
+
+        <!-- List layout -->
+        <div v-else class="projects__list">
+          <card-component
+            v-for="project of projects"
+            :key="project.id"
+            :project="project"
           />
         </div>
       </div>
+    </div>
 
-      <!-- List layout -->
-      <div v-else class="projects__list">
-        <card-component
-          v-for="project of projects"
-          :key="project.id"
-          :project="project"
-        />
-      </div>
-    </div>
-  </section>
-  <section v-else>
-    <div class="waiting">
-      There's currently no project in the {{selectedCategory}} category, come back soon!
-    </div>
+    <!-- Placeholder when there's no projects in the category -->
+    <placeholder-component v-else />
   </section>
 </template>
 
 <style scoped lang="scss">
 .projects {
-  display: flex;
-  flex-direction: column;
-	padding: var(--container-padding);
-	// Active only when the "transition-component" is displayed.
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+  &__container {
+    min-height: 100vh;
+    padding: var(--container-padding);
+  }
+
   &__filters {
     display: flex;
-		flex-wrap: wrap;
+    flex-wrap: wrap;
     margin-bottom: 30px;
   }
+
   &__filter {
+    display: table-cell;
+    vertical-align: middle;
     cursor: pointer;
-    padding: 7px 12px;
+    padding: 0 12px;
     font-family: var(--font-primary);
     text-transform: uppercase;
     transition: 0.2s ease-in all;
     margin-right: 10px;
-		margin-bottom: 10px;
+    height: 32px;
+
     &:last-child {
       margin-right: 0;
     }
+
+    span {
+      line-height: 32px;
+    }
   }
+
   &__content {
-		position: relative;
-	}
+    position: relative;
+  }
+
   &__gallery {
     display: flex;
+
     &-images, &-highlight {
       width: 50%;
-			:deep(.image__src) {
-				cursor: pointer;
-			}
+      :deep(.image__src) {
+        cursor: pointer;
+      }
     }
+
     &-images {
       display: flex;
       flex-flow: row wrap;
     }
+
     &-highlight {
-			position: sticky;
-			top: 30px;
-			height: 100%;
+      position: sticky;
+      top: 30px;
+      height: 100%;
       margin-left: 30px;
     }
   }
+
   &__list {
     display: grid;
-		grid-template-columns: 1fr;
+    grid-template-columns: 1fr;
     grid-column-gap: 30px;
     grid-row-gap: 30px;
   }
-  &__item {
-    width: 100%;
-    padding: 5px;
-    &-image {
-      width: 100%;
-      height: 350px;
-			:deep(.image) {
-				height: 100%;
-				img {
-					cursor: pointer;
-					object-fit: cover;
-					height: 100%;
-					width: 100%;
-				}
-			}
-      &--link {}
-    }
-    &-src {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    &-title {
-      margin-top: 5px;
+
+  &__shape {
+    position: fixed;
+    height: 60%;
+    &-01 {
+      bottom: 0;
+      right: 20%;
     }
   }
-	&__shape {
-		position: absolute;
-		&-01 {
-			bottom: 0;
-			right: 0;
-		}
-	}
-	&__shape {
-		position: fixed;
-		height: 60%;
-		&-01 {
-			bottom: 0;
-			right: 20%;
-		}
-	}
-}
-
-.waiting {
-	padding-top: 130px;
-	padding-bottom: 130px;
-	text-align: center;
 }
 
 @media (min-width: 768px) {

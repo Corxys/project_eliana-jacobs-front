@@ -2,6 +2,15 @@ import {shuffleArray} from "@/utils/shuffleArray";
 
 export default function createGetters() {
   return {
+    categories(state) {
+      return state.categories.sort((category1, category2) => {
+        if (category1.attributes.index < category2.attributes.index) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+    },
     filters(state) {
       let filters = [];
       
@@ -36,7 +45,17 @@ export default function createGetters() {
         }
       }
       
-      return projects.length ? projects : null;
+      if (projects.length) {
+        return projects.sort((project1, project2) => {
+          if (project1.attributes.index < project2.attributes.index) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+      } else {
+        return null;
+      }
     },
     medias(state) {
       const medias = [];

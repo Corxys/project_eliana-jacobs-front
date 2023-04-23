@@ -14,7 +14,7 @@ const store = useStore();
 
 let isMenuOpen = inject("isMenuOpen");
 let colorTheme = inject("colorTheme");
-const categories = computed(() => store.state.categories);
+const categories = computed(() => store.getters.categories);
 
 const getProjectsByCategory = (name) => {
   store.dispatch("setCategory", {"category": name.toLowerCase()});
@@ -231,7 +231,7 @@ const onLeave = (el, done) => {
       display: block;
       width: 100%;
       height: 4px;
-      background-color: red;
+      background-color: var(--color-text-light);
       transition: transform 0.2s ease-in-out;
 
       &:before {
