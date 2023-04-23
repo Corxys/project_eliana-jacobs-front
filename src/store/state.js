@@ -8,6 +8,7 @@ export default function createState() {
 			"colorTheme": "dark",
 			"isLoading": true,
 		},
+		"cv": "",
 		"filters": {
 			"data": {},
 		},

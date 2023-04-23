@@ -4,6 +4,9 @@ export default function createMutations() {
     setPractices(state, {practices}) {
       state.practices = practices.data;
     },
+		setCV(state, {cv}) {
+			state.cv = cv;
+		},
     setNews(state, {news}) {
       state.news = news.data;
     },

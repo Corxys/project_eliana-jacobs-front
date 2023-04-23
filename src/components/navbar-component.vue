@@ -231,7 +231,7 @@ const onLeave = (el, done) => {
       display: block;
       width: 100%;
       height: 4px;
-      background-color: red;
+      background-color: var(--color-text-light);
       transition: transform 0.2s ease-in-out;
 
       &:before {
