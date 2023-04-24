@@ -293,7 +293,7 @@ const onLeave = (el, done) => {
   &__link {
     opacity: 0;
     cursor: pointer;
-    font-size: 35px;
+    font-size: 3vh;
     font-family: var(--font-primary);
     margin: 5px 0;
     padding: 10px 30px 7px 30px;
