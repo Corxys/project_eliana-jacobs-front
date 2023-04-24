@@ -14,7 +14,7 @@ const store = useStore();
 
 let isMenuOpen = inject("isMenuOpen");
 let colorTheme = inject("colorTheme");
-const categories = computed(() => store.state.categories);
+const categories = computed(() => store.getters.categories);
 
 const getProjectsByCategory = (name) => {
   store.dispatch("setCategory", {"category": name.toLowerCase()});

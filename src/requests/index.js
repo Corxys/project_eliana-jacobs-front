@@ -71,6 +71,7 @@ const CATEGORIES_QUERY = gql`query Categories {
   categories {
     data {
       attributes {
+      	index
         name
         placeholder {
           data {
@@ -117,6 +118,7 @@ const PROJECTS_QUERY = gql`query Projects {
     data {
       id
       attributes {
+      	index
         category {
           data {
             attributes {
