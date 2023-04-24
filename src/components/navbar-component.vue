@@ -290,22 +290,29 @@ const onLeave = (el, done) => {
       height: 100vh;
     }
   }
+
   &__link {
-    opacity: 0;
+    display: table-cell;
+    vertical-align: middle;
     cursor: pointer;
-    font-size: 35px;
+    opacity: 0;
+    font-size: 3.8vh;
+    height: 6vh;
     font-family: var(--font-primary);
     margin: 5px 0;
-    padding: 10px 30px 7px 30px;
+    padding: 0 30px;
     transition: background-color 0.2s ease;
+
     &:hover {
       background-color: var(--epj-c-main);
     }
+
     &-text {
-      display: inline;
+      line-height: 6vh;
     }
+
     &:nth-child(3) {
-      margin-bottom: 60px;
+      margin-bottom: 5vh;
     }
   }
 }
