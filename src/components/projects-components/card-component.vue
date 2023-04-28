@@ -1,43 +1,37 @@
 <script setup>
 import {computed, inject} from "vue";
-import store from "@/store";
-
-inject("colorTheme");
+import {useStore} from "vuex";
 
 const props = defineProps({
 	"project": {
 		"type": Object,
 		"required": true,
-		"default": () => ({"id": 0, "attributes": {"name": "Lorem ipsum dolor sit amet", "medias": []}}),
+		"default": () => ({"id": 0, "name": "Lorem ipsum dolor sit amet", "medias": []}),
 	}
 });
 
-const projectName = computed(() => props.project.attributes.name);
-const projectImage = computed(() =>
-  props.project.attributes.medias.length ?
-  props.project.attributes.medias[0].src.data.attributes.url :
-  ""
-);
-const imageAlt = computed(() => {
-  return projectImage.value ? `Cover picture of the project ${projectName.value}` : "There's no picture for this project";
-});
+const store = useStore();
 
-const handleProject = () => {
-  store.dispatch("setProject", {"id": props.project.id});
-};
+const projectName = computed(() => props.project.name);
+const projectImage = computed(() => props.project.medias?.length ? props.project.medias[0].url : "");
+const imageAlt = computed(() => projectImage.value ?
+  `Cover picture of the project ${projectName.value}` :
+  "There's no picture for this project");
+
+inject("colorTheme");
 </script>
 
 <template>
   <div class="card">
-    <div class="card__image">
+    <div v-if="projectImage" class="card__image">
       <img
         class="card__src"
         :src="projectImage"
         :alt="imageAlt"
-        @click="handleProject"
+        @click="store.dispatch('setProject', projectName)"
       >
     </div>
-    <h2 class="card__title" @click="handleProject">
+    <h2 class="card__title" @click="store.dispatch('setProject', projectName)">
       {{projectName}}
     </h2>
   </div>

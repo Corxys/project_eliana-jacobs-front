@@ -9,6 +9,7 @@ import loadingScreenLogotype from "@/assets/images/logo-loading-screen.png";
 
 import NavbarComponent from "@/components/navbar-component.vue";
 import FooterComponent from "./components/footer-component.vue";
+import ErrorComponent from "@/components/shared-components/error-component.vue";
 
 const store = useStore();
 const route = useRoute();
@@ -17,6 +18,7 @@ const isMenuOpen = ref(false);
 const colorTheme = ref("dark");
 const isLoading = computed(() => store.state.app.isLoading);
 const hasTransitionScreen = computed(() => store.state.app.hasTransitionScreen);
+const errorMessage = computed(() => store.state.app.errorMessage);
 
 const apolloClient = new ApolloClient({
   "uri": "https://eliana-jacobs-back.herokuapp.com/graphql",
@@ -40,13 +42,11 @@ watch(() => route, (param) => {
     colorTheme.value = "dark";
   }
 }, {"deep": true, "immediate": true});
-
-// provide("isTransitionScreenOpen", isTransitionScreenOpen);
 </script>
 
 <template>
   <div class="app__container">
-    <!-- LOADING SCREEN -->
+    <!-- Loading screen -->
     <transition name="loading" duration="500">
       <div v-if="isLoading" class="loading-screen">
         <div class="loading-screen__container">
@@ -62,19 +62,22 @@ watch(() => route, (param) => {
       </div>
     </transition>
 
-    <!-- MAIN -->
+    <!-- Site -->
     <main
       class="main"
       :class="`theme--${colorTheme}`"
     >
-      <navbar-component />
-      <div
-        class="main__container"
-        :class="{'main__container--stuck': isLoading || isMenuOpen || hasTransitionScreen}"
-      >
-        <router-view />
+      <div>
+        <navbar-component />
+        <div
+          class="main__container"
+          :class="{'main__container--stuck': isLoading || isMenuOpen || hasTransitionScreen}"
+        >
+          <router-view v-if="!errorMessage" />
+          <error-component v-else />
+        </div>
+        <footer-component />
       </div>
-      <footer-component />
     </main>
   </div>
 </template>
@@ -109,7 +112,13 @@ watch(() => route, (param) => {
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+  background:
+    radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),
+    radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),
+    radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),
+    radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),
+    radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),
+    radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
 
   &__container {
     display: flex;

@@ -1,69 +1,93 @@
 <script setup>
-// General
 import {ref, computed, watch} from "vue";
 import {useStore} from "vuex";
 import {useRoute, useRouter} from "vue-router";
 import {marked} from "marked";
 
-// Components
 import ArrowBackComponent from "@/components/arrow-back-component.vue";
-import ImageCustomComponent from "@/components/shared-components/image-custom-component.vue";
-import GalleryComponent from "@/components/gallery-component.vue";
+import MediaComponent from "@/components/shared-components/media-component.vue";
+import GalleryComponent from "@/components/shared-components/gallery-component.vue";
 
-// Hook call
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
-// Store
-const projectDate = computed(() => project.value.attributes.date.slice(0, 4));
+const projectDate = computed(() => project.value.date);
 const selectedFilter = computed(() => store.state.app.selectedFilter);
 
-// Ref
 let indexOfFocusedImage = ref(0);
 
-// Getters
-const project = computed(() => store.getters.project);
+const projects = computed(() => store.state.projects);
 
-// Methods
 const changeImageFocused = ({index}) => {
   indexOfFocusedImage.value = index;
 };
 const backOnProjectsPage = async () => {
 	await store.dispatch("setFilter", {"filter": selectedFilter.value});
-	await store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+	await store.dispatch("setHasTransitionScreen",  false);
 	await router.back();
 };
 
-// Watchers
+// Un-displays the image on preview if we returns in the project page.
 watch(() => route, () => {
-	store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
+	store.dispatch("setImageOnPreview", false);
 }, {"deep": true, "immediate": true});
+
+// Retrieve the content of the targeted project with the slug.
+const project = computed(() => {
+  if (!projects.value) {
+    return null;
+  }
+
+  store.commit("setProject", route.params.slug);
+
+  return projects.value[route.params.slug];
+});
 </script>
 
 <template>
   <section class="project">
-    <arrow-back-component :on-click="backOnProjectsPage" />
-    <div class="project__container">
-      <div class="project__content">
-        <h1 class="project__title">
-          {{project.attributes.name}}
-        </h1>
-        <div class="project__date">
-          {{projectDate}}
+    <div v-if="project">
+      <arrow-back-component :on-click="backOnProjectsPage" />
+
+      <div class="project__container">
+        <div class="project__content">
+          <h1 class="project__title">
+            {{project.name}}
+          </h1>
+
+          <div class="project__date">
+            {{projectDate}}
+          </div>
+          <p
+            v-if="project.text"
+            class="project__text"
+            v-html="marked.parse(project.text)"
+          />
+
+          <div v-if="project.medias.length > 1" class="project__images">
+            <gallery-component
+              :images="project.medias"
+              :on-click="changeImageFocused"
+            />
+          </div>
         </div>
-        <p v-if="project.attributes.text" class="project__text" v-html="marked.parse(project.attributes.text)" />
-        <div v-if="project.attributes.medias.length > 1" class="project__images">
-          <gallery-component :images="project.attributes.medias" :on-click="changeImageFocused" />
+
+        <div v-if="project.medias[indexOfFocusedImage]" class="project__highlight">
+          <media-component
+            :media="project.medias[indexOfFocusedImage]"
+            :copyright="project.medias[indexOfFocusedImage].copyright"
+            :has-preview="true"
+          />
         </div>
       </div>
-      <div v-if="project.attributes.medias[indexOfFocusedImage]" class="project__highlight">
-        <image-custom-component
-          :media="project.attributes.medias[indexOfFocusedImage]"
-          :copyright="project.attributes.medias[indexOfFocusedImage].copyright"
-          :has-preview="true"
-        />
-      </div>
+    </div>
+
+    <!-- Placeholder for the project page. -->
+    <div v-else>
+      Oops, an error occurred while fetching the project.
+      <br>
+      Try again later, and don't hesitate to contact me if the problem persists!
     </div>
   </section>
 </template>

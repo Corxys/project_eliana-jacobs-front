@@ -1,10 +1,11 @@
 <script setup>
-/*
-* TODO:
-* - make animation on the hover (scale a bit)
-*/
-
 /**
+ * @property {Object} types All types
+ * @property {number} types.length Length of the types Array
+ * @property {Object} type One type
+ * @property {string} type.id ID of a type
+ * @property {string} type.name Name of a type
+ * @property {string} type.image Image used for the type
  * @property {string} alternativeText
  **/
 
@@ -22,22 +23,22 @@ const emit = defineEmits(["selectFilter"]);
 
 <template>
   <div class="transition">
-    <div v-if="types.length" class="transition__filters">
+    <div class="transition__filters">
       <div
         v-for="type of types"
         :key="type.id"
         class="transition__filter"
         :style="`width: calc(100vw / ${types.length}); height: calc(100vh / ${types.length})`"
       >
-        <div v-if="type.attributes" class="transition__filter-image" @click="emit('selectFilter', {'name': type.attributes.name})">
+        <div v-if="type" class="transition__filter-image" @click="emit('selectFilter', type.name)">
           <img
             class="transition__filter-src"
-            :src="type.attributes.image.data.attributes.url ? type.attributes.image.data.attributes.url : ''"
-            :alt="type.attributes.image.data.attributes.alternativeText ? type.attributes.image.data.attributes.alternativeText : ''"
+            :src="type.image || ''"
+            alt=""
           >
         </div>
-        <h2 class="transition__filter-name" @click="emit('selectFilter', {'name': type.attributes.name})">
-          {{type.attributes.name}}
+        <h2 class="transition__filter-name" @click="emit('selectFilter', type.name)">
+          {{type.name}}
         </h2>
       </div>
     </div>
@@ -46,7 +47,7 @@ const emit = defineEmits(["selectFilter"]);
 
 <style scoped lang="scss">
 .transition {
-  z-index: 10;
+  z-index: 100;
   position: absolute;
   top: 0;
   left: 0;
@@ -57,6 +58,7 @@ const emit = defineEmits(["selectFilter"]);
   justify-content: center;
   align-items: center;
 	padding: var(--container-padding);
+
 	&__filters {
     display: flex;
 		flex-direction: column;
@@ -66,25 +68,30 @@ const emit = defineEmits(["selectFilter"]);
 		height: 100vh;
 		width: 100vw;
   }
+
   &__filter {
     margin-bottom: 30px;
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+
 		&:last-child {
 			margin-bottom: 0;
 		}
+
     &-image {
 			height: 100%;
 			width: 100%;
 			cursor: pointer;
 			overflow: hidden;
     }
+
     &-src {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
+
     &-name {
       cursor: pointer;
       margin-top: 15px;
@@ -99,12 +106,15 @@ const emit = defineEmits(["selectFilter"]);
 		&__filters {
 			flex-direction: row;
 		}
+
 		&__filter {
 			margin-right: 30px;
 			margin-bottom: 0;
+
 			&:last-child {
 				margin-right: 0;
 			}
+
 			&-image {
 				height: 350px;
 			}

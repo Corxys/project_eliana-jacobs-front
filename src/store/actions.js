@@ -1,150 +1,142 @@
 import router from "@/router";
 
 import graphqlClient from "@/utils/graphql";
-import {slugifyTitle} from "@/utils/slugifyTitle";
+import {slugifyString} from "@/utils/slugify";
 
 import {PRACTICES_QUERY, NEWS_QUERY, CATEGORIES_QUERY, TYPES_QUERY, PROJECTS_QUERY, CV_QUERY} from "@/requests";
 
 export default function createActions() {
   return {
     /**
-     * GENERAL
-     * @method
-     * @name getData
-     * @param {function} state
      * @param {function} commit
+     *
      * On app initialization, get all data.
      **/
-    async getData({state, commit}) {
+    async getData({commit}) {
       console.debug("[app] data initialization...");
-
-      // Get practices data
+      
+      // Get practices data.
       console.debug("[app] get practices...");
       const responsePractices = await graphqlClient.query({"query": PRACTICES_QUERY});
       console.debug("[app] practices:", responsePractices.data.practices);
-      commit("setPractices", {"practices": responsePractices.data.practices});
+      commit("setPractices", responsePractices.data.practices.data);
       
-      console.debug("[app] get cv...");
-      const responseCV = await graphqlClient.query({"query": CV_QUERY});
-      console.debug("[app] cv:", responseCV.data.cv);
-      commit("setCV", {"cv": responseCV.data.cv});
-      
-      // Get news data
+      // Get news data.
       console.debug("[app] get news...");
       const responseNews = await graphqlClient.query({"query": NEWS_QUERY});
       console.debug("[app] news:", responseNews.data.news);
-      commit("setNews", {"news": responseNews.data.news});
-
-      // Get categories (circus, visual art, performance art, music, digital media) data
+      commit("setNews", responseNews.data.news.data);
+      
+      // Get CV link.
+      console.debug("[app] get cv...");
+      const responseCV = await graphqlClient.query({"query": CV_QUERY});
+      console.debug("[app] cv:", responseCV.data.cv);
+      commit("setCV", responseCV.data.cv.data.attributes.link);
+      
+      // Get categories (circus, visual art, performance art, music, digital media) data.
       console.debug("[app] get categories...");
       const responseCategories = await graphqlClient.query({"query": CATEGORIES_QUERY});
       console.debug("[app] categories:", responseCategories.data.categories);
-      commit("setCategories", {"categories": responseCategories.data.categories});
-
-      // Get filters (performance gallery, artistik gallery, videos / habiter, sound, video / papercutting & installation, archive) data
+      commit("setCategories", responseCategories.data.categories.data);
+      
+      // Get filters (performance gallery, artistik gallery, videos / habiter, sound, video / papercutting & installation, archive) data.
       console.debug("[app] get filters...");
       const responseFilters = await graphqlClient.query({"query": TYPES_QUERY});
-      console.debug("[app] filters:", responseFilters.data);
-      commit("setFilters", {"filters": responseFilters.data.types});
-
+      console.debug("[app] filters:", responseFilters.data.types);
+      commit("setFilters", responseFilters.data.types.data);
+      
       // Get projects data
       console.debug("[app] get projects...");
       const responseProjects = await graphqlClient.query({"query": PROJECTS_QUERY});
       console.debug("[app] projects:", responseProjects.data);
-      
-      // Use a copy of "projects" to next dispatched them by the different categories.
-      const dispatchedProjects = {...state.projects};
-      
-      responseCategories.data.categories.data.forEach((category) => {
-        // Get the name of the category.
-        const categoryName = category.attributes.name;
-        // And filter projects to store them in the good category.
-        dispatchedProjects.data[categoryName.toLowerCase()] = responseProjects.data.projects.data.filter((project) => project.attributes.category.data.attributes.name === categoryName);
-      });
-      
-      // For the circus projects, medias needs to be extracted and store in a specific key.
-      dispatchedProjects.data["circus"].forEach((project) => project.attributes.medias.forEach((media) => dispatchedProjects.medias.push(media)));
-      
-      commit("setProjects", {"projects": dispatchedProjects});
-    },
-    setIsLoading({commit}, {isLoading}) {
-      commit("setIsLoading", {isLoading});
-    },
-    setHasFilter({commit}, {hasFiltered}) {
-      commit("setHasFilter", {hasFiltered});
-    },
-    setHasTransitionScreen({commit}, {hasTransitionScreen}) {
-      commit("setHasTransitionScreen", {hasTransitionScreen});
-    },
-    setLayoutProjects({commit}, {layoutName}) {
-      commit("setLayoutProjects", {layoutName});
+      commit("setProjects", responseProjects.data.projects.data);
     },
     
     /**
-     * CATEGORY
-     * @method
-     * @name setCategory
      * @param {function} commit
      * @param {function} dispatch
-     * @param {function} getters
      * @param {string} category - Name of the selected category in the navbar component.
+     *
      * Set category for projects (allows the getter to retrieve the data).
      **/
-    async setCategory({commit, dispatch}, {category}) {
-      await commit("setCategory", {category});
-  
-      // For the Digital media and Visual art projects, a transition screen needs to be displayed.
-      if (category === "digital media" || category === "visual art") {
-        await dispatch("setHasTransitionScreen", {"hasTransitionScreen": true});
+    async setCategory({commit, dispatch}, category) {
+      const categoryWithATransitionScreen = ["digital-media", "visual-art"];
+      
+      const slugifiedCategory = slugifyString(category);
+      
+      // For some categories, a transition screen needs to be displayed.
+      if (categoryWithATransitionScreen.includes(slugifiedCategory)) {
+        await dispatch("setHasTransitionScreen", true);
       } else {
-        await dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+        await dispatch("setHasTransitionScreen", false);
       }
       
-      if (!category) {
-        return;
-      }
+      commit("setCategory", slugifiedCategory);
       
-      await router.push(`/projects/${slugifyTitle(category)}`);
+      await router.push(`/projects/${slugifiedCategory}`);
     },
     
     /**
-     * FILTER
-     * @method
-     * @name setFilter
      * @param {function} commit
-     * @param {function} dispatch
-     * @param {function} getters
      * @param {string} filter - Name of the selected filter in the filters.
+     *
      * Set category for projects (allows the getter to retrieve the data).
      **/
-    async setFilter({commit, dispatch, getters}, {filter}) {
-      await commit("setFilter", {filter});
+    setFilter({commit}, filter) {
+      commit("setFilter", filter);
     },
     
-    // PREVIEW
-    setImageOnPreview({commit}, {isImageOnPreview}) {
-      commit("setImageOnPreview", {isImageOnPreview});
+    /**
+     * @param {Object} state
+     * @param {function} commit
+     * @param {string} name - Name of the selected project.
+     *
+     * Set project.
+     **/
+    async setProject({state, commit}, name) {
+      const slugifiedName = slugifyString(name);
+      
+      window.localStorage.setItem("project", slugifiedName);
+      
+      commit("setProject", slugifiedName);
+      
+      await router.push(`/projects/${state.selected.category}/${slugifiedName}`);
     },
-  
-    // PROJECT
-    async setProject({state, commit, getters}, {id}) {
-      const project = getters.projects.find((project) => project.id === id);
-      window.localStorage.setItem("project", JSON.stringify(project));
-      commit("setProject", {project});
-      await router.push(`/projects/${state.app.selectedCategory.split(" ").join("-")}/${slugifyTitle(project.attributes.name)}`);
+    
+    /**
+     * @param {function} commit
+     * @param {string} title - Title of the selected article.
+     *
+     * Get article by its title.
+     **/
+    async setArticle({commit}, title) {
+      const slugifiedTitle = slugifyString(title);
+      
+      window.localStorage.setItem("article", slugifiedTitle);
+      
+      commit("setArticle", slugifiedTitle);
+      
+      await router.push(`/news/${slugifiedTitle}`);
     },
-  
-    // ARTICLE
-    async setArticle({state, commit}, {id}) {
-      const article = state.news.find((article) => article.id === id);
-      window.localStorage.setItem("article", JSON.stringify(article));
-      commit("setArticle", {article});
-      await router.push(`/article/${slugifyTitle(article.attributes.title)}`);
+    
+    // Set the loading screen.
+    setIsLoading({commit}, isLoading) {
+      commit("setIsLoading", isLoading);
     },
-  
-    // FILTERS
-    setTransitionScreen({commit}, {isTransitioned}) {
-      commit("setTransitionScreen", {isTransitioned});
+    
+    // Set the transition screen.
+    setHasTransitionScreen({commit}, hasTransitionScreen) {
+      commit("setHasTransitionScreen", hasTransitionScreen);
+    },
+    
+    // Set an image on preview.
+    setImageOnPreview({commit}, isImageOnPreview) {
+      commit("setImageOnPreview", isImageOnPreview);
+    },
+    
+    // Error message for the error page.
+    setErrorMessage({commit}, errorMessage) {
+      commit("setErrorMessage", errorMessage);
     },
 	};
 }

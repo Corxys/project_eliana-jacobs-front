@@ -6,14 +6,14 @@ const store = useStore();
 
 const imagePlaceholder = computed(() => {
   // Early return if there's no category selected.
-  if (!store.state.app.selectedCategory) {
+  if (!store.state.selected.category) {
     return null;
   }
 
-  const selectedCategory = store.state.categories.find((category) => category.attributes.name.toLowerCase() === store.state.app.selectedCategory);
+  const selectedCategory = store.state.categories[store.state.selected.category];
 
   // Return an empty string if there's no placeholder image.
-  return selectedCategory.attributes.placeholder.data ? selectedCategory.attributes.placeholder.data.attributes.url : "";
+  return selectedCategory.placeholder ? selectedCategory.placeholder : "";
 });
 
 </script>

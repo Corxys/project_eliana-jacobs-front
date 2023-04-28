@@ -1,4 +1,15 @@
 <script setup>
+/**
+ * @property {Object} media
+ * @property {string} media.copyright Credits photographer.
+ * @property {string} media.mime Mime format of the media.
+ * @property {string} media.link Link of the YouTube video, if any.
+ * @property {string} article.address.street Street name of the event.
+ * @property {string} article.address.city City of the event.
+ * @property {string} article.website Website where to get more details about the event.
+ * @property {string} article.publishedAt Publication date of the article.
+ **/
+
 import {computed} from "vue";
 import {useStore} from "vuex";
 
@@ -9,12 +20,7 @@ const props = defineProps({
   "media": {
     "type": Object,
     "required": true,
-    "default": () => ({"link": "", "src": {"data": {"attributes": {"mime": ""}}}}),
-  },
-  "copyright": {
-    "type": String,
-    "required": false,
-    "default": ""
+    "default": () => ({"link": "", "copyright": "", "mime": "", "url": "", "alternativeText": ""}),
   },
 	"hasPreview": {
 		"type": Boolean,
@@ -27,17 +33,23 @@ const store = useStore();
 
 const imageMimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
 const audioMimesTypesCheck = /audio\/mp3|audio\/wav|audio\/ogg/;
-const mediaIsImage = computed(() => imageMimesTypesCheck.test(props.media.src.data.attributes.mime));
-const mediaIsAudio = computed(() => audioMimesTypesCheck.test(props.media.src.data.attributes.mime)) ;
+const mediaIsImage = computed(() => imageMimesTypesCheck.test(props.media.mime));
+const mediaIsAudio = computed(() => audioMimesTypesCheck.test(props.media.mime)) ;
 const mediaIsVideo = computed(() => props.media.link);
 
 const hasImageOnPreview = computed(() => store.state.app.hasImageOnPreview);
-const mediaImage = computed(() => mediaIsImage.value ? props.media.src.data.attributes.url : "");
-const imageAlt = computed(() => mediaIsImage.value ? props.media.src.data.attributes.alternativeText : "");
+const mediaImage = computed(() => mediaIsImage.value ? props.media.url : "");
+const imageAlt = computed(() => mediaIsImage.value ? props.media.alternativeText : "");
 const mediaLink = computed(() => props.media.link);
 
+const youTubeVideoLink = computed(() => {
+  const YOUTUBE_LINK = "https://www.youtube.com/embed/";
+
+  return YOUTUBE_LINK + props.media.link.split("=")[1];
+});
+
 const displayImageOnPreview = () => {
-	store.dispatch("setImageOnPreview", {"isImageOnPreview": true});
+	store.dispatch("setImageOnPreview", true);
 };
 </script>
 
@@ -51,8 +63,8 @@ const displayImageOnPreview = () => {
         :alt="imageAlt"
         @click="displayImageOnPreview"
       >
-      <div v-if="copyright" class="image__copyright">
-        {{copyright}}
+      <div v-if="media.copyright" class="image__copyright">
+        {{media.copyright}}
       </div>
       <div v-if="hasPreview" class="image__preview">
         <font-awesome-icon class="image__icon" :icon="['fas', 'expand']" />
@@ -60,7 +72,7 @@ const displayImageOnPreview = () => {
       <preview-component
         v-if="hasPreview && hasImageOnPreview"
         :image="mediaImage"
-        :copyright="copyright"
+        :copyright="media.copyright"
       />
     </div>
 
@@ -71,7 +83,7 @@ const displayImageOnPreview = () => {
         class="video__src"
         width="560"
         height="315"
-        :src="`https://www.youtube.com/embed/${media.link.split('=')[1]}`"
+        :src="youTubeVideoLink"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
       />

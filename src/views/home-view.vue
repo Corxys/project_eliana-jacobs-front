@@ -1,11 +1,8 @@
 <script setup>
-// General
 import {ref, onMounted, onUnmounted} from "vue";
 
-// Components
 import FlowerComponent from "@/components/home-components/flower-component.vue";
 
-// Images
 import flower from "@/assets/images/shapes/home-flower.png";
 
 import shapeLeftTop from "@/assets/images/shapes/home-01.png";
@@ -13,21 +10,19 @@ import shapeLeftBottom from "@/assets/images/shapes/home-02.png";
 import shapeRightTop from "@/assets/images/shapes/home-03.png";
 import shapeRightBottom from "@/assets/images/shapes/home-04.png";
 
-// Ref
 const flowerWidth = ref(0);
 const flowerHeight = ref(0);
 
-// Lifecycle hook
 onMounted(() => {
 	flowerWidth.value = window.innerWidth;
 	flowerHeight.value = window.innerHeight;
 	window.addEventListener("resize", setSizeOfTheFlower);
 });
+
 onUnmounted(() => {
 	window.removeEventListener("resize", setSizeOfTheFlower);
 });
 
-// Methods
 const setSizeOfTheFlower = (event) => {
 	flowerWidth.value = event.target.innerWidth;
 	flowerHeight.value = event.target.innerHeight;
@@ -42,6 +37,7 @@ const setSizeOfTheFlower = (event) => {
       <img class="home__shape home__shape-03" :src="shapeRightTop" alt="Shape in the top right of the side.">
       <img class="home__shape home__shape-04" :src="shapeRightBottom" alt="Shape in the top right of the side.">
     </div>
+
     <div class="home__flower">
       <img class="home__flower-shape" :src="flower" alt="">
       <flower-component :flower-height="flowerHeight" :flower-width="flowerWidth" />

@@ -1,12 +1,19 @@
 <script setup>
+/**
+ * @property {string} link Link used to redirect the social network.
+ * @property {string} icon Class used to display the icon with FontAwesomeIcon.
+ **/
+
 defineProps({
   "icon": {
     "type": Array,
     "required": true,
+    "default": () => "",
   },
   "link": {
     "type": String,
     "required": true,
+    "default": () => "/",
   },
 });
 </script>
@@ -31,6 +38,7 @@ defineProps({
   min-width: 32px;
   min-height: 32px;
   transition: 0.2s ease-in all;
+
   &:hover {
     background-color: var(--color-button-background-hover);
     border: 1px solid var(--color-button-border-hover);

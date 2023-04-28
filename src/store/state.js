@@ -1,5 +1,18 @@
 export default function createState() {
 	return {
+		"selected": {
+			"category": "",
+			"filter": "all",
+			"projects": [],
+			"project": "",
+			"article": "",
+		},
+		"cv": "",
+		"practices": null,
+		"news": null,
+		"categories": null,
+		"filters": null,
+		"projects": null,
 		"app": {
 			"hasTransitionScreen": false,
 			"hasImageOnPreview": false,
@@ -7,25 +20,7 @@ export default function createState() {
 			"selectedCategory": "",
 			"colorTheme": "dark",
 			"isLoading": true,
+			"errorMessage": "",
 		},
-		"cv": "",
-		"filters": {
-			"data": {},
-		},
-		"categories": [],
-		"projects": {
-			"data": {
-				"circus": [],
-				"visual art": [],
-				"art performance": [],
-				"music": [],
-				"digital media": [],
-			},
-			"medias": [],
-		},
-		"project": {},
-		"practices": [],
-		"news": [],
-		"article": {},
 	};
 }

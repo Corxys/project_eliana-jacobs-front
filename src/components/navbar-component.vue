@@ -17,18 +17,20 @@ let colorTheme = inject("colorTheme");
 const categories = computed(() => store.getters.categories);
 
 const getProjectsByCategory = (name) => {
-  store.dispatch("setCategory", {"category": name.toLowerCase()});
-	store.dispatch("setFilter", {"filter": "all"});
+  store.dispatch("setCategory", name);
+	store.dispatch("setFilter", "all");
+
   isMenuOpen.value = false;
 };
-const goOnPage = (src) => {
-  router.push(src);
-  store.dispatch("setCategory", {"category": ""});
-  store.dispatch("setFilter", {"filter": "all"});
+const goOnPage = async (src) => {
+  await store.dispatch("setCategory", "");
+  await store.dispatch("setFilter", "all");
+
+  await router.push(src);
+
   isMenuOpen.value = false;
 };
 
-// Transitions
 const onBeforeEnter = (el) => {
   gsap.set(el, {
     "scaleY": 0,
@@ -141,10 +143,10 @@ const onLeave = (el, done) => {
           v-for="category of categories"
           :key="category.id"
           class="navbar__link"
-          @click="getProjectsByCategory(category.attributes.name)"
+          @click="getProjectsByCategory(category.name)"
         >
           <span class="navbar__link-text">
-            {{category.attributes.name}}
+            {{category.name}}
           </span>
         </div>
       </div>
