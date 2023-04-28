@@ -1,25 +1,28 @@
 <script setup>
-/* eslint-disable max-len */
+/**
+ * @property {string} cv Dropbox link to the CV.
+ * @property {Object} practices Practices of Eliana.
+ * @property {Object} practice One practice of the practices Array.
+ * @property {string} practice.id ID of a practice.
+ **/
 
-// General
 import {useStore} from "vuex";
 import {computed} from "vue";
 
-// Components
 import IconSocialComponent from "@/components/shared-components/icon-social-component.vue";
 import ButtonCustomComponent from "@/components/shared-components/button-custom-component.vue";
 import PracticeComponent from "@/components/about-components/practice-component.vue";
 
-// Images
 import shapeTopRight from "@/assets/images/shapes/about-01.png";
 import shapeBottomLeft from "@/assets/images/shapes/about-02.png";
 
-// Hook call
 const store = useStore();
 
-// State
-const practices = computed(() => store.state.practices);
+const practices = computed(() => store.getters.practices);
 const cv = computed(() => store.state.cv);
+
+const INSTAGRAM_PROFILE = "https://www.instagram.com/__e_l_i_a_n_a__/";
+const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51VQ";
 </script>
 
 <template>
@@ -29,81 +32,138 @@ const cv = computed(() => store.state.cv);
         <h1 class="about__title">
           Eliana is a performance, circus, visual and conceptual artist and singer.
         </h1>
+
         <div class="about__actions">
           <div class="about__icons">
-            <icon-social-component :icon="['fab', 'instagram']" link="https://www.instagram.com/__e_l_i_a_n_a__/" />
-            <icon-social-component :icon="['fab', 'youtube']" link="https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51VQ" />
+            <!-- Instagram profile -->
+            <icon-social-component
+              :icon="['fab', 'instagram']"
+              :link="INSTAGRAM_PROFILE"
+            />
+
+            <!-- YouTube channel -->
+            <icon-social-component
+              :icon="['fab', 'youtube']"
+              :link="YOUTUBE_CHANNEL"
+            />
           </div>
+
           <div class="about__buttons">
-            <button-custom-component text="Contact me" link="/contact" :external="false" />
-            <button-custom-component text="Download my CV" :link="cv.data.attributes.link" :external="true" />
+            <!-- Contact page button -->
+            <button-custom-component
+              text="Contact me"
+              link="/contact"
+              :external="false"
+            />
+
+            <!-- Button to download CV -->
+            <button-custom-component
+              text="Download my CV"
+              :link="cv"
+              :external="true"
+            />
           </div>
         </div>
       </header>
+
       <article class="about__content">
         <h2 class="about__subtitle">
           Practices
         </h2>
+
         <div class="about__practices">
-          <practice-component v-for="practice of practices" :key="practice.id" :practice="practice" />
+          <practice-component
+            v-for="practice of practices"
+            :key="practice.id"
+            :practice="practice"
+          />
         </div>
       </article>
     </main>
-    <img class="about__shape about__shape-01" :src="shapeTopRight" alt="Shape in the bottom right of the site.">
-    <img class="about__shape about__shape-02" :src="shapeBottomLeft" alt="Shape in the bottom left of the site.">
+
+    <!-- Shapes in the background -->
+    <img
+      class="about__shape about__shape-01"
+      :src="shapeTopRight"
+      alt="Shape in the bottom right of the site."
+    >
+    <img
+      class="about__shape about__shape-02"
+      :src="shapeBottomLeft"
+      alt="Shape in the bottom left of the site."
+    >
   </div>
 </template>
 
 <style scoped lang="scss">
 .about {
 	padding: var(--container-padding);
-	background: radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+	background:
+    radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),
+    radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),
+    radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),
+    radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),
+    radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),
+    radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+
 	&__container {
 		z-index: 10;
 		position: relative;
 	}
+
 	&__title {
 		margin-bottom: 30px;
 	}
+
 	&__header {
 		margin-bottom: 30px;
 		padding-bottom: 30px;
 		border-bottom: 1px solid var(--epj-c-white);
 	}
+
 	&__actions, &__icons, &__buttons {
 		display: flex;
 	}
+
 	&__actions {
 		flex-wrap: wrap;
 	}
+
 	&__icons {
 		margin-bottom: 10px;
 		:deep(.icon-social) {
 			margin-right: 10px;
 		}
 	}
+
 	&__buttons {
     display: flex;
     column-gap: 10px;
   }
+
 	&__subtitle {
 		margin-bottom: 30px;
 	}
+
 	&__practices {
 		:deep(.image) {
 			height: auto;
 		}
+
 		:deep(.practice) {
 			&:last-child {
 				margin-bottom: 0;
 			}
+
 			.image {
 				margin-bottom: 30px;
 			}
 		}
 	}
+
 	&__shape {
 		position: absolute;
+
 		&-01 {
 			width: 70%;
 			right: 0;
@@ -123,17 +183,21 @@ const cv = computed(() => store.state.cv);
 			margin-bottom: 60px;
 			padding-bottom: 60px;
 		}
+
 		&__title {
 			margin-bottom: 50px;
 		}
+
 		&__subtitle {
 			margin-bottom: 60px;
 		}
+
 		&__shape {
 			&-01 {
 				width: 50%;
 				max-width: 520px;
 			}
+
 			&-02 {
 				width: 70%;
 				max-width: 870px;

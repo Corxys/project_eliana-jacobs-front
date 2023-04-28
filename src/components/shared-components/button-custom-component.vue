@@ -1,8 +1,15 @@
 <script setup>
+/**
+ * @property {string} text Text inside the button.
+ * @property {string} link Link used when the user clicks on the button.
+ * @property {boolean} external Specify if <router-link> or <a> tag is needed.
+ **/
+
 defineProps({
   "text": {
     "type": String,
     "required": true,
+    "default": () => "",
   },
   "link": {
     "type": String,

@@ -1,11 +1,8 @@
 <script setup>
-// General
 import {useStore} from "vuex";
 
-// Hook call
 const store = useStore();
 
-// Props
 defineProps({
 	"image": {
 		"type": String,
@@ -17,9 +14,8 @@ defineProps({
 	},
 });
 
-// Methods
 const undisplayedImageOnPreview = () => {
-	store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
+	store.dispatch("setImageOnPreview", false);
 };
 </script>
 

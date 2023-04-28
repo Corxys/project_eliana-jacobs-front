@@ -1,70 +1,162 @@
+import {slugifyString} from "@/utils/slugify";
+
 export default function createMutations() {
 	return {
-    // GENERAL
-    setPractices(state, {practices}) {
-      state.practices = practices.data;
-    },
-		setCV(state, {cv}) {
-			state.cv = cv;
+		/**
+		 * @name setPractices
+		 * @name setNews
+		 * @name setCV
+		 * @name setCategories
+		 * @name setFilters
+		 * @name setProjects
+		 *
+		 * Load data in state.
+	   **/
+		setPractices(state, practices) {
+			if (!practices.length) {
+				state.practices = null;
+				
+				return;
+			}
+			
+			state.practices = practices.reduce((acc, practice) => {
+				const title = slugifyString(practice.attributes.title);
+				
+				acc[title] = {
+					...practice.attributes,
+					"id": practice.id,
+					"image": {
+						...practice.attributes.image.src.data.attributes,
+						"copyright": practice.attributes.image.copyright,
+						"link": practice.attributes.image.link,
+					}
+				};
+				
+				return acc;
+			}, {});
 		},
-    setNews(state, {news}) {
-      state.news = news.data;
-    },
-		setCategories(state, {categories}) {
-			state.categories = categories.data;
+		setNews(state, news) {
+			if (!news.length) {
+				state.news = null;
+				
+				return;
+			}
+			
+			state.news = news.reduce((acc, article) => {
+				const title = slugifyString(article.attributes.title);
+				
+				acc[title] = {
+					...article.attributes,
+					"id": article.id,
+					"image": {
+						...article.attributes.image.src.data.attributes,
+						"copyright": article.attributes.image.copyright,
+						"link": article.attributes.image.link,
+					}
+				};
+				
+				return acc;
+			}, {});
 		},
-		setFilters(state, {filters}) {
-			state.filters.data = filters.data;
+		setCV(state, cv) {
+			state.cv = cv ? cv : "";
 		},
-		setProjects(state, {projects}) {
-			state.projects = {...state.projects, ...projects};
-    },
-		setIsLoading(state, {isLoading}) {
-			state.app.isLoading = isLoading;
+		setCategories(state, categories) {
+			if (!categories.length) {
+				state.categories = null;
+				
+				return;
+			}
+			
+			state.categories = categories.reduce((acc, category) => {
+				const name = slugifyString(category.attributes.name);
+				
+				acc[name] = {
+					...category.attributes,
+					"id": category.id,
+					"placeholder": category.attributes.placeholder.data?.attributes.url || null,
+				};
+				
+				return acc;
+			}, {});
 		},
-		setHasFilter(state, {hasFiltered}) {
-			state.app.hasFilter = hasFiltered;
+		setFilters(state, filters) {
+			state.filters = filters.reduce((acc, filter) => {
+				const name = slugifyString(filter.attributes.name);
+				
+				acc[name] = {
+					...filter.attributes,
+					"id": filter.id,
+					"image": filter.attributes.image.data?.attributes.url || null,
+					"category": slugifyString(filter.attributes.category.data.attributes.name),
+				};
+				
+				return acc;
+			}, {});
 		},
-		setHasTransitionScreen(state, {hasTransitionScreen}) {
+		setProjects(state, projects) {
+			state.projects = projects.reduce((acc, project) => {
+				const name = slugifyString(project.attributes.name);
+				
+				acc[name] = {
+					...project.attributes,
+					"id": project.id,
+					"date": project.attributes.date?.split("-")[0] || null,
+					"category": project.attributes.category.data.attributes.name,
+					"link": project.attributes.link?.src || null,
+					"type": project.attributes.type.data?.attributes.name || null,
+					"medias": [
+							...project.attributes.medias.map((media) => ({
+								...media.src.data.attributes,
+								"link": media.link,
+								"copyright": media.copyright,
+							})),
+					]
+				};
+				
+				return acc;
+			}, {});
+		},
+		
+		
+		// Set the selected category.
+		setCategory(state, category) {
+			state.selected.category = category;
+		},
+		
+		// Set the selected filter.
+		setFilter(state, filter) {
+			state.selected.filter = filter;
+		},
+		
+		// Set the transition screen.
+		setHasTransitionScreen(state, hasTransitionScreen) {
 			state.app.hasTransitionScreen = hasTransitionScreen;
 		},
-		setLayoutProjects(state, {layoutName}) {
-			state.app.layoutProjects = layoutName;
+		
+		// Display or hide the loading screen.
+		setIsLoading(state, isLoading) {
+			state.app.isLoading = isLoading;
 		},
 		
-		// CATEGORIES
-		setCategory(state, {category}) {
-			state.app.selectedCategory = category;
-		},
-		
-		// FILTERS
-		setFilter(state, {filter}) {
-			state.app.selectedFilter = filter;
-		},
-		
-		// Preview
-		setImageOnPreview(state, {isImageOnPreview}) {
+		// Display or hide the image on preview.
+		setImageOnPreview(state, isImageOnPreview) {
 			state.app.hasImageOnPreview = isImageOnPreview;
 		},
 		
-		// Project
-		setProject(state, {project}) {
-      state.project = project;
+		// Set the selected projet.
+		setProject(state, project) {
+      state.selected.project = project;
     },
 		
-		// Article
-		setArticle(state, {article}) {
-			state.article = article;
+		// Set the selected article.
+		setArticle(state, article) {
+			state.selected.article = article;
 		},
 		
-		/* Filters */
-		setTransitionScreen(state, {isTransitioned}) {
-			state.app.hasTransitionScreen = isTransitioned;
-		},
-    // setSelectedFilter(state, {selectedFilterName, circusMedias = [], selectedProjects = []}) {
-		// 	state.app.selectedFilter = selectedFilterName;
-		// 	state.projects.medias = circusMedias;
-		// 	state.projects.selected = selectedProjects;
-		// },
+		// Set the error message for the error page.
+		setErrorMessage(state, errorMessage) {
+			state.app.errorMessage = errorMessage;
+		}
 	};
 }

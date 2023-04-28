@@ -1,11 +1,13 @@
 <script setup>
-import {ref, computed, watch, inject} from "vue";
+import {ref, computed} from "vue";
 import {useStore} from "vuex";
-import {useRoute, useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 
-import TransitionComponent from "@/components/transition-component.vue";
-import GalleryComponent from "@/components/gallery-component.vue";
-import ImageCustomComponent from "@/components/shared-components/image-custom-component.vue";
+import {slugifyString} from "@/utils/slugify";
+
+import TransitionComponent from "@/components/projects-components/transition-component.vue";
+import GalleryComponent from "@/components/shared-components/gallery-component.vue";
+import MediaComponent from "@/components/shared-components/media-component.vue";
 import CardComponent from "@/components/projects-components/card-component.vue";
 import PlaceholderComponent from "@/components/projects-components/placeholder-component.vue";
 
@@ -13,100 +15,113 @@ import shapeBottom from "@/assets/images/shapes/projects-01.png";
 
 const store = useStore();
 const route = useRoute();
-const router = useRouter();
 
 const filters = computed(() => store.getters.filters);
 const projects = computed(() => store.getters.projects);
-const medias = computed(() => store.getters.medias);
 const layout = computed(() => store.getters.layout);
 const filtered = computed(() => store.getters.filtered);
 
 const hasTransitionScreen = computed(() => store.state.app.hasTransitionScreen);
-const selectedFilter = computed(() => store.state.app.selectedFilter);
-const keysOfProjects = computed(() => store.state.projects.data);
+const selectedFilter = computed(() => store.state.selected.filter);
 
 let indexOfFocusedImage = ref(0);
 
-const selectFilter = ({name}) => {
-	indexOfFocusedImage.value = 0;
-	store.dispatch("setFilter", {"filter": name.toLowerCase()});
-	store.dispatch("setHasTransitionScreen", {"hasTransitionScreen": false});
+const selectFilter = (name) => {
+  indexOfFocusedImage.value = 0;
+
+  store.dispatch("setFilter", slugifyString(name));
+  store.dispatch("setHasTransitionScreen", false);
 };
 const changeImageFocused = ({index}) => {
-	indexOfFocusedImage.value = index;
+  indexOfFocusedImage.value = index;
 };
 
+// Select the filters, depending on the category selected.
 const displayedFilters = computed(() => {
-	// "Circus" are the only projects page where the "All" filter is necessary.
-	if (route.fullPath === "/projects/circus") {
-		const filtersMap = filters.value.map((filterMap) => filterMap);
-		filtersMap.unshift({"id": 0, "attributes": {"name": "all"}});
-		store.dispatch("setFilter", {"filter": "all"});
-		return filtersMap;
-	} else {
-		return filters.value;
-	}
+  if (!filtered.value) {
+    return [];
+  }
+
+  // "Circus" is the only projects page where the "All" filter is necessary.
+  if (route.params.slug === "circus") {
+    const filtersMap = filters.value.map((filterMap) => filterMap);
+
+    filtersMap.unshift({"id": 0, "name": "all"});
+
+    store.dispatch("setFilter", "all");
+
+    return filtersMap;
+  } else {
+    return filters.value;
+  }
 });
 
-// Watchers
-watch(() => route, (param) => {
-	Object.keys(keysOfProjects.value).forEach((key) => {
-		if (param.path.includes(key.split(" ").join("-"))) {
-			// "/projects/category-name" > "projects/category-name" > ["projects", "category-name"] > ["category", "name"] > "category name"
-			const categoryName = param.path.slice(1, param.path.length).split("/")[1].split("-").join(" ");
-			store.dispatch("setImageOnPreview", {"isImageOnPreview": false});
-			store.dispatch("setCategory", {"category": categoryName});
-		}
-	});
-}, {"deep": true, "immediate": true});
+// Select the project, depending on the category and the filter selected, if any.
+const selectedProjects = computed(() => {
+  if (!projects.value) {
+    return null;
+  }
+
+  const projectsInTheCategory = projects.value[route.params.slug];
+
+  if (!projectsInTheCategory.length) {
+    return null;
+  }
+
+  // If the selected filter is equal to all, return all the projects.
+  if (store.state.selected.filter === "all") {
+    return projectsInTheCategory;
+  }
+
+  // Select the project, according to the selected filter.
+  return projectsInTheCategory.filter((project) => project.type ? slugifyString(project?.type) === selectedFilter.value : project);
+});
 </script>
 
 <template>
   <section class="projects">
-    <div
-      v-if="projects"
-      class="projects__container"
-    >
+    <div v-if="selectedProjects" class="projects__container">
       <!-- Filters -->
-      <div v-if="filtered" class="projects__filters">
+      <div v-if="displayedFilters" class="projects__filters">
         <div
           v-for="filter of displayedFilters"
           :key="filter.id"
           class="projects__filter"
-          :class="{'projects__filter--active': filter.attributes.name.toLowerCase() === selectedFilter}"
-          @click="selectFilter({'name': filter.attributes.name})"
+          :class="{'projects__filter--active': slugifyString(filter.name) === selectedFilter}"
+          @click="selectFilter(filter.name)"
         >
           <span>
-            {{filter.attributes.name}}
+            {{filter.name}}
           </span>
         </div>
       </div>
 
       <!-- Transition screen -->
-      <transition-component v-if="filtered && hasTransitionScreen" :types="filters" @select-filter="selectFilter" />
+      <transition-component
+        v-if="filtered && hasTransitionScreen"
+        :types="displayedFilters"
+        @select-filter="selectFilter"
+      />
 
       <!-- Projects -->
-      <div v-if="projects || medias" class="projects__content">
+      <div class="projects__content">
         <!-- Gallery layout	-->
-        <div v-if="layout === 'gallery'" class="projects__gallery">
-          <img v-if="layout === 'gallery'" class="projects__shape projects__shape-01" :src="shapeBottom" alt="Shape in the bottom of the site.">
-
+        <div v-if="layout === 'gallery' && selectedProjects" class="projects__gallery">
           <div class="projects__gallery-images">
-            <gallery-component :on-click="changeImageFocused" :images="medias" />
+            <gallery-component :on-click="changeImageFocused" :images="selectedProjects" />
           </div>
-          <div v-if="medias[indexOfFocusedImage].src.data.attributes" class="projects__gallery-highlight">
-            <image-custom-component
-              :media="medias[indexOfFocusedImage]"
-              :copyright="medias[indexOfFocusedImage].copyright"
+          <div v-if="selectedProjects[indexOfFocusedImage]" class="projects__gallery-highlight">
+            <media-component
+              :media="selectedProjects[indexOfFocusedImage]"
               :has-preview="true"
             />
           </div>
         </div>
 
         <!-- List layout -->
-        <div v-else class="projects__list">
+        <div v-if="layout === 'list' && selectedProjects" class="projects__list">
           <card-component
-            v-for="project of projects"
+            v-for="project of selectedProjects"
             :key="project.id"
             :project="project"
           />
@@ -114,8 +129,11 @@ watch(() => route, (param) => {
       </div>
     </div>
 
+    <!-- Shape in the background -->
+    <img v-if="layout === 'gallery'" class="projects__shape" :src="shapeBottom" alt="Shape in the bottom of the site.">
+
     <!-- Placeholder when there's no projects in the category -->
-    <placeholder-component v-else />
+    <placeholder-component v-if="!selectedProjects" />
   </section>
 </template>
 
@@ -154,6 +172,7 @@ watch(() => route, (param) => {
 
   &__content {
     position: relative;
+    z-index: 10;
   }
 
   &__gallery {
@@ -189,10 +208,8 @@ watch(() => route, (param) => {
   &__shape {
     position: fixed;
     height: 60%;
-    &-01 {
-      bottom: 0;
-      right: 20%;
-    }
+    bottom: 0;
+    right: 20%;
   }
 }
 

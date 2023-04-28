@@ -1,8 +1,14 @@
 <script setup>
-// Components
-import ImageCustomComponent from "../shared-components/image-custom-component.vue";
+/**
+ * @property {Object} practice
+ * @property {Object} practice.image Image that symbolizes the practice.
+ * @property {string} practice.image.copyright Credits photographer.
+ * @property {string} practice.title Title of the practice.
+ * @property {string} practice.text Text that gives details about the practice.
+ **/
 
-// Props
+import MediaComponent from "@/components/shared-components/media-component.vue";
+
 defineProps({
   "practice": {
     "type": Object,
@@ -14,17 +20,14 @@ defineProps({
 <template>
   <div class="practice">
     <div v-if="practice" class="practice__container">
-      <image-custom-component
-        :media="practice.attributes.image"
-        :copyright="practice.attributes.image.copyright"
-      />
+      <media-component :media="practice.image" />
     </div>
     <div class="practice__content">
       <h3 class="practice__title">
-        {{practice.attributes.title}}
+        {{practice.title}}
       </h3>
       <p class="practice__text">
-        {{practice.attributes.text}}
+        {{practice.text}}
       </p>
     </div>
   </div>
@@ -34,12 +37,15 @@ defineProps({
 .practice {
 	display: flex;
 	flex-wrap: wrap;
+
 	&__container {
 		width: 100%;
 	}
+
 	:deep(.image) {
 		width: 100%;
 	}
+
   &__text {
     white-space: pre-line;
   }
@@ -51,11 +57,13 @@ defineProps({
 		grid-template-columns: repeat(10, 1fr);
 		column-gap: var(--spacing-between-horizontal-elements);
 		margin-bottom: 60px;
+
 		&__container {
 			grid-column: 1 / 4;
 			margin-right: var(--spacing-between-horizontal-elements);
 			width: 100%;
 		}
+
 		&__content {
 			grid-column: 4 / -1;
 		}

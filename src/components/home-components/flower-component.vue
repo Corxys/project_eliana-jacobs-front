@@ -1,10 +1,8 @@
 <!--suppress CssUnknownTarget, HtmlUnknownAttribute -->
 <script setup>
-// General
 import {ref} from "vue";
 import {useStore} from "vuex";
 
-// Props
 defineProps({
 	"flowerHeight": {
 		"type": Number,
@@ -16,22 +14,19 @@ defineProps({
 	},
 });
 
-// Images
 import music from "@/assets/images/petal_music.jpg";
 import performanceArt from "@/assets/images/petal_performance-art.jpg";
 import visualArt from "@/assets/images/petal_visual-art.jpg";
 import circus from "@/assets/images/petal_circus.jpg";
 import digitalMedia from "@/assets/images/petal_digital-media.jpg";
 
-// Hook call
 const store = useStore();
 
-// Ref
 let tooltipText = ref("");
 
-// Methods
 const displayTooltip = (event) => {
 	const target = document.querySelector(".flower__tooltip");
+
 	target.style.display = "block";
   target.innerHTML = event.target.id;
   target.style.top = (event.target.getBoundingClientRect().top + (event.target.getBoundingClientRect().height / 2)) - (target.getBoundingClientRect().height / 2) + "px";
@@ -39,13 +34,15 @@ const displayTooltip = (event) => {
 };
 const hideTooltip = () => {
 	const target = document.querySelector(".flower__tooltip");
+
 	target.style.display = "none";
 	tooltipText.value = "";
 };
 const getProjectsByCategory = (event) => {
 	const flower = event.target.closest(".flower__petal");
-	store.dispatch("setCategory", {"category": flower.id.toLowerCase()});
-	store.dispatch("setFilter", {"filter": "all"});
+
+	store.dispatch("setCategory", flower.id);
+	store.dispatch("setFilter", "all");
 };
 </script>
 
@@ -62,7 +59,7 @@ const getProjectsByCategory = (event) => {
     >
       <!-- Petal 1 -->
       <g
-        id="Art performance"
+        id="art-performance"
         class="flower__petal flower__petal-01"
         @mouseenter="displayTooltip"
         @mouseleave="hideTooltip"
@@ -91,10 +88,9 @@ const getProjectsByCategory = (event) => {
 
       <!-- Petal 2 -->
       <g
-        id="Circus"
+        id="circus"
         class="flower__petal flower__petal-02"
         @mouseenter="displayTooltip"
-        @mousemove="moveTooltip"
         @mouseleave="hideTooltip"
         @click="getProjectsByCategory"
       >
@@ -124,10 +120,9 @@ const getProjectsByCategory = (event) => {
       </g>
       <!-- Petal 3 -->
       <g
-        id="Visual art"
+        id="visual-art"
         class="flower__petal flower__petal-03"
         @mouseenter="displayTooltip"
-        @mousemove="moveTooltip"
         @mouseleave="hideTooltip"
         @click="getProjectsByCategory"
       >
@@ -157,10 +152,9 @@ const getProjectsByCategory = (event) => {
       </g>
       <!-- Petal 4 -->
       <g
-        id="Music"
+        id="music"
         class="flower__petal flower__petal-04"
         @mouseenter="displayTooltip"
-        @mousemove="moveTooltip"
         @mouseleave="hideTooltip"
         @click="getProjectsByCategory"
       >
@@ -193,7 +187,6 @@ const getProjectsByCategory = (event) => {
         id="Digital media"
         class="flower__petal flower__petal-05"
         @mouseenter="displayTooltip"
-        @mousemove="moveTooltip"
         @mouseleave="hideTooltip"
         @click="getProjectsByCategory"
       >
@@ -232,16 +225,25 @@ const getProjectsByCategory = (event) => {
 	align-items: center;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+  background:
+    radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),
+    radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),
+    radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),
+    radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),
+    radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),
+    radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+
   &__petal {
     &--image {
       cursor: pointer;
       transition: all 0.2s ease;
+
       &:hover {
         filter: blur(40px)
       }
     }
   }
+
   &__svg {
 		position: absolute;
     top: 50%;
@@ -250,6 +252,7 @@ const getProjectsByCategory = (event) => {
     width: 95%;
     height: 95%;
 	}
+
 	&__tooltip {
 		position: absolute;
 		z-index: 10;
@@ -262,10 +265,12 @@ const getProjectsByCategory = (event) => {
 		white-space: nowrap;
     pointer-events: none;
     cursor: pointer;
+
 		&--bold {
 			font-weight: 700;
 			margin-bottom: 5px;
 		}
+
 		&.active {
 			display: block;
 			flex-direction: column;
