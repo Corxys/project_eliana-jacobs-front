@@ -7,6 +7,7 @@ import {marked} from "marked";
 import ArrowBackComponent from "@/components/shared-components/arrow-back-component.vue";
 import MediaComponent from "@/components/shared-components/media-component.vue";
 import GalleryComponent from "@/components/shared-components/gallery-component.vue";
+import {slugifyString} from "@/utils/slugify";
 
 const store = useStore();
 const route = useRoute();
@@ -26,7 +27,9 @@ const changeImageFocused = ({index}) => {
 const backOnProjectsPage = async () => {
 	await store.dispatch("setHasTransitionScreen",  false);
 
-	await router.back();
+  await store.dispatch("setCategory", projects.value[store.state.selected.project].category);
+
+	await router.push(`/projects/${store.state.selected.category}`);
 };
 
 // Un-displays the image on preview if we return in the project page.

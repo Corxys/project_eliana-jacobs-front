@@ -74,9 +74,9 @@ const onLeave = (el, done) => {
   <nav class="navbar">
     <!-- LOGO-->
     <div class="navbar__logo">
-      <router-link to="/">
+      <router-link to="/" @click="isMenuOpen = false">
         <img
-          v-if="colorTheme === 'dark'"
+          v-if="isMenuOpen && colorTheme === 'light' || colorTheme === 'dark'"
           class="navbar__logo-src"
           alt="Name of Eliana's handwritten (white version)"
           :src="logotypeWhite"
@@ -96,7 +96,7 @@ const onLeave = (el, done) => {
       <div
         class="navbar__menu-lines"
         :class="{
-          'navbar__menu-lines--white': colorTheme === 'dark',
+          'navbar__menu-lines--white': isMenuOpen && colorTheme === 'light' || colorTheme === 'dark',
           'navbar__menu-lines--active': isMenuOpen,
         }"
         @click="isMenuOpen = !isMenuOpen"
@@ -105,7 +105,7 @@ const onLeave = (el, done) => {
         <span
           class="navbar__menu-line"
           :class="{
-            'navbar__menu-line--white': colorTheme === 'dark',
+            'navbar__menu-line--white': isMenuOpen && colorTheme === 'light' || colorTheme === 'dark',
             'navbar__menu-line--active': isMenuOpen,
           }"
         />
@@ -114,7 +114,7 @@ const onLeave = (el, done) => {
       <!-- MENU TEXT -->
       <div
         class="navbar__menu-text"
-        :class="{'navbar__menu-text--white': colorTheme === 'dark'}"
+        :class="{'navbar__menu-text--white': isMenuOpen && colorTheme === 'light' || colorTheme === 'dark'}"
       >
         MENU
       </div>

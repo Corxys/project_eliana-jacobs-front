@@ -63,8 +63,19 @@ const displayedFilters = computed(() => {
 
     store.dispatch("setHasTransitionScreen", false);
   } else {
+    if (categoryName === "circus") {
+      console.log("Circus projects!");
+
+      store.dispatch("setHasTransitionScreen", false);
+      store.dispatch("setFilter", "all");
+
+      return filtersByCategory;
+    }
+
     // Otherwise, display the screen to select the filter.
     store.dispatch("setHasTransitionScreen", true);
+    console.log("Other category!");
+
   }
 
   return filtersByCategory;
@@ -173,6 +184,7 @@ const selectedProjects = computed(() => {
   &__filters {
     display: flex;
     flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 30px;
   }
 
@@ -184,7 +196,6 @@ const selectedProjects = computed(() => {
     font-family: var(--font-primary);
     text-transform: uppercase;
     transition: 0.2s ease-in all;
-    margin-right: 10px;
     height: 32px;
 
     &:last-child {
@@ -209,11 +220,6 @@ const selectedProjects = computed(() => {
       :deep(.image__src) {
         cursor: pointer;
       }
-    }
-
-    &-images {
-      display: flex;
-      flex-flow: row wrap;
     }
 
     &-highlight {
