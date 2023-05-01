@@ -60,9 +60,11 @@ const displayedFilters = computed(() => {
   if (filtersByCategory.some((filter) => slugifyString(filter.name) === storedSelectedFilter)) {
     // If there is already a filter selected, and it corresponds to one of the filters of the selected category, it is selected again.
     store.dispatch("setFilter", storedSelectedFilter);
+
+    store.dispatch("setHasTransitionScreen", false);
   } else {
-    // Otherwise, the first default filter is selected.
-    store.dispatch("setFilter", filtersByCategory[0].name);
+    // Otherwise, display the screen to select the filter.
+    store.dispatch("setHasTransitionScreen", true);
   }
 
   return filtersByCategory;
