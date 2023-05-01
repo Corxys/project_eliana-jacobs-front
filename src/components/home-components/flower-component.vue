@@ -42,7 +42,7 @@ const getProjectsByCategory = (event) => {
 	const flower = event.target.closest(".flower__petal");
 
 	store.dispatch("setCategory", flower.id);
-	store.dispatch("setFilter", "all");
+	store.dispatch("setFilter", "All");
 };
 </script>
 

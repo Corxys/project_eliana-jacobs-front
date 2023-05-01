@@ -83,7 +83,11 @@ export default function createActions() {
      * Set category for projects (allows the getter to retrieve the data).
      **/
     setFilter({commit}, filter) {
-      commit("setFilter", filter);
+      const slugifiedName = slugifyString(filter);
+      
+      window.localStorage.setItem("filter", slugifiedName);
+      
+      commit("setFilter", slugifiedName);
     },
     
     /**
@@ -115,8 +119,6 @@ export default function createActions() {
       window.localStorage.setItem("article", slugifiedTitle);
       
       commit("setArticle", slugifiedTitle);
-      
-      await router.push(`/news/${slugifiedTitle}`);
     },
     
     // Set the loading screen.

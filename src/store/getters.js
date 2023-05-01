@@ -1,3 +1,5 @@
+import {clone} from "lodash";
+
 import {shuffleArray} from "@/utils/shuffleArray";
 import {slugifyString} from "@/utils/slugify";
 
@@ -20,12 +22,6 @@ export default function createGetters() {
             return 1;
           }
         }) :
-        null;
-    },
-    
-    filters(state) {
-      return state.selected.category ?
-        Object.values(state.filters).filter((filter) => filter.category === state.selected.category) :
         null;
     },
     
@@ -58,20 +54,6 @@ export default function createGetters() {
       }, []));
       
       return projects;
-    },
-    
-    /**
-     * @param {function} state
-     * @param {function} getters
-     *
-     * If there is filters for the selected projects, allow them to be displayed.
-     **/
-    filtered(state, getters) {
-      if (!getters.filters) {
-        return false;
-      }
-      
-      return true;
     },
     
     /**

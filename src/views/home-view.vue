@@ -53,6 +53,7 @@ const setSizeOfTheFlower = (event) => {
 	width: 100vw;
 	height: calc(var(--100-vh, 1vh) * 100);
 	overflow: hidden;
+
 	&__container {
 		width: 100vw;
 		height: 100%;

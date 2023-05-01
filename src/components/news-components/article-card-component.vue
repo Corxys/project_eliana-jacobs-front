@@ -9,6 +9,8 @@
 
 import {useStore} from "vuex";
 import {formatDate} from "@/utils/formatDate";
+import router from "@/router";
+import {slugifyString} from "@/utils/slugify";
 
 const store = useStore();
 
@@ -23,16 +25,24 @@ defineProps({
     "default": () => "medium",
   },
 });
+
+const goToTheArticlePage = async (articleTitle) => {
+  const slugifiedTitle = slugifyString(articleTitle);
+
+  await store.dispatch("setArticle", slugifiedTitle);
+
+  await router.push(`/news/${slugifiedTitle}`);
+};
 </script>
 
 <template>
   <!-- Small size -->
   <div v-if="size === 'small'" class="article-card--small">
-    <div class="link--image" @click="store.dispatch('setArticle', article.title)">
+    <div class="link--image" @click="goToTheArticlePage(article.title)">
       <img class="image" :src="article.image.url" alt="">
     </div>
     <div class="content">
-      <h4 class="title" @click="store.dispatch('setArticle', article.title)">
+      <h4 class="title" @click="goToTheArticlePage(article.title)">
         <span>
           {{article.title}}
         </span>
@@ -45,11 +55,11 @@ defineProps({
 
   <!-- Medium size -->
   <div v-if="size === 'medium'" class="article-card--medium">
-    <div class="link--image" @click="store.dispatch('setArticle', article.title)">
+    <div class="link--image" @click="goToTheArticlePage(article.title)">
       <img class="image" :src="article.image.url" alt="">
     </div>
     <div class="content">
-      <h4 class="title" @click="store.dispatch('setArticle', article.title)">
+      <h4 class="title" @click="goToTheArticlePage(article.title)">
         <span>
           {{article.title}}
         </span>
@@ -62,7 +72,7 @@ defineProps({
 
   <!-- Large size -->
   <div v-if="size === 'large'" class="article-card--large">
-    <div class="link--image" @click="store.dispatch('setArticle', article.title)">
+    <div class="link--image" @click="goToTheArticlePage(article.title)">
       <img
         class="image"
         :src="article.image.url"
@@ -70,7 +80,7 @@ defineProps({
       >
     </div>
     <div class="content">
-      <h3 class="title" @click="store.dispatch('setArticle', article.title)">
+      <h3 class="title" @click="goToTheArticlePage(article.title)">
         <span>
           {{article.title}}
         </span>

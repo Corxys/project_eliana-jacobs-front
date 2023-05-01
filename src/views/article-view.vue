@@ -14,23 +14,19 @@ import {useStore} from "vuex";
 import {useRoute, useRouter} from "vue-router";
 import {marked} from "marked";
 
-// Images
 import shapeBottom from "@/assets/images/shapes/article-01.png";
 
-// Icons
 import scheduleIcon from "@/assets/icons/schedule.svg";
 import localisationIcon from "@/assets/icons/localisation.svg";
 import emailIcon from "@/assets/icons/email.svg";
 import linkIcon from "@/assets/icons/link.svg";
 
-// Utils
 import {formatDate} from "@/utils/formatDate";
 import {formatHour} from "@/utils/formatHour";
 
-// Components
 import ButtonCustomComponent from "@/components/shared-components/button-custom-component.vue";
 import MediaComponent from "@/components/shared-components/media-component.vue";
-import ArrowBackComponent from "@/components/arrow-back-component.vue";
+import ArrowBackComponent from "@/components/shared-components/arrow-back-component.vue";
 
 // Hook call
 const store = useStore();
@@ -87,8 +83,8 @@ const eventLocationLink = computed(() => {
   return GOOGLE_MAPS_LINK + eventLocation.value;
 });
 
-const backToTheNewsPage = () => {
-  router.push("/news");
+const backToTheNewsPage = async () => {
+  await router.push("/news");
 };
 </script>
 

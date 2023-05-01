@@ -1,10 +1,10 @@
 <script setup>
-import {ref, computed, watch} from "vue";
+import {ref, computed, watch, inject} from "vue";
 import {useStore} from "vuex";
 import {useRoute, useRouter} from "vue-router";
 import {marked} from "marked";
 
-import ArrowBackComponent from "@/components/arrow-back-component.vue";
+import ArrowBackComponent from "@/components/shared-components/arrow-back-component.vue";
 import MediaComponent from "@/components/shared-components/media-component.vue";
 import GalleryComponent from "@/components/shared-components/gallery-component.vue";
 
@@ -13,9 +13,10 @@ const route = useRoute();
 const router = useRouter();
 
 const projectDate = computed(() => project.value.date);
-const selectedFilter = computed(() => store.state.app.selectedFilter);
 
 let indexOfFocusedImage = ref(0);
+
+const colorTheme = inject("colorTheme");
 
 const projects = computed(() => store.state.projects);
 
@@ -23,12 +24,12 @@ const changeImageFocused = ({index}) => {
   indexOfFocusedImage.value = index;
 };
 const backOnProjectsPage = async () => {
-	await store.dispatch("setFilter", {"filter": selectedFilter.value});
 	await store.dispatch("setHasTransitionScreen",  false);
+
 	await router.back();
 };
 
-// Un-displays the image on preview if we returns in the project page.
+// Un-displays the image on preview if we return in the project page.
 watch(() => route, () => {
 	store.dispatch("setImageOnPreview", false);
 }, {"deep": true, "immediate": true});
@@ -46,7 +47,7 @@ const project = computed(() => {
 </script>
 
 <template>
-  <section class="project">
+  <section class="project" :class="{'project--dark': colorTheme === 'dark'}">
     <div v-if="project">
       <arrow-back-component :on-click="backOnProjectsPage" />
 
@@ -95,6 +96,19 @@ const project = computed(() => {
 <style scoped lang="scss">
 .project {
 	padding: var(--container-padding);
+  background-color: var(--epj-c-white);
+  color: var(--epj-c-black);
+
+  &--dark {
+    background:
+      radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 61%),
+      radial-gradient(circle at 42.94% 50.05%, #110F10, transparent 100%),
+      radial-gradient(circle at 45.89% 30.01%, #110F10, transparent 100%),
+      radial-gradient(circle at 99.17% 46.73%, #205251, transparent 100%),
+      radial-gradient(circle at 66.28% 54.41%, #110F10, transparent 100%),
+      radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+  }
+
   &__container {
     display: flex;
 		flex-direction: column-reverse;

@@ -75,6 +75,11 @@ export default function createMutations() {
 					...category.attributes,
 					"id": category.id,
 					"placeholder": category.attributes.placeholder.data?.attributes.url || null,
+					"types": [
+						...category.attributes.types.data.map((type) => (
+							type.attributes.name
+						)),
+					],
 				};
 				
 				return acc;
