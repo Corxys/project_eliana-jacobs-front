@@ -1,5 +1,15 @@
+<script setup>
+import {inject} from "vue";
+
+let isMenuOpen = inject("isMenuOpen");
+let colorTheme = inject("colorTheme");
+</script>
+
 <template>
-  <footer class="footer">
+  <footer
+    class="footer"
+    :class="{'footer--white': isMenuOpen && colorTheme === 'light' || colorTheme === 'dark'}"
+  >
     <div class="footer__credits">
       <router-link to="/about">
         EPJ
@@ -20,9 +30,13 @@
 	width: 100vw;
 	display: flex;
 	justify-content: space-between;
-  color: white;
   font-family: var(--font-primary);
   font-size: 12px;
+  color: var(--epj-c-black);
+
+  &--white {
+    color: var(--epj-c-white);
+  }
 
   &__credits, &__notices {
     position: absolute;

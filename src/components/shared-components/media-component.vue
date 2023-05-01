@@ -118,7 +118,7 @@ const displayImageOnPreview = () => {
   }
 
   &__copyright, &__preview {
-    height: 30px;
+    min-height: 30px;
     position: absolute;
     bottom: 0;
     background-color: var(--image-custom-preview-background-color);
@@ -129,7 +129,8 @@ const displayImageOnPreview = () => {
     display: none;
     align-items: center;
     left: 0;
-    padding: 0 8px;
+    padding: 5px 8px;
+    max-width: calc(100% - 40px);
   }
 
   &__preview {
