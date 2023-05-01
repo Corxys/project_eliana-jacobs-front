@@ -29,11 +29,9 @@ provide("isMenuOpen", isMenuOpen);
 provide("colorTheme", colorTheme);
 provide(DefaultApolloClient, apolloClient);
 
-// // Ref
-// const isTransitionScreenOpen = ref(false);
-
 watch(() => route, (param) => {
-	if (param.fullPath.includes("/projects/visual-art") ||
+	if (
+    param.fullPath.includes("/projects/visual-art") ||
 		param.fullPath.includes("/projects/art-performance") ||
 		param.fullPath.includes("/projects/digital-media")
 	) {

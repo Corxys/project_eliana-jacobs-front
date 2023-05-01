@@ -17,6 +17,14 @@ import ArticleCard from "@/components/news-components/article-card-component.vue
 
 // Images
 import shapeTop from "@/assets/images/shapes/news-01.png";
+
+const newsSelected = computed(() => {
+  if (!news.value) {
+    return null;
+  }
+
+  return news.value;
+});
 </script>
 
 <template>
@@ -26,7 +34,7 @@ import shapeTop from "@/assets/images/shapes/news-01.png";
         News
       </h1>
 
-      <div v-if="news" class="news__content">
+      <div v-if="newsSelected" class="news__content">
         <header class="news__header">
           <article class="news__highlight">
             <!-- The last article published -->

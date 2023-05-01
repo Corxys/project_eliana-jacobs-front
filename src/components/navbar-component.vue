@@ -16,15 +16,15 @@ let isMenuOpen = inject("isMenuOpen");
 let colorTheme = inject("colorTheme");
 const categories = computed(() => store.getters.categories);
 
+// By clicking on a category link.
 const getProjectsByCategory = (name) => {
   store.dispatch("setCategory", name);
-	store.dispatch("setFilter", "all");
 
   isMenuOpen.value = false;
 };
 const goOnPage = async (src) => {
   await store.dispatch("setCategory", "");
-  await store.dispatch("setFilter", "all");
+  await store.dispatch("setFilter", "All");
 
   await router.push(src);
 

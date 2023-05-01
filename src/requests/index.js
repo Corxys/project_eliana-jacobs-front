@@ -80,6 +80,13 @@ const CATEGORIES_QUERY = gql`query Categories {
             }
           }
         }
+        types {
+        	data {
+        		attributes {
+        			name
+        		}
+        	}
+        }
       }
       id
     }

@@ -2,7 +2,7 @@ export default function createState() {
 	return {
 		"selected": {
 			"category": "",
-			"filter": "all",
+			"filter": "",
 			"projects": [],
 			"project": "",
 			"article": "",
@@ -16,8 +16,6 @@ export default function createState() {
 		"app": {
 			"hasTransitionScreen": false,
 			"hasImageOnPreview": false,
-			"selectedFilter": "all",
-			"selectedCategory": "",
 			"colorTheme": "dark",
 			"isLoading": true,
 			"errorMessage": "",

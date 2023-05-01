@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed} from "vue";
+import {computed, ref} from "vue";
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
 
@@ -16,11 +16,9 @@ import shapeBottom from "@/assets/images/shapes/projects-01.png";
 const store = useStore();
 const route = useRoute();
 
-const filters = computed(() => store.getters.filters);
+const filters = computed(() => store.state.filters);
 const projects = computed(() => store.getters.projects);
 const layout = computed(() => store.getters.layout);
-const filtered = computed(() => store.getters.filtered);
-
 const hasTransitionScreen = computed(() => store.state.app.hasTransitionScreen);
 const selectedFilter = computed(() => store.state.selected.filter);
 
@@ -29,42 +27,56 @@ let indexOfFocusedImage = ref(0);
 const selectFilter = (name) => {
   indexOfFocusedImage.value = 0;
 
-  store.dispatch("setFilter", slugifyString(name));
+  store.dispatch("setFilter", name);
   store.dispatch("setHasTransitionScreen", false);
 };
 const changeImageFocused = ({index}) => {
   indexOfFocusedImage.value = index;
 };
 
-// Select the filters, depending on the category selected.
+// Select the appropriate filter depending on the category.
 const displayedFilters = computed(() => {
-  if (!filtered.value) {
-    return [];
+  if (!filters.value) {
+    return null;
   }
 
-  // "Circus" is the only projects page where the "All" filter is necessary.
-  if (route.params.slug === "circus") {
-    const filtersMap = filters.value.map((filterMap) => filterMap);
+  const categoryName = route.params.slug;
+  const storedSelectedFilter = window.localStorage.getItem("filter");
 
-    filtersMap.unshift({"id": 0, "name": "all"});
+  const filtersByCategory = Object.values(filters.value).filter((filter) => {
+    return filter.category === categoryName;
+  });
 
-    store.dispatch("setFilter", "all");
+  // If there's no filters.
+  if (!filtersByCategory.length) {
+    return null;
+  }
 
-    return filtersMap;
+  // "Circus" is the only category where the "all" filter is necessary.
+  if (categoryName === "circus") {
+    filtersByCategory.unshift({"id": "0", "name": "All", "image": "", "category": "circus"});
+  }
+
+  if (filtersByCategory.some((filter) => slugifyString(filter.name) === storedSelectedFilter)) {
+    // If there is already a filter selected, and it corresponds to one of the filters of the selected category, it is selected again.
+    store.dispatch("setFilter", storedSelectedFilter);
+
+    store.dispatch("setHasTransitionScreen", false);
   } else {
-    return filters.value;
+    // Otherwise, display the screen to select the filter.
+    store.dispatch("setHasTransitionScreen", true);
   }
+
+  return filtersByCategory;
 });
 
 // Select the project, depending on the category and the filter selected, if any.
 const selectedProjects = computed(() => {
-  if (!projects.value) {
-    return null;
-  }
-
   const projectsInTheCategory = projects.value[route.params.slug];
 
-  if (!projectsInTheCategory.length) {
+  store.commit("setCategory", route.params.slug);
+
+  if (!projects.value || !projectsInTheCategory.length) {
     return null;
   }
 
@@ -79,7 +91,7 @@ const selectedProjects = computed(() => {
 </script>
 
 <template>
-  <section class="projects">
+  <section class="projects" :class="{'projects--dark': layout === 'gallery'}">
     <div v-if="selectedProjects" class="projects__container">
       <!-- Filters -->
       <div v-if="displayedFilters" class="projects__filters">
@@ -98,14 +110,14 @@ const selectedProjects = computed(() => {
 
       <!-- Transition screen -->
       <transition-component
-        v-if="filtered && hasTransitionScreen"
+        v-if="filters && hasTransitionScreen"
         :types="displayedFilters"
         @select-filter="selectFilter"
       />
 
       <!-- Projects -->
       <div class="projects__content">
-        <!-- Gallery layout	-->
+        <!--        Gallery layout-->
         <div v-if="layout === 'gallery' && selectedProjects" class="projects__gallery">
           <div class="projects__gallery-images">
             <gallery-component :on-click="changeImageFocused" :images="selectedProjects" />
@@ -118,7 +130,7 @@ const selectedProjects = computed(() => {
           </div>
         </div>
 
-        <!-- List layout -->
+        <!--       List layout -->
         <div v-if="layout === 'list' && selectedProjects" class="projects__list">
           <card-component
             v-for="project of selectedProjects"
@@ -139,6 +151,20 @@ const selectedProjects = computed(() => {
 
 <style scoped lang="scss">
 .projects {
+  min-height: 100vh;
+  background-color: var(--epj-c-white);
+  color: var(--epj-c-black);
+
+  &--dark {
+    background:
+      radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 61%),
+      radial-gradient(circle at 42.94% 50.05%, #110F10, transparent 100%),
+      radial-gradient(circle at 45.89% 30.01%, #110F10, transparent 100%),
+      radial-gradient(circle at 99.17% 46.73%, #205251, transparent 100%),
+      radial-gradient(circle at 66.28% 54.41%, #110F10, transparent 100%),
+      radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+  }
+
   &__container {
     min-height: 100vh;
     padding: var(--container-padding);
