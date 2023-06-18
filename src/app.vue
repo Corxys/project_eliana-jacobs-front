@@ -54,7 +54,7 @@ watch(() => route, (param) => {
             alt="Eliana's logotype"
           >
           <h4 class="loading-screen__text">
-            Loading screen
+            Loading
           </h4>
         </div>
       </div>
