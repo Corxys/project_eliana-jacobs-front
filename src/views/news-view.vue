@@ -5,12 +5,10 @@
  * @property {string} article.id ID of an article.
  **/
 
-
 import {computed} from "vue";
 import {useStore} from "vuex";
 
-const store = useStore();
-const news = computed(() => store.getters.news);
+const {state} = useStore();
 
 // Components
 import ArticleCard from "@/components/news-components/article-card-component.vue";
@@ -18,12 +16,11 @@ import ArticleCard from "@/components/news-components/article-card-component.vue
 // Images
 import shapeTop from "@/assets/images/shapes/news-01.png";
 
-const newsSelected = computed(() => {
-  if (!news.value) {
-    return null;
-  }
-
-  return news.value;
+/**
+ * Get all the news.
+ **/
+const news = computed(() => {
+  return state.news ? Object.values(state.news) : null;
 });
 </script>
 
@@ -34,7 +31,7 @@ const newsSelected = computed(() => {
         News
       </h1>
 
-      <div v-if="newsSelected" class="news__content">
+      <div v-if="news" class="news__content">
         <header class="news__header">
           <article class="news__highlight">
             <!-- The last article published -->
@@ -92,7 +89,6 @@ const newsSelected = computed(() => {
 
 <style scoped lang="scss">
 .news {
-	padding: var(--container-padding);
 	padding-bottom: 0;
 	background:
     radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 55%),
@@ -109,7 +105,7 @@ const newsSelected = computed(() => {
 
   &__header {
     padding-bottom: 30px;
-    border-bottom: 1px solid var(--epj-c-white);
+    border-bottom: 1px solid var(--color-white);
     margin-bottom: 30px;
   }
 
@@ -148,18 +144,18 @@ const newsSelected = computed(() => {
   }
 
   &__all {
-    background-color: var(--color-section-background);
+    background-color: var(--color-secondary-opacified);
     padding: 30px 30px 100px 30px;
   }
 
   &__articles {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: var(--spacing-between-horizontal-elements);
+    column-gap: var(--margin-x-elements);
   }
 
   &__subtitle {
-    margin-bottom: var(--spacing-subtitle-small);
+    margin-bottom: 30px;
   }
 
   &__shape {

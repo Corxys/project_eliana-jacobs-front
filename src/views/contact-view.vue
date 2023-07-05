@@ -155,7 +155,6 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
 <style scoped lang="scss">
 .contact {
 	display: flex;
-	padding: var(--container-padding);
 	min-height: 100vh;
 	background:
 					radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 61%),
@@ -166,6 +165,7 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
 					radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
 
 	&__container {
+    z-index: 10;
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
@@ -204,8 +204,8 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
   }
 
   &__input {
-    border: 1px solid var(--epj-c-white);
-    background-color: var(--color-input-background);
+    border: 1px solid var(--color-white);
+    background-color: var(--color-white-opacified);
     height: 40px;
     padding: 0 15px;
 
@@ -226,7 +226,7 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
     display: flex;
 
     :deep(.icon-social:nth-child(1)) {
-      margin-right: var(--spacing-between-buttons);
+      margin-right: 10px;
     }
   }
 
@@ -236,7 +236,7 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
   }
 
   .error {
-    border: 1px solid var(--epj-c-main);
+    border: 1px solid var(--color-main);
   }
 
 	&__shape {

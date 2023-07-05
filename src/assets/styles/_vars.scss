@@ -1,129 +1,54 @@
+// Import
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
+// Font face
 @font-face {
   font-family: 'MrDarcy';
   src: url(../fonts/mr-darcy-bold.ttf) format("truetype");
 }
 
-// PROJECTS
 :root {
-  --card-border-color: var(--epj-c-black);
-  --card-text-hover-color: var(--epj-c-main);
-  --image-custom-preview-background-color: var(--epj-c-main);
-  --image-custom-preview-text-color: var(--epj-c-white);
-}
+  // Design system
+  --color-main: #58003C;
+  --color-secondary-opacified: rgba(113, 206, 212, 0.1);
+  --color-white: #F9FDFD;
+  --color-white-opacified: rgba(249, 253, 253, 0.2);
+  --color-black: #110F10;
+  --color-black-opacified: rgba(17, 15, 16, 0.95);
 
-// General
-:root {
-  // Size
-  --100-vh: 1vh;
-
-  // Colors
-  --color-button-background-default: var(--epj-c-main);
-}
-
-// Mobile
-:root {
-  // Heading
-  --h1-font-size: 20px;
-
-  // Semantic rules
-  --container-padding: 130px 10% 95px 10%;
-}
-
-// Desktop
-@media (min-width: 768px) {
-  :root {
-    // Heading
-    --h1-font-size: 40px;
-
-    // Semantic rules
-    --container-padding: 130px 20% 130px 20%;
-  }
-}
-
-
-
-/* Color palette */
-:root {
-  --epj-c-black: #110F10;
-  --epj-c-white: #F9FDFD;
-  --epj-c-main: #58003C;
-}
-
-/* Fonts variables */
-:root {
+  // Fonts
   --font-primary: "MrDarcy", serif;
   --font-secondary: "Roboto", sans-serif;
+
+  // Layout
+  --padding-page-desktop: 12vh 20% 8.8vh 20%;
+  --padding-page-mobile: 12vh 30px 8.8vh 30px;
+  --margin-x-elements: 30px;
+  --margin-y-elements: 60px;
+
+  // Colors
+  --color-overlay-background: var(--color-black-opacified);
+  --color-background-label: var(--color-main);
+  --color-text-label: var(--color-white);
+  --color-background-button: var(--color-main);
+  --color-border-button: var(--color-main);
+  --color-background-button-hovered: var(--color-black);
+  --color-border-button-hovered: var(--color-white);
+  --color-background-filter: var(--color-black);
+  --color-border-filter:var(--color-white);
+  --color-background-filter-hovered: var(--color-white);
+  --color-border-filter-hovered: var(--color-white);
+  --color-text-filter-hovered: var(--color-black);
+  --color-background-filter-active: var(--color-main);
+  --color-border-filter-active: var(--color-main);
+
+  // Dark theme colors
+  --color-background-dark: var(--color-black);
+  --color-text-dark: var(--color-white);
+  --color-burger-lines-dark: var(--color-white);
+
+  // Light theme colors
+  --color-background-light: var(--color-white);
+  --color-text-light: var(--color-black);
+  --color-burger-lines-light: var(--color-black);
 }
-
-/* Semantic color variables */
-:root {
-  /* Default (dark) */
-  --dark-filter-default-background-color: var(--epj-c-black);
-  --dark-filter-default-border-color: var(--epj-c-white);
-  --dark-filter-default-text-color: var(--epj-c-white);
-  /* Hover (dark) */
-  --dark-filter-hover-background-color: red;
-  --dark-filter-hover-border-color: red;
-  --dark-filter-hover-text-color: blue;
-  /* Default (light) */
-  --light-filter-default-background-color: var(--epj-c-white);
-  --light-filter-default-border-color: var(--epj-c-main);
-  --light-filter-default-text-color: var(--epj-c-main);
-  /* Active */
-  --both-filter-active-background-color: var(--epj-c-main);
-  --both-filter-active-border-color: var(--epj-c-main);
-  --both-filter-active-text-color: var(--epj-c-white);
-}
-
-
-
-
-
-
-
-
-
-/* Semantic color variables */
-:root {
-  --color-background-dark: var(--epj-c-black);
-  --color-text-dark: var(--epj-c-white);
-  --color-background-light: var(--epj-c-light);
-  --color-text-light: var(--epj-c-black);
-
-  ;
-  --color-button-background-hover: var(--epj-c-black);
-  --color-button-border-hover: var(--epj-c-white);
-
-  --color-section-background: rgba(113, 206, 212, 0.1);
-  --color-overlay-background: rgba(17, 15, 16, 0.95);
-
-  --color-input-background: rgba(249, 253, 253, 0.2);
-}
-
-/* Semantic text variables */
-:root {
-  --spacing-subtitle-small: 30px;
-  --spacing-subtitle-medium: 60px;
-  --spacing-h3: 5px;
-  --spacing-h4: 5px;
-}
-
-/* Semantic dimension variables */
-:root {
-  --min-height-component: 100vh;
-}
-
-/* Semantic spacing variables */
-:root {
-  --spacing-section-padding-top: 105px;
-  --spacing-section-padding-bottom: 105px;
-  --spacing-section-padding-x: 20%;
-
-  --spacing-between-buttons: 10px;
-
-  --spacing-between-horizontal-elements: 30px;
-}
-
-

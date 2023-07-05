@@ -1,11 +1,11 @@
 <script setup>
-import {computed, ref} from "vue";
+import {computed, onMounted} from "vue";
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
 
 import {slugifyString} from "@/utils/slugify";
+import {shuffleArray} from "@/utils/shuffleArray";
 
-import TransitionComponent from "@/components/projects-components/transition-component.vue";
 import GalleryComponent from "@/components/shared-components/gallery-component.vue";
 import MediaComponent from "@/components/shared-components/media-component.vue";
 import CardComponent from "@/components/projects-components/card-component.vue";
@@ -13,101 +13,125 @@ import PlaceholderComponent from "@/components/projects-components/placeholder-c
 
 import shapeBottom from "@/assets/images/shapes/projects-01.png";
 
-const store = useStore();
+const {state, getters, dispatch} = useStore();
 const route = useRoute();
 
-const filters = computed(() => store.state.filters);
-const projects = computed(() => store.getters.projects);
-const layout = computed(() => store.getters.layout);
-const hasTransitionScreen = computed(() => store.state.app.hasTransitionScreen);
-const selectedFilter = computed(() => store.state.selected.filter);
+const indexOfFocusedImage = computed(() => state.app.focusedImageIndex);
+const selectedFilter = computed(() => state.selected.filter);
+const lightTheme = computed(() => getters.lightTheme);
+const filters = computed(() => getters.filters(route.params.slug));
 
-let indexOfFocusedImage = ref(0);
-
-const selectFilter = (name) => {
-  indexOfFocusedImage.value = 0;
-
-  store.dispatch("setFilter", name);
-  store.dispatch("setHasTransitionScreen", false);
-};
-const changeImageFocused = ({index}) => {
-  indexOfFocusedImage.value = index;
-};
-
-// Select the appropriate filter depending on the category.
-const displayedFilters = computed(() => {
-  if (!filters.value) {
-    return null;
+/**
+ * Select the appropriate layout for the projects.
+ **/
+const layout = computed(() => {
+  if (!state.selected.category) {
+    return;
   }
 
-  const categoryName = route.params.slug;
-  const storedSelectedFilter = window.localStorage.getItem("filter");
-
-  const filtersByCategory = Object.values(filters.value).filter((filter) => {
-    return filter.category === categoryName;
-  });
-
-  // If there's no filters.
-  if (!filtersByCategory.length) {
-    return null;
-  }
-
-  // "Circus" is the only category where the "all" filter is necessary.
-  if (categoryName === "circus") {
-    filtersByCategory.unshift({"id": "0", "name": "All", "image": "", "category": "circus"});
-  }
-
-  if (filtersByCategory.some((filter) => slugifyString(filter.name) === storedSelectedFilter)) {
-    // If there is already a filter selected, and it corresponds to one of the filters of the selected category, it is selected again.
-    store.dispatch("setFilter", storedSelectedFilter);
-
-    store.dispatch("setHasTransitionScreen", false);
+  if (state.selected.category === "circus") {
+    return "gallery";
   } else {
-    if (categoryName === "circus") {
-      console.log("Circus projects!");
-
-      store.dispatch("setHasTransitionScreen", false);
-      store.dispatch("setFilter", "all");
-
-      return filtersByCategory;
-    }
-
-    // Otherwise, display the screen to select the filter.
-    store.dispatch("setHasTransitionScreen", true);
-    console.log("Other category!");
-
+    return "list";
   }
-
-  return filtersByCategory;
 });
 
-// Select the project, depending on the category and the filter selected, if any.
-const selectedProjects = computed(() => {
-  const projectsInTheCategory = projects.value[route.params.slug];
 
-  store.commit("setCategory", route.params.slug);
-
-  if (!projects.value || !projectsInTheCategory.length) {
+/**
+ * Select the appropriate projects, according to the category and the filter selected.
+ *
+ * @param {object} state - State of the application.
+ **/
+const projects = computed(() => {
+  if (!state.projects || state.selected.category === "") {
     return null;
   }
 
-  // If the selected filter is equal to all, return all the projects.
-  if (store.state.selected.filter === "all") {
-    return projectsInTheCategory;
+  const typesReturnAllProjects = ["", "all"];
+
+  return Object.values(state.projects)
+    .filter((project) => {
+      // Filters by category.
+      return slugifyString(project.category) === state.selected.category;
+    })
+    .filter((project) => {
+      // Filters by type.
+      if (typesReturnAllProjects.includes(state.selected.filter)) {
+        return project;
+      }
+
+      return slugifyString(project.type) === state.selected.filter;
+    })
+    .sort((projectA, projectB) => {
+      if (projectA.index < projectB.index) {
+        return -1;
+      }
+
+      if (projectA.index > projectB.index) {
+        return 1;
+      }
+
+      return 0;
+    });
+});
+
+/**
+ * Returns a shuffled list of medias if the selected category is circus.
+ **/
+const medias = computed(() => {
+  if (!projects.value || state.selected.category !== "circus") {
+    return null;
   }
 
-  // Select the project, according to the selected filter.
-  return projectsInTheCategory.filter((project) => project.type ? slugifyString(project?.type) === selectedFilter.value : project);
+  return shuffleArray(projects.value.reduce((acc, project) => {
+    acc.push(
+      ...project.medias.map((media) => ({
+        ...media,
+        "type": slugifyString(project.type),
+      }))
+    );
+
+    return acc;
+  }, []));
+});
+
+/**
+ * Changes the focused image.
+ *
+ * @param index - Index of the selected image in the "medias" array.
+ **/
+const changeImageFocused = ({index}) => {
+  dispatch("setFocusedImageIndex", index);
+};
+
+/**
+ * Changes the selected filter.
+ *
+ * @param name - Name of the selected filter.
+ **/
+const selectFilter = (name) => {
+  dispatch("setFocusedImageIndex", 0);
+  dispatch("setFilter", name);
+};
+
+/**
+ * Retrieve the selected category with the slug.
+ **/
+onMounted(async () => {
+  await dispatch("setCategory", route.params.slug);
 });
 </script>
 
 <template>
-  <section class="projects" :class="{'projects--dark': layout === 'gallery'}">
-    <div v-if="selectedProjects" class="projects__container">
+  <section class="projects" :class="{'projects--light': lightTheme}">
+    <!-- Placeholder when there's no projects in the category -->
+    <placeholder-component v-if="(!projects || !projects.length)" />
+
+    <div v-else class="projects__container">
       <!-- Filters -->
-      <div v-if="displayedFilters" class="projects__filters">
+      <div v-if="filters" class="projects__filters">
         <div
-          v-for="filter of displayedFilters"
+          v-for="filter of filters"
           :key="filter.id"
           class="projects__filter"
           :class="{'projects__filter--active': slugifyString(filter.name) === selectedFilter}"
@@ -119,66 +143,77 @@ const selectedProjects = computed(() => {
         </div>
       </div>
 
-      <!-- Transition screen -->
-      <transition-component
-        v-if="filters && hasTransitionScreen"
-        :types="displayedFilters"
-        @select-filter="selectFilter"
-      />
-
       <!-- Projects -->
       <div class="projects__content">
-        <!--        Gallery layout-->
-        <div v-if="layout === 'gallery' && selectedProjects" class="projects__gallery">
-          <div class="projects__gallery-images">
-            <gallery-component :on-click="changeImageFocused" :images="selectedProjects" />
+        <div class="projects__content">
+          <!-- Gallery layout-->
+          <div v-if="layout === 'gallery'" class="projects__gallery">
+            <div class="projects__gallery-images">
+              <gallery-component :on-click="changeImageFocused" :images="medias" />
+            </div>
+            <div v-if="medias[indexOfFocusedImage]" class="projects__gallery-highlight">
+              <media-component
+                :media="medias[indexOfFocusedImage]"
+                :has-preview="true"
+              />
+            </div>
           </div>
-          <div v-if="selectedProjects[indexOfFocusedImage]" class="projects__gallery-highlight">
-            <media-component
-              :media="selectedProjects[indexOfFocusedImage]"
-              :has-preview="true"
+
+          <!-- List layout -->
+          <div v-if="layout === 'list'" class="projects__list">
+            <card-component
+              v-for="project of projects"
+              :key="project.id"
+              :project="project"
             />
           </div>
         </div>
-
-        <!--       List layout -->
-        <div v-if="layout === 'list' && selectedProjects" class="projects__list">
-          <card-component
-            v-for="project of selectedProjects"
-            :key="project.id"
-            :project="project"
-          />
-        </div>
+        <!---->
+        <!-- Shape in the background -->
+        <img v-if="layout === 'gallery'" class="projects__shape" :src="shapeBottom" alt="Shape in the bottom of the site.">
       </div>
     </div>
-
-    <!-- Shape in the background -->
-    <img v-if="layout === 'gallery'" class="projects__shape" :src="shapeBottom" alt="Shape in the bottom of the site.">
-
-    <!-- Placeholder when there's no projects in the category -->
-    <placeholder-component v-if="!selectedProjects" />
   </section>
 </template>
 
 <style scoped lang="scss">
 .projects {
   min-height: 100vh;
-  background-color: var(--epj-c-white);
-  color: var(--epj-c-black);
+  background:
+    radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 61%),
+    radial-gradient(circle at 42.94% 50.05%, #110F10, transparent 100%),
+    radial-gradient(circle at 45.89% 30.01%, #110F10, transparent 100%),
+    radial-gradient(circle at 99.17% 46.73%, #205251, transparent 100%),
+    radial-gradient(circle at 66.28% 54.41%, #110F10, transparent 100%),
+    radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
 
-  &--dark {
-    background:
-      radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 61%),
-      radial-gradient(circle at 42.94% 50.05%, #110F10, transparent 100%),
-      radial-gradient(circle at 45.89% 30.01%, #110F10, transparent 100%),
-      radial-gradient(circle at 99.17% 46.73%, #205251, transparent 100%),
-      radial-gradient(circle at 66.28% 54.41%, #110F10, transparent 100%),
-      radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+  &--light {
+    background-color: var(--color-white);
+    background-image: none;
+
+    .projects {
+      &__filter {
+        background-color: var(--color-white);
+        border: 1px solid var(--color-main);
+        color: var(--color-main);
+
+        &:hover {
+          background-color: var(--color-black);
+          border-color: var(--color-black);
+          color: var(--color-white);
+        }
+
+        &--active {
+          background-color: var(--color-main);
+          color: var(--color-white);
+        }
+      }
+    }
   }
 
   &__container {
     min-height: 100vh;
-    padding: var(--container-padding);
+    padding: var(--padding-page-mobile);
   }
 
   &__filters {
@@ -197,6 +232,8 @@ const selectedProjects = computed(() => {
     text-transform: uppercase;
     transition: 0.2s ease-in all;
     height: 32px;
+    background-color: var(--color-background-filter);
+    border: 1px solid var(--color-border-filter);
 
     &:last-child {
       margin-right: 0;
@@ -204,6 +241,17 @@ const selectedProjects = computed(() => {
 
     span {
       line-height: 32px;
+    }
+
+    &:hover {
+      background-color: var(--color-background-filter-hovered);
+      border: 1px solid var(--color-border-filter-hovered);
+      color: var(--color-text-filter-hovered);
+    }
+
+    &--active {
+      background-color: var(--color-background-filter-active);
+      border: 1px solid var(--color-border-filter-active);
     }
   }
 
@@ -245,8 +293,12 @@ const selectedProjects = computed(() => {
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 968px) {
 	.projects {
+    &__container {
+      padding: var(--padding-page-desktop);
+    }
+
 		&__list {
 			grid-template-columns: repeat(2, 1fr);
 		}

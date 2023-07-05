@@ -107,7 +107,7 @@ const displayImageOnPreview = () => {
   height: 100%;
 }
 
-// MEDIA IMAGE
+// Media image
 .image {
  position: relative;
   width: 100%;
@@ -121,8 +121,8 @@ const displayImageOnPreview = () => {
     min-height: 30px;
     position: absolute;
     bottom: 0;
-    background-color: var(--image-custom-preview-background-color);
-    color: var(--image-custom-preview-text-color);
+    background-color: var(--color-main);
+    color: var(--color-white);
   }
 
   &__copyright {

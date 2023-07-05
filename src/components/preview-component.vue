@@ -42,7 +42,7 @@ const undisplayedImageOnPreview = () => {
 		max-width: 80%;
 		max-height: 80%;
 		padding: 5px;
-		border: 1px solid var(--epj-c-white);
+		border: 1px solid var(--color-white);
 	}
 }
 </style>

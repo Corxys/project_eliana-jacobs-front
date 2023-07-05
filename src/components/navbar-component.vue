@@ -8,29 +8,46 @@ import logotypeWhite from "@/assets/images/logo-navbar-w.png";
 import logotypeBlack from "@/assets/images/logo-navbar-b.png";
 
 import {links} from "@/assets/data/links";
+import {slugifyString} from "@/utils/slugify";
 
+const {getters, dispatch} = useStore();
 const router = useRouter();
-const store = useStore();
 
 let isMenuOpen = inject("isMenuOpen");
-let colorTheme = inject("colorTheme");
-const categories = computed(() => store.getters.categories);
+const lightTheme = computed(() => getters.lightTheme);
+const categories = computed(() => getters.categories);
 
 // By clicking on a category link.
-const getProjectsByCategory = (name) => {
-  store.dispatch("setCategory", name);
+const getProjectsByCategory = async (name) => {
+  await dispatch("setCategory", name);
+
+  isMenuOpen.value = false;
+
+  await router.push(`/projects/${slugifyString(name)}`);
+};
+const goToHomePage = async () => {
+  await dispatch("setFilter", "All");
+  await dispatch("setCategory", "");
+  await dispatch("setProject", "");
 
   isMenuOpen.value = false;
 };
 const goOnPage = async (src) => {
-  await store.dispatch("setCategory", "");
-  await store.dispatch("setFilter", "All");
+  await dispatch("setFilter", "All");
+  await dispatch("setCategory", "");
+  await dispatch("setProject", "");
 
   await router.push(src);
 
   isMenuOpen.value = false;
 };
 
+// Color theme of the navbar.
+const navbarColorTheme = computed(() => {
+  return lightTheme.value || lightTheme.value && isMenuOpen.value;
+});
+
+// GSAP animations.
 const onBeforeEnter = (el) => {
   gsap.set(el, {
     "scaleY": 0,
@@ -70,57 +87,49 @@ const onLeave = (el, done) => {
 </script>
 
 <template>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <!-- LOGO-->
+  <nav
+    class="navbar"
+    :class="{'navbar--light': navbarColorTheme}"
+  >
+    <!-- Logo -->
     <div class="navbar__logo">
-      <router-link to="/" @click="isMenuOpen = false">
+      <router-link to="/" @click="goToHomePage">
         <img
-          v-if="isMenuOpen && colorTheme === 'light' || colorTheme === 'dark'"
-          class="navbar__logo-src"
-          alt="Name of Eliana's handwritten (white version)"
-          :src="logotypeWhite"
-        >
-        <img
-          v-else
+          v-if="navbarColorTheme"
           class="navbar__logo-src"
           alt="Name of Eliana's handwritten (black version)"
           :src="logotypeBlack"
         >
+        <img
+          v-else
+          class="navbar__logo-src"
+          alt="Name of Eliana's handwritten (white version)"
+          :src="logotypeWhite"
+        >
       </router-link>
     </div>
 
-    <!-- MENU -->
-    <div class="navbar__menu">
-      <!-- MENU LINES WITH BEFORE AFTER TO MAKE TOP & BOTTOM LINES -->
+    <!-- Menu -->
+    <div class="navbar__button" @click="isMenuOpen = !isMenuOpen">
+      <!-- Menu lines with with pseudo class ":before" and ":after" to make top and bottom lines -->
       <div
-        class="navbar__menu-lines"
-        :class="{
-          'navbar__menu-lines--white': isMenuOpen && colorTheme === 'light' || colorTheme === 'dark',
-          'navbar__menu-lines--active': isMenuOpen,
-        }"
-        @click="isMenuOpen = !isMenuOpen"
+        class="navbar__burger"
+        :class="{'navbar__burger--active': isMenuOpen}"
       >
-        <!-- MIDDLE LINE WITH BEFORE TO MAKE CROSS ANIMATION -->
+        <!-- Middle line with pseudo class ":before" to make cross animation -->
         <span
-          class="navbar__menu-line"
-          :class="{
-            'navbar__menu-line--white': isMenuOpen && colorTheme === 'light' || colorTheme === 'dark',
-            'navbar__menu-line--active': isMenuOpen,
-          }"
+          class="navbar__burger-line"
+          :class="{'navbar__burger-line--active': isMenuOpen}"
         />
       </div>
 
-      <!-- MENU TEXT -->
-      <div
-        class="navbar__menu-text"
-        :class="{'navbar__menu-text--white': isMenuOpen && colorTheme === 'light' || colorTheme === 'dark'}"
-      >
+      <!-- Menu text -->
+      <div class="navbar__text">
         MENU
       </div>
     </div>
 
-    <!-- MENU OVERLAY -->
+    <!-- Overlay menu -->
     <transition
       @before-enter="onBeforeEnter"
       @enter="onEnter"
@@ -157,12 +166,37 @@ const onLeave = (el, done) => {
 <style scoped lang="scss">
 @import "../assets/styles/transitions";
 
-// NAVBAR
+// Navbar
 .navbar {
-	width: 100vw;
+  position: absolute;
+  z-index: 900;
+  width: 100vw;
 
-  // LOGO & MENU BURGER
-  &__logo, &__menu {
+  // Light theme
+  &--light {
+    .navbar {
+      &__burger {
+        &:before, &:after {
+          background-color: var(--color-burger-lines-light);
+        }
+
+        &-line {
+          background-color: var(--color-burger-lines-light);
+
+          &:before {
+            background-color: var(--color-burger-lines-light);
+          }
+        }
+      }
+
+      &__text {
+        color: var(--color-text-light);
+      }
+    }
+  }
+
+  // Logo and button menu
+  &__logo, &__button {
     z-index: 400;
     position: absolute;
     height: 100px;
@@ -171,61 +205,54 @@ const onLeave = (el, done) => {
     flex-wrap: nowrap;
   }
 
-  // LOGO
+  // Logo
   &__logo {
     left: 30px;
   }
 
-  // MENU BURGER
-  &__menu {
+  // Button menu
+  &__button {
     cursor: pointer;
     right: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     row-gap: 8px;
+  }
 
-    // MENU BURGER LINES
-    &-lines {
-      position: relative;
-      width: 42px;
-      height: 30px;
+  // Lines of the burger menu
+  &__burger {
+    position: relative;
+    width: 42px;
+    height: 30px;
 
-      // TOP & BOTTOM LINES
+    // Top and bottom lines
+    &:before, &:after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      background-color: var(--color-burger-lines-dark);
+      transition: width 0.2s ease-in-out 0.4s;
+    }
+
+    &:before {
+      top: 0;
+      left: 0;
+    }
+
+    &:after {
+      bottom: 0;
+      right: 0;
+    }
+
+    &--active {
       &:before, &:after {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 4px;
-        background-color: var(--color-text-light);
-        transition: width 0.2s ease-in-out 0.4s;
-      }
-      &:before {
-        top: 0;
-        left: 0;
-      }
-      &:after {
-        bottom: 0;
-        right: 0;
-      }
-
-      // WHITE THEME TOP & BOTTOM LINES
-      &--white {
-        &:before, &:after {
-          background-color: var(--color-text-dark)
-        }
-      }
-
-      // MENU ACTIVE TOP & BOTTOM LINES
-      &--active {
-        &:before, &:after {
-          width: 0;
-          transition: all 0.2s ease-in-out;
-        }
+        width: 0;
+        transition: all 0.2s ease-in-out;
       }
     }
 
-    // MIDDLE LINE
     &-line {
       position: absolute;
       top: 50%;
@@ -233,7 +260,7 @@ const onLeave = (el, done) => {
       display: block;
       width: 100%;
       height: 4px;
-      background-color: var(--color-text-light);
+      background-color: var(--color-burger-lines-dark);
       transition: transform 0.2s ease-in-out;
 
       &:before {
@@ -241,16 +268,8 @@ const onLeave = (el, done) => {
         position: absolute;
         width: 100%;
         height: 100%;
-        background-color: var(--color-text-light);
+        background-color: var(--color-burger-lines-dark);
         transition: transform 0.2s ease-in-out;
-      }
-
-      // WHITE THEME MIDDLE LINE
-      &--white {
-        background-color: var(--color-text-dark);
-        &:before, &:after {
-          background-color: var(--color-text-dark);
-        }
       }
 
       &--active {
@@ -263,16 +282,9 @@ const onLeave = (el, done) => {
         }
       }
     }
-
-    // BUTTON TEXT
-    &-text {
-      &--white {
-        color: var(--color-text-dark);
-      }
-    }
   }
 
-  // OVERLAY
+  // Overlay
   &__overlay {
     z-index: 100;
     position: absolute;
@@ -299,18 +311,13 @@ const onLeave = (el, done) => {
     cursor: pointer;
     opacity: 0;
     font-size: 3.8vh;
-    height: 6vh;
     font-family: var(--font-primary);
     margin: 5px 0;
-    padding: 0 30px;
+    padding: 1.2vh 3vh 0.7vh 3vh;
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: var(--epj-c-main);
-    }
-
-    &-text {
-      line-height: 6vh;
+      background-color: var(--color-main);
     }
 
     &:nth-child(3) {
@@ -319,10 +326,11 @@ const onLeave = (el, done) => {
   }
 }
 
-// RESPONSIVE DESKTOP
+
+// Responsive desktop
 @media (min-width: 768px) {
 	.navbar {
-		&__logo, &__menu {
+		&__logo, &__button {
 			position: fixed;
 		}
 	}

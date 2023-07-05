@@ -1,4 +1,6 @@
 <script setup>
+import {ref} from "vue";
+
 /**
  * @property {Object} types All types
  * @property {number} types.length Length of the types Array
@@ -9,15 +11,14 @@
  * @property {string} alternativeText
  **/
 
-// Props
-defineProps({
+const props = defineProps({
   "types": {
     "type": Array,
     "required": true,
   },
 });
+const typesLength = ref(props.types.length);
 
-// Emit
 const emit = defineEmits(["selectFilter"]);
 </script>
 
@@ -28,9 +29,12 @@ const emit = defineEmits(["selectFilter"]);
         v-for="type of types"
         :key="type.id"
         class="transition__filter"
-        :style="`width: calc(100vw / ${types.length}); height: calc(100vh / ${types.length})`"
       >
-        <div v-if="type" class="transition__filter-image" @click="emit('selectFilter', type.name)">
+        <div
+          v-if="type"
+          class="transition__filter-image"
+          @click="emit('selectFilter', type.name)"
+        >
           <img
             class="transition__filter-src"
             :src="type.image || ''"
@@ -48,50 +52,37 @@ const emit = defineEmits(["selectFilter"]);
 <style scoped lang="scss">
 .transition {
   z-index: 100;
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  overflow: hidden;
   width: 100vw;
-	height: 100vh;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-	padding: var(--container-padding);
+  background-color: var(--color-white);
+  padding: var(--padding-page-mobile);
 
-	&__filters {
-    display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 30px;
-		height: 100vh;
-		width: 100vw;
+  &__filters {
+    display: grid;
+    grid-gap: 30px;
+    grid-template-rows: repeat(v-bind(typesLength), 1fr);
+    grid-template-columns: 1fr;
   }
 
   &__filter {
-    margin-bottom: 30px;
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-
-		&:last-child {
-			margin-bottom: 0;
-		}
+    width: 100%;
 
     &-image {
-			height: 100%;
-			width: 100%;
-			cursor: pointer;
-			overflow: hidden;
+      cursor: pointer;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      max-height: 350px;
     }
-
     &-src {
       width: 100%;
       height: 100%;
+      max-height: 350px;
       object-fit: cover;
+      object-position: center;
     }
-
     &-name {
       cursor: pointer;
       margin-top: 15px;
@@ -102,23 +93,20 @@ const emit = defineEmits(["selectFilter"]);
 }
 
 @media (min-width: 768px) {
-	.transition {
-		&__filters {
-			flex-direction: row;
-		}
+  .transition {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-		&__filter {
-			margin-right: 30px;
-			margin-bottom: 0;
+    &__filters {
+      grid-template-rows: 1fr;
+      grid-template-columns: repeat(v-bind(typesLength), 1fr);
+    }
 
-			&:last-child {
-				margin-right: 0;
-			}
-
-			&-image {
-				height: 350px;
-			}
-		}
-	}
+    &__filter {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }
 </style>

@@ -52,17 +52,17 @@ defineProps({
   display: table-cell;
   vertical-align: middle;
   height: 32px;
-  padding: 0 12px;
+  padding: 0.1vh 1vw 0 1vw;
   font-family: var(--font-primary);
   text-transform: uppercase;
   white-space: nowrap;
-  background-color: var(--color-button-background-default);
-  border: 1px solid var(--color-button-background-default);
+  background-color: var(--color-background-button);
+  border: 1px solid var(--color-border-button);
   transition: 0.2s ease-in all;
 
   &:hover {
-    background-color: var(--color-button-background-hover);
-    border: 1px solid var(--color-button-border-hover);
+    background-color: var(--color-background-button-hovered);
+    border: 1px solid var(--color-border-button-hovered);
   }
 
   &__content {

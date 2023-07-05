@@ -32,16 +32,17 @@ defineProps({
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-button-background-default);
-  border: 1px solid var(--color-button-background-default);
+  padding-top: 0.1vh;
+  background-color: var(--color-background-button);
+  border: 1px solid var(--color-border-button);
   border-radius: 50%;
   min-width: 32px;
   min-height: 32px;
   transition: 0.2s ease-in all;
 
   &:hover {
-    background-color: var(--color-button-background-hover);
-    border: 1px solid var(--color-button-border-hover);
+    background-color: var(--color-background-button-hovered);
+    border: 1px solid var(--color-border-button-hovered);
   }
 }
 </style>

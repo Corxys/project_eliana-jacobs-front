@@ -2,7 +2,6 @@
 <script setup>
 import {computed, ref} from "vue";
 import {useStore} from "vuex";
-import slugify from "slugify";
 import {slugifyString} from "@/utils/slugify";
 
 defineProps({
@@ -34,10 +33,15 @@ const displayTooltip = (event) => {
 	const target = document.querySelector(".flower__tooltip");
   const clipPath = event.target.querySelector("clipPath use");
 
+  const boundedImage = clipPath.getBoundingClientRect();
+
 	target.style.display = "block";
   target.innerHTML = event.target.id;
-  target.style.top = (clipPath.getBoundingClientRect().top + (clipPath.getBoundingClientRect().height / 2)) - (target.getBoundingClientRect().height / 2) + "px";
-  target.style.left = (clipPath.getBoundingClientRect().left + (clipPath.getBoundingClientRect().width / 2)) - (target.getBoundingClientRect().width / 2) + "px";
+
+  const boundedTooltip = target.getBoundingClientRect();
+
+  target.style.top = (boundedImage.top + (boundedImage.height / 2)) - (boundedTooltip.height / 2) + "px";
+  target.style.left = (boundedImage.left + (boundedImage.width / 2)) - (boundedTooltip.width / 2) + "px";
 };
 const hideTooltip = () => {
 	const target = document.querySelector(".flower__tooltip");
@@ -55,7 +59,10 @@ const getProjectsByCategory = (event) => {
 
 <template>
   <div class="flower">
+    <!-- Tooltip -->
     <div class="flower__tooltip" />
+
+    <!-- Flower SVG -->
     <svg
       class="flower__svg"
       x="0px"
@@ -113,7 +120,7 @@ const getProjectsByCategory = (event) => {
           />
         </defs>
         <clipPath id="SVGID_00000113339469024594871880000017756546414844136069_">
-          <use xlink:href="#SVGID_00000090266364474443077110000012638213831180463233_" style="overflow:visible;" />
+          <use xlink:href="#SVGID_00000090266364474443077110000012638213831180463233_" style="overflow:visible" />
         </clipPath>
         <g style="clip-path:url(#SVGID_00000113339469024594871880000017756546414844136069_);">
 
@@ -145,7 +152,7 @@ const getProjectsByCategory = (event) => {
           />
         </defs>
         <clipPath id="SVGID_00000103985328193008530800000008135543856864860041_">
-          <use xlink:href="#SVGID_00000043443998604319363350000004483554710250153368_" style="overflow:visible;" />
+          <use xlink:href="#SVGID_00000043443998604319363350000004483554710250153368_" style="overflow:visible" />
         </clipPath>
         <g style="clip-path:url(#SVGID_00000103985328193008530800000008135543856864860041_);">
 
@@ -177,7 +184,7 @@ const getProjectsByCategory = (event) => {
           />
         </defs>
         <clipPath id="SVGID_00000042697362760462214870000012711698149196813705_">
-          <use xlink:href="#SVGID_00000178922333451864009520000004111467456522529704_" style="overflow:visible;" />
+          <use xlink:href="#SVGID_00000178922333451864009520000004111467456522529704_" style="overflow:visible" />
         </clipPath>
         <g transform="matrix(1 0 0 1 0 0)" style="clip-path:url(#SVGID_00000042697362760462214870000012711698149196813705_);">
 
@@ -228,6 +235,10 @@ const getProjectsByCategory = (event) => {
 </template>
 
 <style scoped lang="scss">
+clipPath use {
+  position: relative;
+}
+
 .flower {
 	display: flex;
 	justify-content: center;
@@ -263,17 +274,17 @@ const getProjectsByCategory = (event) => {
 	}
 
 	&__tooltip {
+    cursor: pointer;
+		white-space: nowrap;
+    pointer-events: none;
 		position: absolute;
 		z-index: 10;
 		display: none;
-		background-color: var(--epj-c-main);
-		padding: 15px 20px 10px 20px;
+		background-color: var(--color-background-label);
+		padding: 1.39vh 1.8vh 0.9vh 1.8vh;
+		color: var(--color-text-label);
 		font-family: var(--font-primary);
-		font-size: 25px;
-		color: var(--epj-c-white);
-		white-space: nowrap;
-    pointer-events: none;
-    cursor: pointer;
+    font-size: 2vh;
 
 		&--bold {
 			font-weight: 700;

@@ -1,26 +1,20 @@
 @import "../../../node_modules/destyle.css/destyle.min.css";
 @import "./_vars.scss";
 
-// General
-body {
-  position: relative;
-  font-family: var(--font-secondary);
-  font-size: 15px;
-  background-color: var(--color-background-dark);
-  color: var(--color-text-dark);
+html {
   overflow-x: hidden;
 }
 
 * {
   &::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: var(--color-black);
   }
   &::-webkit-scrollbar {
     width: 7px;
-    background-color: transparent;
+    background-color: var(--color-black);
   }
   &::-webkit-scrollbar-thumb {
-    background-color: var(--epj-c-main);
+    background-color: var(--color-main);
   }
 }
 
@@ -38,11 +32,11 @@ h2 {
 }
 h3 {
   font-size: 3vh;
-  margin-bottom: 15px;
+  margin-bottom: 1.3vh;
 }
 h4 {
   font-size: 2.8vh;
-  margin-bottom: var(--spacing-h4)
+  margin-bottom: 0.4vh;
 }
 
 // Semantic
@@ -53,21 +47,13 @@ p {
   white-space: pre-line;
 }
 
-.about, .news, .article, .contact, .project, .waiting {
-  min-height: 100vh;
-  padding: 0 var(--spacing-section-padding-x) 0 var(--spacing-section-padding-x);
+.about, .news, .article, .contact, .project {
+  padding: var(--padding-page-mobile);
 }
 
-//.about, .news, .article, .contact, .project, .projects {
-//  //min-height: var(--min-height-component);
-
-//}
-//
-//.home, .about, .news, .article, .contact, .projects, .transition {
-
-//}
-//.projects--light, .project {
-//  background-color: var(--color-background-light);
-//  color: var(--color-text-light);
-//}
+@media (min-width: 768px) {
+  .about, .news, .article, .contact, .project {
+    padding: var(--padding-page-desktop);
+  }
+}
 

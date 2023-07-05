@@ -80,7 +80,7 @@ const setSizeOfTheFlower = (event) => {
 		&-01 {
 			top: 12%;
 			left: 0;
-			width: 40%;
+			width: 35%;
 			max-width: 406px;
 		}
 		&-02 {
@@ -92,7 +92,7 @@ const setSizeOfTheFlower = (event) => {
 		&-03 {
 			width: 30%;
 			max-width: 568px;
-			top: 12%;
+			top: 16%;
 			right: 0;
 		}
 		&-04 {

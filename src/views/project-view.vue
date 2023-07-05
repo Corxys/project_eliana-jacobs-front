@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, watch, inject} from "vue";
+import {ref, computed, watch, onMounted, onUnmounted} from "vue";
 import {useStore} from "vuex";
 import {useRoute, useRouter} from "vue-router";
 import {marked} from "marked";
@@ -9,48 +9,88 @@ import MediaComponent from "@/components/shared-components/media-component.vue";
 import GalleryComponent from "@/components/shared-components/gallery-component.vue";
 import {slugifyString} from "@/utils/slugify";
 
-const store = useStore();
+const {state, getters, dispatch} = useStore();
 const route = useRoute();
 const router = useRouter();
 
-const projectDate = computed(() => project.value.date);
+let viewportWidth = ref(0);
+const indexOfFocusedImage = computed(() => state.app.focusedImageIndex);
+const lightTheme = computed(() => getters.lightTheme);
 
-let indexOfFocusedImage = ref(0);
+/**
+ * Change the image focused in the window.
+ *
+ * @function
+ * @param {number} index - Index of the selected image in the "medias" array.
+ **/
+const changeImageFocused = async ({index}) => {
+  dispatch("setFocusedImageIndex", index);
 
-const colorTheme = inject("colorTheme");
-
-const projects = computed(() => store.state.projects);
-
-const changeImageFocused = ({index}) => {
-  indexOfFocusedImage.value = index;
+  if (viewportWidth.value < 768) {
+    await dispatch("setImageOnPreview", true);
+  }
 };
+
+/**
+ * Clicking on the "Back" arrow takes the user back to the page of the projects.
+ *
+ * @function
+ **/
 const backOnProjectsPage = async () => {
-	await store.dispatch("setHasTransitionScreen",  false);
-
-  await store.dispatch("setCategory", projects.value[store.state.selected.project].category);
-
-	await router.push(`/projects/${store.state.selected.category}`);
+  await dispatch("setCategory", slugifyString(state.projects[state.selected.project].category));
+	await router.push(`/projects/${state.selected.category}`);
 };
 
-// Un-displays the image on preview if we return in the project page.
-watch(() => route, () => {
-	store.dispatch("setImageOnPreview", false);
-}, {"deep": true, "immediate": true});
+/**
+ * Set the viewport width in the "viewportWidth" data.
+ * @function
+ * @param {object} event
+ **/
+const setViewportWidth = (event) => {
+  viewportWidth.value = event.target.innerWidth;
+};
 
-// Retrieve the content of the targeted project with the slug.
+
 const project = computed(() => {
-  if (!projects.value) {
+  if (state.selected.project === "") {
     return null;
   }
 
-  store.commit("setProject", route.params.slug);
+  return state.projects[state.selected.project];
+});
 
-  return projects.value[route.params.slug];
+/**
+ * Un-displays the image on preview if we return in the project page.
+ **/
+watch(() => route, async () => {
+	await dispatch("setImageOnPreview", false);
+}, {"deep": true, "immediate": true});
+
+/**
+ * Retrieve the selected project and the category with the slug,
+ * and according to the viewport width, decides if the selected image
+ * must be previewed or displayed in the "media-component".
+ **/
+onMounted(async () => {
+  viewportWidth.value = window.innerWidth;
+  window.addEventListener("resize", setViewportWidth);
+
+  const categoryName = state.projects[route.params.slug].category;
+
+  await dispatch("setCategory", categoryName);
+  await dispatch("setProject", route.params.slug);
+});
+
+/**
+ * Remove listener on the window resizing.
+ **/
+onUnmounted(() => {
+  window.removeEventListener("resize", setViewportWidth);
 });
 </script>
 
 <template>
-  <section class="project" :class="{'project--dark': colorTheme === 'dark'}">
+  <section class="project" :class="{'project--light': lightTheme}">
     <div v-if="project">
       <arrow-back-component :on-click="backOnProjectsPage" />
 
@@ -61,7 +101,7 @@ const project = computed(() => {
           </h1>
 
           <div class="project__date">
-            {{projectDate}}
+            {{project.date}}
           </div>
           <p
             v-if="project.text"
@@ -98,36 +138,41 @@ const project = computed(() => {
 
 <style scoped lang="scss">
 .project {
-	padding: var(--container-padding);
-  background-color: var(--epj-c-white);
-  color: var(--epj-c-black);
+  background:
+    radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 61%),
+    radial-gradient(circle at 42.94% 50.05%, #110F10, transparent 100%),
+    radial-gradient(circle at 45.89% 30.01%, #110F10, transparent 100%),
+    radial-gradient(circle at 99.17% 46.73%, #205251, transparent 100%),
+    radial-gradient(circle at 66.28% 54.41%, #110F10, transparent 100%),
+    radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
 
-  &--dark {
-    background:
-      radial-gradient(circle at 27.28% 77.78%, #110F10, transparent 61%),
-      radial-gradient(circle at 42.94% 50.05%, #110F10, transparent 100%),
-      radial-gradient(circle at 45.89% 30.01%, #110F10, transparent 100%),
-      radial-gradient(circle at 99.17% 46.73%, #205251, transparent 100%),
-      radial-gradient(circle at 66.28% 54.41%, #110F10, transparent 100%),
-      radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+  &--light {
+    background-image: none;
+    background-color: var(--color-white);
+    color: var(--color-black);
   }
 
   &__container {
     display: flex;
 		flex-direction: column-reverse;
   }
+
   &__text {
     white-space: pre-wrap;
   }
+
   &__content, &__highlight {
     width: 100%;
   }
+
 	&__title {
 		margin: 30px 0;
 	}
+
   &__date {
     margin-bottom: 30px;
   }
+
   &__highlight {
     height: 100%;
     margin-left: 0;
@@ -139,17 +184,21 @@ const project = computed(() => {
 		&__container {
 			flex-direction: row;
 		}
+
 		&__date {
 			margin-bottom: 50px;
 		}
+
 		&__content, &__highlight {
 			width: 50%;
 		}
+
 		&__highlight {
 			position: sticky;
 			top: 30px;
 			height: 100%;
 			margin-left: 30px;
+
 			:deep(.image__src) {
 				cursor: pointer;
 				width: 100%;

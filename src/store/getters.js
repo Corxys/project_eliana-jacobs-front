@@ -1,18 +1,56 @@
-import {clone} from "lodash";
-
-import {shuffleArray} from "@/utils/shuffleArray";
-import {slugifyString} from "@/utils/slugify";
-
 export default function createGetters() {
   return {
-    practices(state) {
-      return state.practices ? Object.values(state.practices) : null;
+    /**
+     * Select the appropriate filter depending on the category.
+     *
+     * @param {object} state - State of the application.
+     * @return {array} - Filters that must be displayed.
+     **/
+    filters(state) {
+      return (slug) => {
+        if (!slug || !state.filters) {
+          return null;
+        }
+        
+        const categoryWithFilterAll = ["circus"];
+        const filtersByCategory = Object.values(state.filters)
+          .filter((filter) => filter.category === slug);
+        
+        // If there are no filters.
+        if (!filtersByCategory.length) {
+          return null;
+        }
+        
+        // "Circus" is the only category where the "all" filter is necessary.
+        if (categoryWithFilterAll.includes(slug)) {
+          filtersByCategory.unshift({
+            "id": "0",
+            "name": "All",
+            "image": "",
+            "category": "circus"
+          });
+        }
+        
+        return filtersByCategory;
+      };
     },
     
-    news(state) {
-      return state.news ? Object.values(state.news) : null;
+    /**
+     * Change the website theme to light.
+     *
+     * @param {object} state - State of the application.
+     * @return {boolean} - If "true", website theme must be "light".
+     */
+    lightTheme(state) {
+      return ["digital-media", "visual-art", "art-performance"].includes(state.selected.category);
     },
     
+    /**
+     * Get all the categories.
+     *
+     * @param {object} state = State of the application.
+     * @return {array} - Categories must be displayed.
+     **/
     categories(state) {
       return state.categories ?
         Object.values(state.categories).sort((category1, category2) => {
@@ -23,54 +61,6 @@ export default function createGetters() {
           }
         }) :
         null;
-    },
-    
-    projects(state) {
-      const projects = {};
-      
-      if (!state.categories || !state.projects) {
-        return null;
-      }
-      
-      Object.values(state.categories).forEach((category) => {
-        const name = slugifyString(category.name);
-        
-        projects[name] = Object.values(state.projects).filter((project) => {
-          return slugifyString(project.category) === name;
-        });
-      });
-      
-      projects["circus"] = shuffleArray(projects["circus"].reduce((acc, project) => {
-        acc.push(
-          ...project.medias.map((media) => {
-            return ({
-              ...media,
-              "type": slugifyString(project.type),
-            });
-          }),
-        );
-        
-        return acc;
-      }, []));
-      
-      return projects;
-    },
-    
-    /**
-     * @param {function} state
-     *
-     * Select the appropriate layout for the projects.
-     **/
-    layout(state) {
-      if (!state.selected.category) {
-        return;
-      }
-      
-      if (state.selected.category === "circus") {
-        return "gallery";
-      } else {
-        return "list";
-      }
     },
   };
 }
