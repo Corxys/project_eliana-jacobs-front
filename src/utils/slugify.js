@@ -1,6 +1,10 @@
 import slugify from "slugify";
 
 const slugifyString = (title) => {
+  if (!title) {
+    return;
+  }
+  
   const replacedTitle = title
     .replace("_", "-")
     .replace("&", "")

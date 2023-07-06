@@ -74,12 +74,12 @@ const emit = defineEmits(["selectFilter"]);
       overflow: hidden;
       width: 100%;
       height: 100%;
-      max-height: 350px;
+      max-height: 300px;
     }
     &-src {
       width: 100%;
       height: 100%;
-      max-height: 350px;
+      max-height: 300px;
       object-fit: cover;
       object-position: center;
     }
