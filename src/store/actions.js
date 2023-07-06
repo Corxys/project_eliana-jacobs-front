@@ -60,10 +60,12 @@ export default function createActions() {
      * @param {string} category - Name of the selected category in the navbar component.
      **/
     setCategory({dispatch, commit}, category) {
+      if (category) {
+        window.localStorage.setItem("category", slugifyString(category));
+      }
+      
       const slugifiedCategory = slugifyString(category);
       const filterName = window.localStorage.getItem("filter");
-      
-      window.localStorage.setItem("category", slugifiedCategory);
       
       if (filterName) {
         dispatch("setFilter", filterName);
@@ -81,9 +83,11 @@ export default function createActions() {
      * @param {string} filter - Name of the selected filter in the filters.
      **/
     setFilter({commit}, filter) {
-      const slugifiedName = slugifyString(filter);
+      if (filter) {
+        window.localStorage.setItem("filter", slugifyString(filter));
+      }
       
-      window.localStorage.setItem("filter", slugifiedName);
+      const slugifiedName = slugifyString(filter);
       
       commit("setFilter", slugifiedName);
     },
@@ -95,9 +99,11 @@ export default function createActions() {
      * @param {string} name - Name of the selected project.
      **/
     setProject({commit}, name) {
-      const slugifiedName = slugifyString(name);
+      if (name) {
+        window.localStorage.setItem("project", slugifyString(name));
+      }
       
-      window.localStorage.setItem("project", slugifiedName);
+      const slugifiedName = slugifyString(name);
       
       commit("setProject", slugifiedName);
     },
@@ -108,9 +114,11 @@ export default function createActions() {
      * @param {string} title - Title of the selected article.
      **/
     setArticle({commit}, title) {
-      const slugifiedTitle = slugifyString(title);
+      if (title) {
+        window.localStorage.setItem("article", slugifiedTitle);
+      }
       
-      window.localStorage.setItem("article", slugifiedTitle);
+      const slugifiedTitle = slugifyString(title);
       
       commit("setArticle", slugifiedTitle);
     },
