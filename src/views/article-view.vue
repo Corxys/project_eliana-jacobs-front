@@ -180,7 +180,6 @@ const backToTheNewsPage = async () => {
 <style scoped lang="scss">
 .article {
   min-height: 100vh;
-	padding: var(--container-padding);
   background:
     radial-gradient(circle at 81.06% 22.22%, #110F10, transparent 80%),
     radial-gradient(circle at 0.33% 9.55%, #110F10, transparent 60%),

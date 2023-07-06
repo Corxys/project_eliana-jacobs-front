@@ -8,7 +8,10 @@
  * @property {string} image.formats.thumbnail.url URL of the image.
  **/
 
-import {inject} from "vue";
+import {computed} from "vue";
+import {useStore} from "vuex";
+
+const {state} = useStore();
 
 defineProps({
   "images": {
@@ -21,9 +24,9 @@ defineProps({
   },
 });
 
-const imageMimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
+const colorTheme = computed(() => state.app.colorTheme);
 
-const colorTheme = inject("colorTheme");
+const imageMimesTypesCheck = /image\/png|image\/jpeg|imagesvg\+xml|image\/gif|image\/svg\+xml/;
 </script>
 
 <template>
@@ -74,12 +77,12 @@ const colorTheme = inject("colorTheme");
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: var(--epj-c-main);
+		background-color: var(--color-main);
 		&-icon {
 			font-size: 30px;
 			margin-bottom: 5px;
 			margin-right: 10px;
-			color: var(--epj-c-white);
+			color: var(--color-white);
 		}
 	}
 }

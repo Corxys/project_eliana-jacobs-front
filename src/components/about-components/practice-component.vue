@@ -55,12 +55,12 @@ defineProps({
 	.practice {
 		display: grid;
 		grid-template-columns: repeat(10, 1fr);
-		column-gap: var(--spacing-between-horizontal-elements);
-		margin-bottom: 60px;
+		column-gap: var(--margin-x-elements);
+		margin-bottom: var(--margin-y-elements);
 
 		&__container {
 			grid-column: 1 / 4;
-			margin-right: var(--spacing-between-horizontal-elements);
+			margin-right: var(--margin-x-elements);
 			width: 100%;
 		}
 

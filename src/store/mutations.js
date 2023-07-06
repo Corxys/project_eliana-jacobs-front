@@ -134,11 +134,6 @@ export default function createMutations() {
 			state.selected.filter = filter;
 		},
 		
-		// Set the transition screen.
-		setHasTransitionScreen(state, hasTransitionScreen) {
-			state.app.hasTransitionScreen = hasTransitionScreen;
-		},
-		
 		// Display or hide the loading screen.
 		setIsLoading(state, isLoading) {
 			state.app.isLoading = isLoading;
@@ -162,6 +157,15 @@ export default function createMutations() {
 		// Set the error message for the error page.
 		setErrorMessage(state, errorMessage) {
 			state.app.errorMessage = errorMessage;
+		},
+		
+		// Set the color theme of the website.
+		setColorTheme(state, colorTheme) {
+			state.app["colorTheme"] = colorTheme;
+		},
+		
+		setFocusedImageIndex(state, imageIndex) {
+			state.app.focusedImageIndex = imageIndex;
 		}
 	};
 }

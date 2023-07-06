@@ -3,7 +3,6 @@ export default function createState() {
 		"selected": {
 			"category": "",
 			"filter": "",
-			"projects": [],
 			"project": "",
 			"article": "",
 		},
@@ -12,13 +11,13 @@ export default function createState() {
 		"news": null,
 		"categories": null,
 		"filters": null,
-		"projects": null,
+		"projects": null, // Projects by names.
 		"app": {
-			"hasTransitionScreen": false,
 			"hasImageOnPreview": false,
 			"colorTheme": "dark",
 			"isLoading": true,
 			"errorMessage": "",
+			"focusedImageIndex": 0,
 		},
 	};
 }

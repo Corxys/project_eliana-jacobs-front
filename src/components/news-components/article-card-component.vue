@@ -26,12 +26,12 @@ defineProps({
   },
 });
 
-const goToTheArticlePage = async (articleTitle) => {
+const goToTheArticlePage = (articleTitle) => {
   const slugifiedTitle = slugifyString(articleTitle);
 
-  await store.dispatch("setArticle", slugifiedTitle);
+  store.dispatch("setArticle", slugifiedTitle);
 
-  await router.push(`/news/${slugifiedTitle}`);
+  router.push(`/news/${slugifiedTitle}`);
 };
 </script>
 
@@ -140,7 +140,7 @@ const goToTheArticlePage = async (articleTitle) => {
 
 // Article card (medium)
 .article-card--medium {
-  margin-bottom: 30px;
+  margin-bottom: var(--margin-x-elements);
   overflow: hidden;
 
   .image {
@@ -161,8 +161,7 @@ const goToTheArticlePage = async (articleTitle) => {
   grid-template-rows: 1fr max-content;
   grid-area: 1 / 1 / 4 / 2;
   height: 450px;
-  padding: 5px;
-  border: 1px solid var(--epj-c-white);
+  border: 1px solid var(--color-white);
   overflow: hidden;
 
   .link--image {

@@ -53,34 +53,32 @@ export default function createActions() {
     },
     
     /**
+     * Set category for projects (allows the getter to retrieve the data).
+     *
      * @param {function} commit
      * @param {function} dispatch
      * @param {string} category - Name of the selected category in the navbar component.
-     *
-     * Set category for projects (allows the getter to retrieve the data).
      **/
-    async setCategory({commit, dispatch}, category) {
-      const categoryWithATransitionScreen = ["digital-media", "visual-art"];
-      
+    setCategory({dispatch, commit}, category) {
       const slugifiedCategory = slugifyString(category);
+      const filterName = window.localStorage.getItem("filter");
       
-      // For some categories, a transition screen needs to be displayed.
-      if (categoryWithATransitionScreen.includes(slugifiedCategory)) {
-        await dispatch("setHasTransitionScreen", true);
+      window.localStorage.setItem("category", slugifiedCategory);
+      
+      if (filterName) {
+        dispatch("setFilter", filterName);
       } else {
-        await dispatch("setHasTransitionScreen", false);
+        dispatch("setFilter", "");
       }
       
-      commit("setCategory", slugifiedCategory);
-      
-      await router.push(`/projects/${slugifiedCategory}`);
+      commit("setCategory", slugifyString(slugifiedCategory));
     },
     
     /**
+     * Set filter.
+     *
      * @param {function} commit
      * @param {string} filter - Name of the selected filter in the filters.
-     *
-     * Set category for projects (allows the getter to retrieve the data).
      **/
     setFilter({commit}, filter) {
       const slugifiedName = slugifyString(filter);
@@ -91,29 +89,25 @@ export default function createActions() {
     },
     
     /**
+     * Set project.
      * @param {Object} state
      * @param {function} commit
      * @param {string} name - Name of the selected project.
-     *
-     * Set project.
      **/
-    async setProject({state, commit}, name) {
+    setProject({commit}, name) {
       const slugifiedName = slugifyString(name);
       
       window.localStorage.setItem("project", slugifiedName);
       
       commit("setProject", slugifiedName);
-      
-      await router.push(`/projects/${state.selected.category}/${slugifiedName}`);
     },
     
     /**
+     * Set article.
      * @param {function} commit
      * @param {string} title - Title of the selected article.
-     *
-     * Get article by its title.
      **/
-    async setArticle({commit}, title) {
+    setArticle({commit}, title) {
       const slugifiedTitle = slugifyString(title);
       
       window.localStorage.setItem("article", slugifiedTitle);
@@ -126,11 +120,6 @@ export default function createActions() {
       commit("setIsLoading", isLoading);
     },
     
-    // Set the transition screen.
-    setHasTransitionScreen({commit}, hasTransitionScreen) {
-      commit("setHasTransitionScreen", hasTransitionScreen);
-    },
-    
     // Set an image on preview.
     setImageOnPreview({commit}, isImageOnPreview) {
       commit("setImageOnPreview", isImageOnPreview);
@@ -139,6 +128,16 @@ export default function createActions() {
     // Error message for the error page.
     setErrorMessage({commit}, errorMessage) {
       commit("setErrorMessage", errorMessage);
+    },
+    
+    // Set the color theme of the website.
+    setColorTheme({commit}, colorTheme) {
+      commit("setColorTheme", colorTheme);
+    },
+    
+    // Set the index of the focused image on the gallery component.
+    setFocusedImageIndex({commit}, imageIndex) {
+      commit("setFocusedImageIndex", imageIndex);
     },
 	};
 }

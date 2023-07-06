@@ -1,6 +1,10 @@
 <script setup>
-import {computed, inject} from "vue";
+import {computed} from "vue";
 import {useStore} from "vuex";
+import router from "@/router";
+import {slugifyString} from "@/utils/slugify";
+
+const {state, dispatch} = useStore();
 
 const props = defineProps({
 	"project": {
@@ -9,16 +13,22 @@ const props = defineProps({
 		"default": () => ({"id": 0, "name": "Lorem ipsum dolor sit amet", "medias": []}),
 	}
 });
-
-const store = useStore();
-
+const selectedCategory = computed(() => state.selected.category);
 const projectName = computed(() => props.project.name);
 const projectImage = computed(() => props.project.medias?.length ? props.project.medias[0].url : "");
 const imageAlt = computed(() => projectImage.value ?
   `Cover picture of the project ${projectName.value}` :
   "There's no picture for this project");
 
-inject("colorTheme");
+/**
+ * Go to the page of the selected project.
+ *
+ * @param {string} projectName - Name of the selected project.
+ **/
+const goToProjectPage = async (projectName) => {
+  await dispatch("setProject", projectName);
+  await router.push(`/projects/${selectedCategory.value}/${slugifyString(projectName)}`);
+};
 </script>
 
 <template>
@@ -28,10 +38,11 @@ inject("colorTheme");
         class="card__src"
         :src="projectImage"
         :alt="imageAlt"
-        @click="store.dispatch('setProject', projectName)"
+        @click="goToProjectPage(projectName)"
       >
     </div>
-    <h2 class="card__title" @click="store.dispatch('setProject', projectName)">
+
+    <h2 class="card__title" @click="goToProjectPage(projectName)">
       {{projectName}}
     </h2>
   </div>
@@ -45,14 +56,14 @@ inject("colorTheme");
     display: flex;
     flex-direction: column;
     row-gap: 5px;
-    border: 1px solid var(--card-border-color);
+    border: 1px solid var(--color-black);
 
     &:hover .card__src {
       scale: 1.05;
     }
 
     &:hover .card__title {
-      color: var(--card-text-hover-color)
+      color: var(--color-main);
     }
 
     &__image {

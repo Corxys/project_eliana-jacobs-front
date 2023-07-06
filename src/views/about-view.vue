@@ -16,13 +16,19 @@ import PracticeComponent from "@/components/about-components/practice-component.
 import shapeTopRight from "@/assets/images/shapes/about-01.png";
 import shapeBottomLeft from "@/assets/images/shapes/about-02.png";
 
-const store = useStore();
+const {state} = useStore();
 
-const practices = computed(() => store.getters.practices);
-const cv = computed(() => store.state.cv);
+const cv = computed(() => state.cv);
 
 const INSTAGRAM_PROFILE = "https://www.instagram.com/__e_l_i_a_n_a__/";
 const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51VQ";
+
+/**
+ * Get all the practices.
+ **/
+const practices = computed(() => {
+  return state.practices ? Object.values(state.practices) : null;
+});
 </script>
 
 <template>
@@ -97,7 +103,6 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
 
 <style scoped lang="scss">
 .about {
-	padding: var(--container-padding);
 	background:
     radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),
     radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),
@@ -118,7 +123,7 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
 	&__header {
 		margin-bottom: 30px;
 		padding-bottom: 30px;
-		border-bottom: 1px solid var(--epj-c-white);
+		border-bottom: 1px solid var(--color-white);
 	}
 
 	&__actions, &__icons, &__buttons {
@@ -146,6 +151,10 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
 	}
 
 	&__practices {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
 		:deep(.image) {
 			height: auto;
 		}
@@ -192,7 +201,7 @@ const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51V
 			margin-bottom: 60px;
 		}
 
-		&__shape {
+    &__shape {
 			&-01 {
 				width: 50%;
 				max-width: 520px;
