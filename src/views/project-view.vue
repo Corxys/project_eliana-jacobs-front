@@ -79,6 +79,7 @@ onMounted(async () => {
 
   await dispatch("setCategory", categoryName);
   await dispatch("setProject", route.params.slug);
+  await dispatch("setFocusedImageIndex", 0);
 });
 
 /**
