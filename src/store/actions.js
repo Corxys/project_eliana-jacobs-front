@@ -60,9 +60,11 @@ export default function createActions() {
      * @param {string} category - Name of the selected category in the navbar component.
      **/
     setCategory({dispatch, commit}, category) {
-      if (category) {
-        window.localStorage.setItem("category", slugifyString(category));
+      if (!category) {
+        return;
       }
+      
+      window.localStorage.setItem("category", slugifyString(category));
       
       const slugifiedCategory = slugifyString(category);
       const filterName = window.localStorage.getItem("filter");
@@ -83,9 +85,11 @@ export default function createActions() {
      * @param {string} filter - Name of the selected filter in the filters.
      **/
     setFilter({commit}, filter) {
-      if (filter) {
-        window.localStorage.setItem("filter", slugifyString(filter));
+      if (!filter) {
+        return;
       }
+
+      window.localStorage.setItem("filter", slugifyString(filter));
       
       const slugifiedName = slugifyString(filter);
       
@@ -99,9 +103,11 @@ export default function createActions() {
      * @param {string} name - Name of the selected project.
      **/
     setProject({commit}, name) {
-      if (name) {
-        window.localStorage.setItem("project", slugifyString(name));
+      if (!name) {
+        return;
       }
+      
+      window.localStorage.setItem("project", slugifyString(name));
       
       const slugifiedName = slugifyString(name);
       
@@ -114,9 +120,11 @@ export default function createActions() {
      * @param {string} title - Title of the selected article.
      **/
     setArticle({commit}, title) {
-      if (title) {
-        window.localStorage.setItem("article", slugifiedTitle);
+      if (!title) {
+        return;
       }
+      
+      window.localStorage.setItem("article", slugifiedTitle);
       
       const slugifiedTitle = slugifyString(title);
       
