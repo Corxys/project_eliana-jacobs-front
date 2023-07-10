@@ -3,6 +3,7 @@
 import {computed, ref} from "vue";
 import {useStore} from "vuex";
 import {slugifyString} from "@/utils/slugify";
+import {useRouter} from "vue-router";
 
 defineProps({
 	"flowerHeight": {
@@ -16,6 +17,7 @@ defineProps({
 });
 
 const store = useStore();
+const router = useRouter();
 
 const categories = computed(() => store.getters.categories);
 const categoriesImages = computed(() => {
@@ -49,11 +51,13 @@ const hideTooltip = () => {
 	target.style.display = "none";
 	tooltipText.value = "";
 };
-const getProjectsByCategory = (event) => {
+const getProjectsByCategory = async (event) => {
 	const flower = event.target.closest(".flower__petal");
 
-	store.dispatch("setCategory", slugifyString(flower.id));
-	store.dispatch("setFilter", "All");
+	await store.dispatch("setCategory", slugifyString(flower.id));
+	await store.dispatch("setFilter", "All");
+
+	await router.push(`/projects/${slugifyString(flower.id)}`);
 };
 </script>
 
