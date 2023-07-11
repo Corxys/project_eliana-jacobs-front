@@ -64,11 +64,9 @@ export default function createActions() {
         return;
       }
       
-      window.localStorage.setItem("category", slugifyString(category));
-      
       const slugifiedCategory = slugifyString(category);
       
-      window.localStorage.setItem("category", slugifiedCategory);
+      window.localStorage.setItem("category", slugifyString(category));
       
       const filterName = window.localStorage.getItem("filter");
       
@@ -91,12 +89,10 @@ export default function createActions() {
       if (!filter) {
         return;
       }
-
-      window.localStorage.setItem("filter", slugifyString(filter));
       
       const slugifiedName = slugifyString(filter);
 
-      window.localStorage.setItem("filter", slugifiedName);
+      window.localStorage.setItem("filter", slugifyString(filter));
       
       commit("setFilter", slugifiedName);
     },
@@ -112,11 +108,9 @@ export default function createActions() {
         return;
       }
       
-      window.localStorage.setItem("project", slugifyString(name));
-      
       const slugifiedName = slugifyString(name);
       
-      window.localStorage.setItem("project", slugifiedName);
+      window.localStorage.setItem("project", slugifyString(name));
       
       commit("setProject", slugifiedName);
     },
@@ -131,11 +125,9 @@ export default function createActions() {
         return;
       }
       
-      window.localStorage.setItem("article", slugifiedTitle);
-      
       const slugifiedTitle = slugifyString(title);
       
-      window.localStorage.setItem("article", slugifiedTitle);
+      window.localStorage.setItem("article", slugifyString(title));
       
       commit("setArticle", slugifiedTitle);
     },
