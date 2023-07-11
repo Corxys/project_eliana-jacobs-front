@@ -67,6 +67,9 @@ export default function createActions() {
       window.localStorage.setItem("category", slugifyString(category));
       
       const slugifiedCategory = slugifyString(category);
+      
+      window.localStorage.setItem("category", slugifiedCategory);
+      
       const filterName = window.localStorage.getItem("filter");
       
       if (filterName) {
@@ -92,6 +95,8 @@ export default function createActions() {
       window.localStorage.setItem("filter", slugifyString(filter));
       
       const slugifiedName = slugifyString(filter);
+
+      window.localStorage.setItem("filter", slugifiedName);
       
       commit("setFilter", slugifiedName);
     },
@@ -111,6 +116,8 @@ export default function createActions() {
       
       const slugifiedName = slugifyString(name);
       
+      window.localStorage.setItem("project", slugifiedName);
+      
       commit("setProject", slugifiedName);
     },
     
@@ -127,6 +134,8 @@ export default function createActions() {
       window.localStorage.setItem("article", slugifiedTitle);
       
       const slugifiedTitle = slugifyString(title);
+      
+      window.localStorage.setItem("article", slugifiedTitle);
       
       commit("setArticle", slugifiedTitle);
     },
