@@ -1,5 +1,4 @@
 import {createRouter, createWebHistory} from "vue-router";
-import {defineAsyncComponent} from "vue";
 
 import store from "@/store";
 
@@ -9,7 +8,7 @@ const router = createRouter({
     {
       "path": "/",
       "name": "home",
-      "component": defineAsyncComponent(() => import("../views/home-view.vue")),
+      "component": () => import("../views/home-view.vue"),
     },
     {
       "path": "/about",
@@ -17,48 +16,48 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      "component": defineAsyncComponent(() => import("../views/about-view.vue")),
+      "component": () => import("../views/about-view.vue"),
     },
     {
       "path": "/news",
       "name": "news",
-      "component": defineAsyncComponent(() => import("../views/news-view.vue")),
+      "component": () => import("../views/news-view.vue"),
     },
     {
       "path": "/news/:slug",
       "name": "article",
-      "component": defineAsyncComponent(() => import("../views/article-view.vue")),
+      "component": () => import("../views/article-view.vue"),
     },
     {
       "path": "/contact",
       "name": "contact",
-      "component": defineAsyncComponent(() => import("../views/contact-view.vue")),
+      "component": () => import("../views/contact-view.vue"),
     },
     {
       "path": "/legal-notices",
       "name": "legal-notices",
-      "component": defineAsyncComponent(() => import("../views/legal-notices-view.vue")),
+      "component": () => import("../views/legal-notices-view.vue"),
     },
 
     {
       "path": "/projects/:slug",
       "name": "projects",
-      "component": defineAsyncComponent(() => import("../views/projects-view.vue")),
+      "component": () => import("../views/projects-view.vue"),
     },
     {
       "path": "/projects/:slug/:slug",
       "name": "project",
-      "component": defineAsyncComponent(() => import("../views/project-view.vue")),
+      "component": () => import("../views/project-view.vue"),
     },
     {
       "path": "/error",
       "name": "error",
-      "component": defineAsyncComponent(() => import("../components/shared-components/error-component.vue")),
+      "component": () => import("../components/shared-components/error-component.vue"),
     },
     {
       "path": "/:pathMatch(.*)*",
       "name": "not-found",
-      "component": defineAsyncComponent(() => import("../components/shared-components/error-component.vue")),
+      "component": () => import("../components/shared-components/error-component.vue"),
     }
   ],
 });

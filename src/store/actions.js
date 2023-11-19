@@ -59,11 +59,7 @@ export default function createActions() {
      * @param {function} dispatch
      * @param {string} category - Name of the selected category in the navbar component.
      **/
-    setCategory({dispatch, commit}, category) {
-      if (!category) {
-        return;
-      }
-      
+    setCategory({dispatch, commit}, category) {      
       const slugifiedCategory = slugifyString(category);
       
       window.localStorage.setItem("category", slugifyString(category));
