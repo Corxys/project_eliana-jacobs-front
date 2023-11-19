@@ -138,6 +138,11 @@ export default function createMutations() {
 		setIsLoading(state, isLoading) {
 			state.app.isLoading = isLoading;
 		},
+
+		// Open or close the menu.
+		setIsMenuOpen(state, isMenuOpen) {
+			state.app.isMenuOpen = isMenuOpen;
+		},
 		
 		// Display or hide the image on preview.
 		setImageOnPreview(state, isImageOnPreview) {
@@ -146,8 +151,8 @@ export default function createMutations() {
 		
 		// Set the selected projet.
 		setProject(state, project) {
-      state.selected.project = project;
-    },
+		state.selected.project = project;
+		},
 		
 		// Set the selected article.
 		setArticle(state, article) {

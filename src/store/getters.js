@@ -44,6 +44,23 @@ export default function createGetters() {
     lightTheme(state) {
       return ["digital-media", "visual-art", "art-performance"].includes(state.selected.category);
     },
+	/**
+	 * The elements must be in black when the theme is light.
+	 * 
+	 * @param {object} state 
+	 * @param {object} getters 
+	 * @return {boolean} - If "true", navbar or footer must be light.
+	 */
+
+	themeMustBeLight(state, getters) {
+		// Theme must be light when we visit the "digital-media", "visual-art"
+		// and "art-performance" pages, if the navbar menu is not open.
+		if (state.app.isMenuOpen) {
+			return false;
+		} else {
+			return getters.lightTheme;
+		}
+	},
     
     /**
      * Get all the categories.

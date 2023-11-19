@@ -136,6 +136,11 @@ export default function createActions() {
     setIsLoading({commit}, isLoading) {
       commit("setIsLoading", isLoading);
     },
+
+	// Set the menu status.
+	setIsMenuOpen({commit}, isMenuOpen) {
+		commit("setIsMenuOpen", isMenuOpen);
+	},
     
     // Set an image on preview.
     setImageOnPreview({commit}, isImageOnPreview) {

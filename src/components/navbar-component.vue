@@ -1,5 +1,5 @@
 <script setup>
-import {computed, inject} from "vue";
+import {computed} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import gsap from "gsap";
@@ -10,18 +10,18 @@ import logotypeBlack from "@/assets/images/logo-navbar-b.png";
 import {links} from "@/assets/data/links";
 import {slugifyString} from "@/utils/slugify";
 
-const {getters, dispatch} = useStore();
+const {state, getters, dispatch} = useStore();
 const router = useRouter();
 
-let isMenuOpen = inject("isMenuOpen");
-const lightTheme = computed(() => getters.lightTheme);
+const isMenuOpen = computed(() => state.app.isMenuOpen);
 const categories = computed(() => getters.categories);
+const themeMustBeLight = computed(() => getters.themeMustBeLight);
 
 // By clicking on a category link.
 const getProjectsByCategory = async (name) => {
   await dispatch("setCategory", name);
 
-  isMenuOpen.value = false;
+  await dispatch("setIsMenuOpen", false);
 
   await router.push(`/projects/${slugifyString(name)}`);
 };
@@ -30,7 +30,7 @@ const goToHomePage = async () => {
   await dispatch("setCategory", "");
   await dispatch("setProject", "");
 
-  isMenuOpen.value = false;
+  await dispatch("setIsMenuOpen", false);
 };
 const goOnPage = async (src) => {
   await dispatch("setFilter", "All");
@@ -39,13 +39,8 @@ const goOnPage = async (src) => {
 
   await router.push(src);
 
-  isMenuOpen.value = false;
+  await dispatch("setIsMenuOpen", false);
 };
-
-// Color theme of the navbar.
-const navbarColorTheme = computed(() => {
-  return lightTheme.value || lightTheme.value && isMenuOpen.value;
-});
 
 // GSAP animations.
 const onBeforeEnter = (el) => {
@@ -89,13 +84,13 @@ const onLeave = (el, done) => {
 <template>
   <nav
     class="navbar"
-    :class="{'navbar--light': navbarColorTheme}"
+    :class="{'navbar--light': themeMustBeLight}"
   >
     <!-- Logo -->
     <div class="navbar__logo">
       <router-link to="/" @click="goToHomePage">
         <img
-          v-if="navbarColorTheme"
+          v-if="themeMustBeLight"
           class="navbar__logo-src"
           alt="Name of Eliana's handwritten (black version)"
           :src="logotypeBlack"
@@ -110,7 +105,7 @@ const onLeave = (el, done) => {
     </div>
 
     <!-- Menu -->
-    <div class="navbar__button" @click="isMenuOpen = !isMenuOpen">
+    <div class="navbar__button" @click="dispatch('setIsMenuOpen', !isMenuOpen)">
       <!-- Menu lines with with pseudo class ":before" and ":after" to make top and bottom lines -->
       <div
         class="navbar__burger"
@@ -171,6 +166,7 @@ const onLeave = (el, done) => {
   position: absolute;
   z-index: 900;
   width: 100vw;
+  color: var(--color-text-dark);
 
   // Light theme
   &--light {

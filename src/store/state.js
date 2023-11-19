@@ -15,6 +15,7 @@ export default function createState() {
 		"app": {
 			"hasImageOnPreview": false,
 			"colorTheme": "dark",
+			"isMenuOpen": false,
 			"isLoading": true,
 			"errorMessage": "",
 			"focusedImageIndex": 0,

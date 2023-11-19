@@ -1,5 +1,5 @@
 <script setup>
-import {ref, provide, computed} from "vue";
+import {provide, computed} from "vue";
 import {useStore} from "vuex";
 import {RouterView, useRoute} from "vue-router";
 import {DefaultApolloClient} from "@vue/apollo-composable";
@@ -20,9 +20,9 @@ const apolloClient = new ApolloClient({
   "uri": "https://eliana-jacobs-back.herokuapp.com/graphql",
   "cache": new InMemoryCache()
 });
-const isMenuOpen = ref(false);
 const lightTheme = computed(() => getters.lightTheme);
 const isLoading = computed(() => state.app.isLoading);
+const isMenuOpen = computed(() => state.app.isMenuOpen);
 const errorMessage = computed(() => state.app.errorMessage);
 const filters = computed( () => {
   const categoryWithFilterAll = ["circus"];
@@ -60,7 +60,6 @@ const transitionScreen = computed(() => {
   return !state.selected.filter && ["digital-media", "visual-art"].includes(state.selected.category);
 });
 
-provide("isMenuOpen", isMenuOpen);
 provide(DefaultApolloClient, apolloClient);
 
 /**
@@ -135,7 +134,7 @@ const selectFilter = (name) => {
   position: relative;
   background-color: var(--color-background-dark);
   color: var(--color-text-dark);
-  font-size: 1.4vh;
+  font-size: 2.1vh;
   font-family: var(--font-secondary);
 
   &--light {
