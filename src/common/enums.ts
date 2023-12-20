@@ -3,6 +3,10 @@ export enum ThemeName {
 	DARK = "dark",
 	LIGHT = "light",
 }
+export enum Layout {
+	LIST = "list",
+	GALLERY = "gallery",
+}
 
 // Categories/category
 export enum CategoryNameSlug {

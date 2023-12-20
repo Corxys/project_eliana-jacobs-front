@@ -1,4 +1,4 @@
-import { CategoryNameSlug, FilterNameFull, ThemeName, CategoryNameFull, FilterNameSlug } from "./enums";
+import { CategoryNameSlug, FilterNameFull, ThemeName, CategoryNameFull, FilterNameSlug, Layout } from "./enums";
 
 // General
 export interface ObjectById<T> {
@@ -60,6 +60,7 @@ export interface Filter {
 	id: string;
 	image: string;
 	name: FilterNameFull;
+	layout: Layout;
 }
 
 // Projects/project
@@ -103,4 +104,49 @@ export interface Media {
 	link: string;
 	mime: string;
 	url: string;
+}
+
+// News
+export interface Article {
+	address: {
+		name: string;
+		street: string;
+		cp: string;
+		city: string;
+	};
+	date: {
+		date: string;
+		start: string;
+		end: string;
+	};
+	email: string;
+	id: string;
+	title: string;
+	publishedAt: string;
+	image: {
+		url: string;
+		alternativeText: string;
+		mime: string;
+		copyright: string;
+		link: string;
+	};
+	register: {
+		email: string;
+	};
+	text: string;
+	website: string;
+}
+
+// #About
+export interface Practice {
+	id: string;
+	title: string;
+	text: string;
+	image: {
+		url: string;
+		alternativeText: string;
+		mime: string;
+		copyright: string;
+		link: string;
+	};
 }

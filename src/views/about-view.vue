@@ -1,115 +1,104 @@
-<script setup>
-/**
- * @property {string} cv Dropbox link to the CV.
- * @property {Object} practices Practices of Eliana.
- * @property {Object} practice One practice of the practices Array.
- * @property {string} practice.id ID of a practice.
- **/
+<template>
+	<div class="about">
+		<main class="about__container">
+			<header class="about__header">
+				<h1 class="about__title">Eliana is a performance, circus, visual and conceptual artist and singer.</h1>
 
-import {useStore} from "vuex";
-import {computed} from "vue";
+				<div class="about__actions">
+					<div class="about__icons">
+						<!-- Instagram profile -->
+						<icon-social-component
+							:icon="['fab', 'instagram']"
+							:link="INSTAGRAM_PROFILE"
+						/>
 
-import IconSocialComponent from "@/components/shared-components/icon-social-component.vue";
-import ButtonCustomComponent from "@/components/shared-components/button-custom-component.vue";
-import PracticeComponent from "@/components/about-components/practice-component.vue";
+						<!-- YouTube channel -->
+						<icon-social-component
+							:icon="['fab', 'youtube']"
+							:link="YOUTUBE_CHANNEL"
+						/>
+					</div>
+
+					<div class="about__buttons">
+						<!-- Contact page button -->
+						<button-custom-component
+							text="Contact me"
+							link="/contact"
+							:external="false"
+						/>
+
+						<!-- Button to download CV -->
+						<button-custom-component
+							text="Download my CV"
+							:link="cv"
+							:external="true"
+						/>
+					</div>
+				</div>
+			</header>
+
+			<article class="about__content">
+				<h2 class="about__subtitle">Practices</h2>
+
+				<div class="about__practices">
+					<practice-component
+						v-for="practice of practices"
+						:key="practice.id"
+						:practice="practice"
+					/>
+				</div>
+			</article>
+		</main>
+
+		<!-- Shapes in the background -->
+		<img
+			class="about__shape about__shape-01"
+			:src="shapeTopRight"
+			alt="Shape in the bottom right of the site."
+		/>
+		<img
+			class="about__shape about__shape-02"
+			:src="shapeBottomLeft"
+			alt="Shape in the bottom left of the site."
+		/>
+	</div>
+</template>
+
+<script setup lang="ts">
+import { computed } from "vue";
+
+import { useStore } from "vuex";
 
 import shapeTopRight from "@/assets/images/shapes/about-01.png";
 import shapeBottomLeft from "@/assets/images/shapes/about-02.png";
+import IconSocialComponent from "@/components/shared-components/icon-social-component.vue";
+import ButtonCustomComponent from "@/components/shared-components/button-custom-component.vue";
+import PracticeComponent from "@/components/about-components/practice-component.vue";
+import type { Practice } from "@/common/types";
 
-const {state} = useStore();
+// #region Composables
+const store = useStore();
+// #endregion
 
-const cv = computed(() => state.cv);
-
+// #region Data
 const INSTAGRAM_PROFILE = "https://www.instagram.com/__e_l_i_a_n_a__/";
 const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51VQ";
+// #endregion
 
-/**
- * Get all the practices.
- **/
-const practices = computed(() => {
-  return state.practices ? Object.values(state.practices) : null;
+// #region Computed
+const cv = computed(() => store.state.cv);
+
+const practices = computed<Practice[] | null>(() => {
+	return store.state.practices ? Object.values(store.state.practices) : null;
 });
+// #endregion
 </script>
-
-<template>
-  <div class="about">
-    <main class="about__container">
-      <header class="about__header">
-        <h1 class="about__title">
-          Eliana is a performance, circus, visual and conceptual artist and singer.
-        </h1>
-
-        <div class="about__actions">
-          <div class="about__icons">
-            <!-- Instagram profile -->
-            <icon-social-component
-              :icon="['fab', 'instagram']"
-              :link="INSTAGRAM_PROFILE"
-            />
-
-            <!-- YouTube channel -->
-            <icon-social-component
-              :icon="['fab', 'youtube']"
-              :link="YOUTUBE_CHANNEL"
-            />
-          </div>
-
-          <div class="about__buttons">
-            <!-- Contact page button -->
-            <button-custom-component
-              text="Contact me"
-              link="/contact"
-              :external="false"
-            />
-
-            <!-- Button to download CV -->
-            <button-custom-component
-              text="Download my CV"
-              :link="cv"
-              :external="true"
-            />
-          </div>
-        </div>
-      </header>
-
-      <article class="about__content">
-        <h2 class="about__subtitle">
-          Practices
-        </h2>
-
-        <div class="about__practices">
-          <practice-component
-            v-for="practice of practices"
-            :key="practice.id"
-            :practice="practice"
-          />
-        </div>
-      </article>
-    </main>
-
-    <!-- Shapes in the background -->
-    <img
-      class="about__shape about__shape-01"
-      :src="shapeTopRight"
-      alt="Shape in the bottom right of the site."
-    >
-    <img
-      class="about__shape about__shape-02"
-      :src="shapeBottomLeft"
-      alt="Shape in the bottom left of the site."
-    >
-  </div>
-</template>
 
 <style scoped lang="scss">
 .about {
-	background:
-    radial-gradient(circle at 1.39% 92.63%, #110F10, transparent 30%),
-    radial-gradient(circle at 51.11% 4.47%, #110F10, transparent 100%),
-    radial-gradient(circle at 87.39% 82.76%, #110F10, transparent 100%),
-    radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),
-    radial-gradient(circle at 74.72% 29.6%, #110F10, transparent 100%),
-    radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
+	background: radial-gradient(circle at 1.39% 92.63%, #110f10, transparent 30%), radial-gradient(circle at 51.11% 4.47%, #110f10, transparent 100%),
+		radial-gradient(circle at 87.39% 82.76%, #110f10, transparent 100%), radial-gradient(circle at 32.5% 59.81%, #205251, transparent 100%),
+		radial-gradient(circle at 74.72% 29.6%, #110f10, transparent 100%), radial-gradient(circle at 50% 50%, #110f10, #110f10 100%);
 
 	&__container {
 		z-index: 10;
@@ -126,7 +115,9 @@ const practices = computed(() => {
 		border-bottom: 1px solid var(--color-white);
 	}
 
-	&__actions, &__icons, &__buttons {
+	&__actions,
+	&__icons,
+	&__buttons {
 		display: flex;
 	}
 
@@ -142,18 +133,18 @@ const practices = computed(() => {
 	}
 
 	&__buttons {
-    display: flex;
-    column-gap: 10px;
-  }
+		display: flex;
+		column-gap: 10px;
+	}
 
 	&__subtitle {
 		margin-bottom: 30px;
 	}
 
 	&__practices {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
 
 		:deep(.image) {
 			height: auto;
@@ -201,7 +192,7 @@ const practices = computed(() => {
 			margin-bottom: 60px;
 		}
 
-    &__shape {
+		&__shape {
 			&-01 {
 				width: 50%;
 				max-width: 520px;

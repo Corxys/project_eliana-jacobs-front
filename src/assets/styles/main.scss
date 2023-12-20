@@ -41,18 +41,18 @@ h4 {
 
 // Semantic
 p {
-  line-height: 1.3rem;
+  line-height: 2.1vw;
   hyphens: auto;
   text-align: justify;
   white-space: pre-line;
 }
 
-.about, .news, .article, .contact, .project {
+.about, .news, .article, .contact, .project, .legal-notices {
   padding: var(--padding-page-mobile);
 }
 
 @media (min-width: 768px) {
-  .about, .news, .article, .contact, .project {
+  .about, .news, .article, .contact, .project, .legal-notices {
     padding: var(--padding-page-desktop);
   }
 }

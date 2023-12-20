@@ -1,5 +1,44 @@
-<script setup>
-import {ref, onMounted, onUnmounted} from "vue";
+<template>
+	<div class="home">
+		<div class="home__shapes">
+			<img
+				class="home__shape home__shape-01"
+				:src="shapeLeftTop"
+				alt="Shape in the top left of the side."
+			/>
+			<img
+				class="home__shape home__shape-02"
+				:src="shapeLeftBottom"
+				alt="Shape in the bottom left of the side."
+			/>
+			<img
+				class="home__shape home__shape-03"
+				:src="shapeRightTop"
+				alt="Shape in the top right of the side."
+			/>
+			<img
+				class="home__shape home__shape-04"
+				:src="shapeRightBottom"
+				alt="Shape in the top right of the side."
+			/>
+		</div>
+
+		<div class="home__flower">
+			<img
+				class="home__flower-shape"
+				:src="flower"
+				alt=""
+			/>
+			<flower-component
+				:flower-height="flowerHeight"
+				:flower-width="flowerWidth"
+			/>
+		</div>
+	</div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from "vue";
 
 import FlowerComponent from "@/components/home-components/flower-component.vue";
 
@@ -10,9 +49,23 @@ import shapeLeftBottom from "@/assets/images/shapes/home-02.png";
 import shapeRightTop from "@/assets/images/shapes/home-03.png";
 import shapeRightBottom from "@/assets/images/shapes/home-04.png";
 
-const flowerWidth = ref(0);
-const flowerHeight = ref(0);
+// #region Data
+const flowerWidth = ref<number>(0);
+const flowerHeight = ref<number>(0);
+// #endregion
 
+// #region Functions
+function setSizeOfTheFlower(event: Event): void | null {
+	if (!event.target) {
+		return null;
+	}
+
+	flowerWidth.value = (event.target as Window).innerWidth;
+	flowerHeight.value = (event.target as Window).innerHeight;
+}
+// #endregion
+
+// #region Lifecycles
 onMounted(() => {
 	flowerWidth.value = window.innerWidth;
 	flowerHeight.value = window.innerHeight;
@@ -22,34 +75,14 @@ onMounted(() => {
 onUnmounted(() => {
 	window.removeEventListener("resize", setSizeOfTheFlower);
 });
-
-const setSizeOfTheFlower = (event) => {
-	flowerWidth.value = event.target.innerWidth;
-	flowerHeight.value = event.target.innerHeight;
-};
+// #endregion
 </script>
-
-<template>
-  <div class="home">
-    <div class="home__shapes">
-      <img class="home__shape home__shape-01" :src="shapeLeftTop" alt="Shape in the top left of the side.">
-      <img class="home__shape home__shape-02" :src="shapeLeftBottom" alt="Shape in the bottom left of the side.">
-      <img class="home__shape home__shape-03" :src="shapeRightTop" alt="Shape in the top right of the side.">
-      <img class="home__shape home__shape-04" :src="shapeRightBottom" alt="Shape in the top right of the side.">
-    </div>
-
-    <div class="home__flower">
-      <img class="home__flower-shape" :src="flower" alt="">
-      <flower-component :flower-height="flowerHeight" :flower-width="flowerWidth" />
-    </div>
-  </div>
-</template>
 
 <style scoped lang="scss">
 .home {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 100vw;
 	height: calc(var(--100-vh, 1vh) * 100);
 	overflow: hidden;
@@ -59,11 +92,11 @@ const setSizeOfTheFlower = (event) => {
 		height: 100%;
 		overflow: hidden;
 	}
-  &__flower {
+	&__flower {
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
-    &-shape {
+		&-shape {
 			pointer-events: none;
 			width: 100vw;
 			height: auto;
@@ -73,8 +106,8 @@ const setSizeOfTheFlower = (event) => {
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-    }
-  }
+		}
+	}
 	&__shape {
 		position: absolute;
 		&-01 {
@@ -110,8 +143,8 @@ const setSizeOfTheFlower = (event) => {
 			&-shape {
 				height: auto;
 				width: auto;
-        max-height: 100vh;
-        max-width: 100vw;
+				max-height: 100vh;
+				max-width: 100vw;
 			}
 		}
 	}

@@ -90,6 +90,7 @@ export default function createMutations() {
 					id: filter.id,
 					image: filter.attributes.image.data?.attributes.url || null,
 					categories: [...filter.attributes.categories.data.map((category) => slugifyString(category.attributes.name))],
+					layout: filter.attributes.layout,
 				};
 
 				return acc;

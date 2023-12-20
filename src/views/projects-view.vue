@@ -88,18 +88,10 @@ import GalleryComponent from "@/components/shared-components/gallery-component.v
 import MediaComponent from "@/components/shared-components/media-component.vue";
 import CardComponent from "@/components/projects-components/card-component.vue";
 import PlaceholderComponent from "@/components/projects-components/placeholder-component.vue";
-import { CategoryNameSlug, FilterNameSlug } from "@/common/enums";
-import { CIRCUS_TYPES_WITH_LIST_LAYOUT } from "@/common/constants";
+import { CategoryNameSlug, FilterNameSlug, Layout } from "@/common/enums";
 import { slugifyString } from "@/utils/slugify";
 import { shuffleArray } from "@/utils/shuffleArray";
-import type { ObjectById, Media, Project } from "@/common/types";
-
-// #region Interface/enum
-enum Layout {
-	LIST = "list",
-	GALLERY = "gallery",
-}
-// #endregion
+import type { ObjectById, Media, Project, Filter } from "@/common/types";
 
 // #region Hooks
 const store = useStore();
@@ -128,7 +120,15 @@ const layout = computed<Layout | null>(() => {
 		return null;
 	}
 
-	if (store.state.selected.category === CategoryNameSlug.CIRCUS && !CIRCUS_TYPES_WITH_LIST_LAYOUT.includes(store.state.selected.filter)) {
+	const TYPES_WITH_LIST_LAYOUT = store.getters.types.reduce((acc: FilterNameSlug[], type: Filter) => {
+		if (type.layout === Layout.LIST) {
+			acc.push(slugifyString<FilterNameSlug>(type.name));
+		}
+
+		return acc;
+	}, []);
+
+	if (store.state.selected.category === CategoryNameSlug.CIRCUS && !TYPES_WITH_LIST_LAYOUT.includes(store.state.selected.filter)) {
 		return Layout.GALLERY;
 	} else {
 		return Layout.LIST;

@@ -10,27 +10,30 @@
 import MediaComponent from "@/components/shared-components/media-component.vue";
 
 defineProps({
-  "practice": {
-    "type": Object,
-    "required": true,
-  },
+	practice: {
+		type: Object,
+		required: true,
+	},
 });
 </script>
 
 <template>
-  <div class="practice">
-    <div v-if="practice" class="practice__container">
-      <media-component :media="practice.image" />
-    </div>
-    <div class="practice__content">
-      <h3 class="practice__title">
-        {{practice.title}}
-      </h3>
-      <p class="practice__text">
-        {{practice.text}}
-      </p>
-    </div>
-  </div>
+	<div class="practice">
+		<div
+			v-if="practice"
+			class="practice__container"
+		>
+			<media-component :media="practice.image" />
+		</div>
+		<div class="practice__content">
+			<h3 class="practice__title">
+				{{ practice.title }}
+			</h3>
+			<p class="practice__text">
+				{{ practice.text }}
+			</p>
+		</div>
+	</div>
 </template>
 
 <style scoped lang="scss">
@@ -46,9 +49,9 @@ defineProps({
 		width: 100%;
 	}
 
-  &__text {
-    white-space: pre-line;
-  }
+	&__text {
+		white-space: pre-line;
+	}
 }
 
 @media (min-width: 768px) {

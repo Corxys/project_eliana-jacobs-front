@@ -1,7 +1,5 @@
-import { useRoute } from "vue-router";
-
 import { CATEGORIES_WITH_THE_ALL_TYPE, CATEGORIES_WITH_LIGHT_THEME } from "@/common/constants";
-import { CategoryNameSlug, FilterNameFull } from "@/common/enums";
+import { CategoryNameSlug, FilterNameFull, Layout } from "@/common/enums";
 import type { State, Getters, Filter, Category } from "@/common/types";
 
 export const getters = {
@@ -63,6 +61,7 @@ export const getters = {
 				name: FilterNameFull.ALL,
 				image: "",
 				categories: CATEGORIES_WITH_THE_ALL_TYPE,
+				layout: Layout.LIST,
 			});
 		}
 

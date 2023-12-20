@@ -122,6 +122,7 @@ const TYPES_QUERY = gql`
 							}
 						}
 					}
+					layout
 				}
 			}
 		}
