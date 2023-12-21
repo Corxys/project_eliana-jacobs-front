@@ -105,6 +105,7 @@ const TYPES_QUERY = gql`
 			data {
 				id
 				attributes {
+					index
 					name
 					categories {
 						data {

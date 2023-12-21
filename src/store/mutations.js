@@ -87,6 +87,7 @@ export default function createMutations() {
 
 				acc[name] = {
 					...filter.attributes,
+					index: filter.attributes.index,
 					id: filter.id,
 					image: filter.attributes.image.data?.attributes.url || null,
 					categories: [...filter.attributes.categories.data.map((category) => slugifyString(category.attributes.name))],

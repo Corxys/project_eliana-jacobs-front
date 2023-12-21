@@ -61,6 +61,7 @@ export interface Filter {
 	image: string;
 	name: FilterNameFull;
 	layout: Layout;
+	index: number;
 }
 
 // Projects/project

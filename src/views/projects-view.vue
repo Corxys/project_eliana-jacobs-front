@@ -105,7 +105,23 @@ const type = computed<FilterNameSlug>(() => store.state.selected.filter);
 const indexOfFocusedImage = computed(() => store.state.app.focusedImageIndex);
 const selectedFilter = computed(() => store.state.selected.filter);
 const lightTheme = computed(() => store.getters.lightTheme);
-const filters = computed(() => store.getters.filtersByCategory);
+const filters = computed<Filter[] | null>(() => {
+	if (!store.getters.filtersByCategory) {
+		return null;
+	}
+
+	return store.getters.filtersByCategory.sort((filterA: Filter, filterB: Filter) => {
+		if (filterA.index < filterB.index) {
+			return -1;
+		}
+
+		if (filterA.index > filterB.index) {
+			return 1;
+		}
+
+		return 0;
+	});
+});
 
 const focusedMedia = computed<Media | null>(() => {
 	if (!medias.value || !medias.value[indexOfFocusedImage.value]) {
