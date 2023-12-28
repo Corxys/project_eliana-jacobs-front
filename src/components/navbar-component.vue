@@ -57,25 +57,41 @@
 				v-if="isMenuOpen"
 				class="navbar__overlay"
 			>
-				<div
-					v-for="link of links"
-					:key="link.id"
-					class="navbar__link"
-					@click="onClickGlobalLink(link.src)"
-				>
-					<span class="navbar__link-text">
-						{{ link.name }}
-					</span>
+				<div class="navbar__links">
+					<div
+						v-for="link of links.slice(0, 1)"
+						:key="link.id"
+						class="navbar__link"
+						@click="onClickGlobalLink(link.src)"
+					>
+						<span class="navbar__link-text">
+							{{ link.name }}
+						</span>
+					</div>
 				</div>
-				<div
-					v-for="category of categories"
-					:key="category.id"
-					class="navbar__link"
-					@click="onClickCategoryLink(category.name)"
-				>
-					<span class="navbar__link-text">
-						{{ category.name }}
-					</span>
+				<div class="navbar__links">
+					<div
+						v-for="category of categories"
+						:key="category.id"
+						class="navbar__link"
+						@click="onClickCategoryLink(category.name)"
+					>
+						<span class="navbar__link-text">
+							{{ category.name }}
+						</span>
+					</div>
+				</div>
+				<div class="navbar__links">
+					<div
+						v-for="link of links.slice(-2)"
+						:key="link.id"
+						class="navbar__link"
+						@click="onClickGlobalLink(link.src)"
+					>
+						<span class="navbar__link-text">
+							{{ link.name }}
+						</span>
+					</div>
 				</div>
 			</div>
 		</transition>
@@ -277,10 +293,18 @@ async function onClickGlobalLink(src: string) {
 		justify-content: center;
 		align-items: center;
 		transform-origin: top center;
+		gap: 2.5vh;
 
 		&--open {
 			height: 100vh;
 		}
+	}
+
+	&__links {
+		z-index: 100;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
 	}
 
 	&__link {
@@ -296,10 +320,6 @@ async function onClickGlobalLink(src: string) {
 
 		&:hover {
 			background-color: var(--color-main);
-		}
-
-		&:nth-child(3) {
-			margin-bottom: 5vh;
 		}
 	}
 }
