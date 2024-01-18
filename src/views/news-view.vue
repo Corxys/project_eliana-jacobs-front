@@ -13,7 +13,7 @@
 						<div class="news__main">
 							<article-card
 								:article="news[0]"
-								size="large"
+								:size="Size.LARGE"
 							/>
 						</div>
 
@@ -23,7 +23,7 @@
 								v-for="article of news.slice(1, 4)"
 								:key="article.id"
 								:article="article"
-								size="small"
+								:size="Size.SMALL"
 							/>
 						</div>
 					</article>
@@ -37,7 +37,7 @@
 							v-for="article of news"
 							:key="article.id"
 							:article="article"
-							size="medium"
+							:size="Size.MEDIUM"
 						/>
 					</div>
 				</div>
@@ -67,6 +67,7 @@ import { useStore } from "vuex";
 
 import shapeTop from "@/assets/images/shapes/news-01.png";
 import ArticleCard from "@/components/news-components/article-card-component.vue";
+import { Size } from "@/common/enums";
 import type { Article } from "@/common/types";
 
 // #region Composables
@@ -75,7 +76,12 @@ const store = useStore();
 
 // #region Computed
 const news = computed<Article[] | null>(() => {
-	return store.state.news ? Object.values(store.state.news) : null;
+	return store.state.news
+		? Object.values(store.state.news as Article[]).sort((article1, article2) => {
+				// @ts-ignore
+				return new Date(article2.date.date) - new Date(article1.date.date);
+		  })
+		: null;
 });
 // #endregion
 </script>

@@ -52,3 +52,10 @@ export enum FilterNameFull {
 	VIDEO = "Video",
 	VIDEOS = "Videos",
 }
+
+// Article
+export enum Size {
+	LARGE = "large",
+	MEDIUM = "medium",
+	SMALL = "small",
+}

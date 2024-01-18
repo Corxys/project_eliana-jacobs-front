@@ -118,7 +118,6 @@ const selectFilter = (name) => {
 	position: relative;
 	background-color: var(--color-background-dark);
 	color: var(--color-text-dark);
-	font-size: 1.4vw;
 	font-family: var(--font-secondary);
 
 	&--light {

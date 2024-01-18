@@ -21,90 +21,90 @@
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="article__content">
-				<div class="article__sidebar">
-					<p
-						class="article__sidebar-text"
-						v-html="parsedText"
-					/>
+				<div class="article__content">
+					<div class="article__sidebar">
+						<p
+							class="article__sidebar-text"
+							v-html="parsedText"
+						/>
 
-					<div class="article__sidebar-details">
-						<div class="article__sidebar-detail">
-							<img
-								class="article__sidebar-icon"
-								:src="scheduleIcon"
-								alt="Schedule"
-							/>
-							<div class="article__sidebar-info">
-								{{ eventDate }}
+						<div class="article__sidebar-details">
+							<div class="article__sidebar-detail">
+								<img
+									class="article__sidebar-icon"
+									:src="scheduleIcon"
+									alt="Schedule"
+								/>
+								<div class="article__sidebar-info">
+									{{ eventDate }}
+								</div>
+							</div>
+
+							<div class="article__sidebar-detail">
+								<img
+									class="article__sidebar-icon"
+									:src="localisationIcon"
+									alt="Pin"
+								/>
+								<a
+									:href="eventLocationLink"
+									target="_blank"
+								>
+									<div class="article__sidebar-info">
+										{{ eventLocation }}
+									</div>
+								</a>
+							</div>
+
+							<div
+								v-if="article.email"
+								class="article__sidebar-detail"
+							>
+								<img
+									class="article__sidebar-icon"
+									:src="emailIcon"
+									alt="Envelop"
+								/>
+								<a :href="`mailto:${article.email}`">
+									<div class="article__sidebar-info">
+										{{ article.email }}
+									</div>
+								</a>
 							</div>
 						</div>
 
-						<div class="article__sidebar-detail">
-							<img
-								class="article__sidebar-icon"
-								:src="localisationIcon"
-								alt="Pin"
-							/>
-							<a
-								:href="eventLocationLink"
-								target="_blank"
-							>
-								<div class="article__sidebar-info">
-									{{ eventLocation }}
-								</div>
-							</a>
-						</div>
+						<button-custom-component
+							v-if="article.register"
+							text="Register by email"
+							:link="'mailto:' + article.register.email"
+							:external="true"
+						/>
 
 						<div
-							v-if="article.email"
-							class="article__sidebar-detail"
+							v-if="article.website"
+							class="article__sidebar-link"
 						>
 							<img
 								class="article__sidebar-icon"
-								:src="emailIcon"
-								alt="Envelop"
+								:src="linkIcon"
+								alt="Link chain"
 							/>
-							<a :href="`mailto:${article.email}`">
-								<div class="article__sidebar-info">
-									{{ article.email }}
-								</div>
+							<a
+								class="article__sidebar-info"
+								href="/"
+							>
+								{{ article.website }}
 							</a>
 						</div>
 					</div>
 
-					<button-custom-component
-						v-if="article.register"
-						text="Register by email"
-						:link="'mailto:' + article.register.email"
-						:external="true"
-					/>
-
-					<div
-						v-if="article.website"
-						class="article__sidebar-link"
-					>
-						<img
-							class="article__sidebar-icon"
-							:src="linkIcon"
-							alt="Link chain"
+					<div class="article__image">
+						<media-component
+							:media="article.image"
+							:copyright="article.image.copyright"
 						/>
-						<a
-							class="article__sidebar-info"
-							href="/"
-						>
-							{{ article.website }}
-						</a>
 					</div>
-				</div>
-
-				<div class="article__image">
-					<media-component
-						:media="article.image"
-						:copyright="article.image.copyright"
-					/>
 				</div>
 			</div>
 		</div>
@@ -170,7 +170,13 @@ const eventDate = computed<string>(() => {
 		return "";
 	}
 
-	return `${formatDate(article.value.date.date)}, ${formatHour(article.value.date.start)} to ${formatHour(article.value.date.end)}`;
+	let date = `${formatDate(article.value.date.date)}, ${formatHour(article.value.date.start)} `;
+
+	if (article.value.date.end) {
+		date += `to ${formatHour(article.value.date.end)}`;
+	}
+
+	return date;
 });
 
 const eventLocation = computed<string>(() => {

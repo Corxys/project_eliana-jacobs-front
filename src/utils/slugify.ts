@@ -5,16 +5,13 @@ export function slugifyString<T>(stringToSlug: string): T {
 		return "" as T;
 	}
 
+	const forbiddenCharacters = ['"', "&", ".", "(", ")", "!", "?", ",", ", "];
+
 	const slugedString = stringToSlug
 		.replace("_", "-")
-		.replace("&", "")
-		.replace(".", "")
-		.replace("(", "")
-		.replace(")", "")
-		.replace("!", "")
-		.replace("?", "")
-		.replace(",", "")
-		.replace(", ", "");
+		.split("")
+		.filter((character) => !forbiddenCharacters.includes(character))
+		.join("");
 
 	return slugify(slugedString, {
 		lower: true,

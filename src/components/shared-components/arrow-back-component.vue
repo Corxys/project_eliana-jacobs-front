@@ -1,21 +1,22 @@
 <template>
 	<div
-		class="arrow-back"
-		:class="{ 'arrow-back--light': lightTheme }"
+		class="back"
+		:class="{ 'back--light': lightTheme }"
+		@click="onClick"
 	>
-		<div class="arrow-back__body" />
-		<div
-			class="arrow-back__text"
-			@click="onClick"
-		>
-			Back
+		<div class="back__arrow">
+			<img :src="lightTheme ? arrowBlack : arrowWhite" />
 		</div>
+		<div class="back__text">Back</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import { useStore } from "vuex";
+
+import arrowBlack from "@/assets/icons/arrow-black.svg";
+import arrowWhite from "@/assets/icons/arrow-white.svg";
 
 interface Props {
 	onClick: () => void;
@@ -32,40 +33,36 @@ const lightTheme = computed<boolean>(() => store.getters.lightTheme);
 </script>
 
 <style scoped lang="scss">
-.arrow-back {
+.back {
+	position: relative;
 	display: flex;
 	align-items: center;
-	position: relative;
+	gap: 15px;
 	margin-bottom: 30px;
-
-	&--light {
-		.arrow-back__body {
-			border-top: 2px solid var(--color-black);
-			border-right: 2px solid var(--color-black);
-		}
-	}
+	cursor: pointer;
 
 	&:hover {
-		.arrow-back__body {
-			left: -5px;
+		.back__arrow {
+			padding-right: 5px;
+			img {
+				margin-left: -5px;
+			}
 		}
 	}
 
+	&__arrow,
 	&__text {
-		cursor: pointer;
-		padding-left: 17px;
+		display: flex;
+		align-items: center;
 	}
 
-	&__body {
-		position: absolute;
-		left: 0;
-		bottom: 5px;
-		height: 8px;
-		width: 8px;
-		border-top: 2px solid var(--color-white);
-		border-right: 2px solid var(--color-white);
-		transform: rotate(-135deg);
-		transition: left 0.2s ease-in-out;
+	&__arrow {
+		transition: all 0.2s ease-in-out;
+
+		img {
+			transition: all 0.2s ease-in-out;
+			height: 13px;
+		}
 	}
 }
 </style>

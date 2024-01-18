@@ -16,11 +16,11 @@
 			<p>
 				Eliana PLISKIN JACOBS
 				<br />
-				Tel : +49 163 4821226
+				Tel: +49 163 4821226
 				<br />
-				Email : elianapliskinjacobs@gmail.com
+				Email: elianapliskinjacobs@gmail.com
 				<br />
-				Website : www.eliana-arts.com
+				Website: www.eliana-arts.com
 			</p>
 
 			<h3>DEVELOPMENT</h3>
@@ -84,7 +84,7 @@
 				The information contained on this site is as accurate as possible and the site is updated at different times of the year, but may contain inaccuracies or omissions.
 				inaccuracies or omissions.
 				<br /><br />
-				If you notice a gap, error or what appears to be a malfunction, please report it by e-mail to suzanne.laclautre@gmail.com, describing the problem as precisely as possible
+				If you notice a gap, error or what appears to be a malfunction, please report it by e-mail to elianapliskinjacobs@gmail.com, describing the problem as precisely as possible
 				(problem page, type of computer and browser used, etc.). describing the problem as precisely as possible (problem page, type of computer and browser used, etc.).
 				<br /><br />
 				Any content downloaded is done so at the user's own risk and under his/her sole responsibility. Consequently, the company cannot be held responsible for any damage for any
