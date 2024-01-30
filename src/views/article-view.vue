@@ -41,7 +41,10 @@
 								</div>
 							</div>
 
-							<div class="article__sidebar-detail">
+							<div
+								v-if="eventLocation"
+								class="article__sidebar-detail"
+							>
 								<img
 									class="article__sidebar-icon"
 									:src="localisationIcon"
@@ -179,9 +182,9 @@ const eventDate = computed<string>(() => {
 	return date;
 });
 
-const eventLocation = computed<string>(() => {
-	if (!article.value) {
-		return "";
+const eventLocation = computed<string | null>(() => {
+	if (!article.value || !article.value.address) {
+		return null;
 	}
 
 	const addressName = article.value.address.name ? article.value.address.name + ", " : "";
