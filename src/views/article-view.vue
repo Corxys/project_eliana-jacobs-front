@@ -95,7 +95,8 @@
 							/>
 							<a
 								class="article__sidebar-info"
-								href="/"
+								:href="article.website"
+								target="_blank"
 							>
 								{{ article.website }}
 							</a>
