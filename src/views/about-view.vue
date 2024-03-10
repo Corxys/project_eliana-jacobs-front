@@ -9,13 +9,13 @@
 						<!-- Instagram profile -->
 						<icon-social-component
 							:icon="['fab', 'instagram']"
-							:link="INSTAGRAM_PROFILE"
+							:link="instagram"
 						/>
 
 						<!-- YouTube channel -->
 						<icon-social-component
 							:icon="['fab', 'youtube']"
-							:link="YOUTUBE_CHANNEL"
+							:link="youtubeChannel"
 						/>
 					</div>
 
@@ -80,13 +80,10 @@ import type { Practice } from "@/common/types";
 const store = useStore();
 // #endregion
 
-// #region Data
-const INSTAGRAM_PROFILE = "https://www.instagram.com/__e_l_i_a_n_a__/";
-const YOUTUBE_CHANNEL = "https://www.youtube.com/channel/UC7Og5-qT_0Oucnraj2f51VQ";
-// #endregion
-
 // #region Computed
 const cv = computed(() => store.state.cv);
+const instagram = computed(() => store.state.instagram);
+const youtubeChannel = computed(() => store.state.youtube);
 
 const practices = computed<Practice[] | null>(() => {
 	return store.state.practices ? Object.values(store.state.practices) : null;

@@ -6,6 +6,7 @@ import { CategoryNameFull, CategoryNameSlug, FilterNameFull, FilterNameSlug, The
 import { CATEGORIES_QUERY, CV_QUERY, NEWS_QUERY, PRACTICES_QUERY, PROJECTS_QUERY, TYPES_QUERY } from "@/requests";
 import { slugifyString } from "@/utils/slugify";
 import type { Getters } from "@/common/types";
+import { INSTAGRAM_QUERY, YOUTUBE_QUERY } from "../requests";
 
 export default function createActions() {
 	return {
@@ -24,6 +25,14 @@ export default function createActions() {
 			// Get CV link.
 			const responseCV = await graphqlClient.query({ query: CV_QUERY });
 			commit("setCV", responseCV.data.cv.data.attributes.link);
+
+			// Get Instagram link.
+			const responseInstagram = await graphqlClient.query({ query: INSTAGRAM_QUERY });
+			commit("setInstagram", responseInstagram.data.instagram.data.attributes.link);
+
+			// Get Youtube link.
+			const responseYoutube = await graphqlClient.query({ query: YOUTUBE_QUERY });
+			commit("setYoutube", responseYoutube.data.youtube.data.attributes.link);
 
 			// Get categories (circus, visual art, performance art, music, digital media) data.
 			const responseCategories = await graphqlClient.query({ query: CATEGORIES_QUERY });

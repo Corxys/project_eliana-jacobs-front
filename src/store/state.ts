@@ -12,6 +12,8 @@ export const state: State = {
 	},
 	categories: null,
 	cv: "",
+	instagram: "",
+	youtube: "",
 	filters: null,
 	news: null,
 	practices: null,

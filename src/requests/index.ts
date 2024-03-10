@@ -192,4 +192,28 @@ const CV_QUERY = gql`
 	}
 `;
 
-export { PRACTICES_QUERY, NEWS_QUERY, CATEGORIES_QUERY, TYPES_QUERY, PROJECTS_QUERY, CV_QUERY };
+const INSTAGRAM_QUERY = gql`
+	query Instagram {
+		instagram {
+			data {
+				attributes {
+					link
+				}
+			}
+		}
+	}
+`;
+
+const YOUTUBE_QUERY = gql`
+	query Youtube {
+		youtube {
+			data {
+				attributes {
+					link
+				}
+			}
+		}
+	}
+`;
+
+export { PRACTICES_QUERY, NEWS_QUERY, CATEGORIES_QUERY, TYPES_QUERY, PROJECTS_QUERY, CV_QUERY, INSTAGRAM_QUERY, YOUTUBE_QUERY };

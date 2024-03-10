@@ -61,6 +61,12 @@ export default function createMutations() {
 		setCV(state, cv) {
 			state.cv = cv ? cv : "";
 		},
+		setInstagram(state, instagram) {
+			state.instagram = instagram || "";
+		},
+		setYoutube(state, youtube) {
+			state.youtube = youtube || "";
+		},
 		setCategories(state, categories) {
 			if (!categories.length) {
 				state.categories = null;
